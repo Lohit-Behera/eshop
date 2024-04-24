@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from djangomediapro.settings import EMAIL_HOST_USER, BASE_DIR
+from backend.settings import EMAIL_HOST_USER, BASE_DIR
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -17,9 +17,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 import os
 
-from .serializers import UserSerializerWithToken, UserSerializer, ContactUsSerializer
+from .serializers import UserSerializerWithToken, UserSerializer
 
-from .models import CustomUser, EmailVerificationToken, ContactUs
+from .models import CustomUser, EmailVerificationToken
 
 # Create your views here.
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

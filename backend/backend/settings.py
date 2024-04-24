@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "corsheaders",
     
     'customuser.apps.CustomuserConfig',
+    'product.apps.ProductConfig',
 ]
 
 REST_FRAMEWORK = {
