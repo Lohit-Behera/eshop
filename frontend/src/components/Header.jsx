@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
-import Logo from "../../public/Logo.svg";
+import Logo from "../assets/Logo.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
@@ -70,7 +70,7 @@ function Header() {
           <div className="block md:hidden mt-1">
             <Sheet>
               <SheetTrigger>
-                <Menu color="#6d28d9" />
+                <Menu color="#3b82f6" />
               </SheetTrigger>
               <SheetContent side="left">
                 <SheetHeader className="items-center">
