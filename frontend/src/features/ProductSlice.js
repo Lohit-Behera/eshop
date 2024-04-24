@@ -22,6 +22,27 @@ export const fetchGetProducts = createAsyncThunk('get/products', async (_, { rej
     }
 })
 
+export const fetchProductDetail = createAsyncThunk('get/productdetail', async (id, { rejectWithValue }) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        const { data } = await axios.get(
+            `/api/product/${id}/`,
+            config
+        );
+        return data;
+    } catch (error) {
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+})
+
 
 const productSlice = createSlice({
     name: 'products',
@@ -29,6 +50,10 @@ const productSlice = createSlice({
         products: null,
         productsStatus: 'idle',
         productsError: null,
+
+        productDetail: null,
+        productDetailStatus: 'idle',
+        productDetailError: null
     },
     reducers: {
     },
@@ -44,6 +69,18 @@ const productSlice = createSlice({
             .addCase(fetchGetProducts.rejected, (state, action) => {
                 state.productsStatus = 'failed';
                 state.productsError = action.payload;
+            })
+
+            .addCase(fetchProductDetail.pending, (state) => {
+                state.productDetailStatus = 'loading';
+            })
+            .addCase(fetchProductDetail.fulfilled, (state, action) => {
+                state.productDetailStatus = 'succeeded';
+                state.productDetail = action.payload;
+            })
+            .addCase(fetchProductDetail.rejected, (state, action) => {
+                state.productDetailStatus = 'failed';
+                state.productDetailError = action.payload;
             })
     }
 })

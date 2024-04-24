@@ -10,14 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 function Product({ product }) {
   return (
@@ -52,24 +44,6 @@ function Product({ product }) {
                 <>{`Hurry Only ${product.countInStock} left`}</>
               ) : (
                 " Stock - Available"
-              )}
-            </div>
-            <div className="mr-2.5">
-              {product.countInStock === 0 ? null : (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">Quantity</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>Select Quantity</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {[...Array(product.countInStock).keys()]
-                      .slice(0, 5)
-                      .map((i) => (
-                        <DropdownMenuItem key={i + 1}>{i + 1}</DropdownMenuItem>
-                      ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
               )}
             </div>
           </div>
