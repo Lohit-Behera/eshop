@@ -3,6 +3,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.shortcuts import redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -73,7 +74,6 @@ def send_verification_email(request, user):
         verify_url = reverse('verify_email', args=[token])
         verify_link = f"http://{current_site.domain}{verify_url}"
         template_name = os.path.join(BASE_DIR, 'customuser/templates/customuser/verification_email.html')
-
         email_context = {
             'user': user,
             'verify_link' : verify_link
@@ -115,3 +115,86 @@ def verify_email(request, token):
         return redirect('/login')
     except EmailVerificationToken.DoesNotExist:
         return redirect('/verify-expired')
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_details(request,pk):
+    user = CustomUser.objects.get(id=pk)
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user(request, pk):
+
+    data = request.data
+    user = CustomUser.objects.get(id=pk)
+
+    user.email = data['email']
+    user.first_name = data['first_name']
+    user.last_name = data['last_name']
+
+    profile_image = request.FILES.get('profile_image')
+    if profile_image:
+        user.profile_image = profile_image
+
+    password = data.get('password')
+    if password:
+        user.make_password(password)
+
+    user.save()
+    return Response({'detail': 'User updated successfully'})
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def edit_user(request, pk):
+    user = CustomUser.objects.get(id=pk)
+    data = request.data
+
+    user.is_staff = data['is_staff']
+    user.save()
+
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def remove_admin(request, pk):
+    user = CustomUser.objects.get(id=pk)
+    data = request.data
+
+    user.is_staff = data['is_staff']
+    user.save()
+
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_users(request):
+    users = CustomUser.objects.all().order_by('email')
+
+    page = request.query_params.get('page')
+    paginator = Paginator(users, 10)
+
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+
+    serializer = UserSerializer(users, many=True)
+    return Response({'users': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, pk):
+    user = CustomUser.objects.get(id=pk)
+    user.delete()
+    return Response({'detail': 'User deleted successfully'})

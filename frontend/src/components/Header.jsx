@@ -1,6 +1,7 @@
 import React from "react";
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { logout } from "@/features/UserSlice";
 import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
@@ -14,17 +15,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const userDetails = useSelector((state) => state.user.userDetails);
+  const profileImage = userDetails ? userDetails.profile_image : "";
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
   return (
     <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
       <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
@@ -64,6 +67,26 @@ function Header() {
                     )}
                   </NavLink>
                 </li>
+                {userInfo ? (
+                  <li>
+                    <Button variant="ghost" onClick={logoutHandler}>
+                      Log Out
+                    </Button>
+                  </li>
+                ) : (
+                  <li>
+                    <NavLink to="/login">
+                      {({ isActive, isPending, isTransitioning }) => (
+                        <Button
+                          variant={isActive ? "default" : "ghost"}
+                          disabled={isPending || isTransitioning}
+                        >
+                          Login
+                        </Button>
+                      )}
+                    </NavLink>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -117,6 +140,16 @@ function Header() {
 
           <div>
             <ul className="flex">
+              {userInfo && (
+                <li className="mr-3">
+                  <Link to="/profile">
+                    <Avatar>
+                      <AvatarImage src={profileImage} />
+                      <AvatarFallback>P</AvatarFallback>
+                    </Avatar>
+                  </Link>
+                </li>
+              )}
               <li className="mt-0.5">
                 <DarkModeToggle />
               </li>
