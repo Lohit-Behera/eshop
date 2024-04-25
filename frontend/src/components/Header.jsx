@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@/features/UserSlice";
 import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
+import { ImageMinus, Menu } from "lucide-react";
 import Logo from "../assets/Logo.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -15,6 +15,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { fetchDeleteImages } from "@/features/DeleteImages";
 
 function Header() {
   const dispatch = useDispatch();
@@ -28,6 +37,11 @@ function Header() {
     dispatch(logout());
     navigate("/");
   };
+
+  const deleteImagesHandler = () => {
+    dispatch(fetchDeleteImages());
+  };
+
   return (
     <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
       <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
@@ -79,6 +93,28 @@ function Header() {
                     )}
                   </NavLink>
                 </li>
+                {userDetails && userDetails.is_staff && (
+                  <li>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost">Admin</Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="text-center">
+                        <DropdownMenuLabel>Admin</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <Link to="/user/dashboard">User Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/product/dashboard">Product Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/order/dashboard">Order Dashboard</Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </li>
+                )}
                 {userInfo ? (
                   <li>
                     <Button variant="ghost" onClick={logoutHandler}>
@@ -142,6 +178,54 @@ function Header() {
                             )}
                           </NavLink>
                         </li>
+                        {userDetails && userDetails.is_staff && (
+                          <li>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost">Admin</Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="text-center">
+                                <DropdownMenuLabel>Admin</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>
+                                  <Link to="/user/dashboard">
+                                    User Dashboard
+                                  </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Link to="/product/dashboard">
+                                    Product Dashboard
+                                  </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Link to="/order/dashboard">
+                                    Order Dashboard
+                                  </Link>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </li>
+                        )}
+                        {userInfo ? (
+                          <li>
+                            <Button variant="ghost" onClick={logoutHandler}>
+                              Log Out
+                            </Button>
+                          </li>
+                        ) : (
+                          <li>
+                            <NavLink to="/login">
+                              {({ isActive, isPending, isTransitioning }) => (
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                >
+                                  Login
+                                </Button>
+                              )}
+                            </NavLink>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </SheetDescription>
@@ -164,6 +248,15 @@ function Header() {
               )}
               <li className="mt-0.5">
                 <DarkModeToggle />
+              </li>
+              <li className="mt-0.5">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={deleteImagesHandler}
+                >
+                  <ImageMinus />
+                </Button>
               </li>
             </ul>
           </div>

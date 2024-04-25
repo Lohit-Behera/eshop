@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from backend.settings import EMAIL_HOST_USER, BASE_DIR
+from backend.settings import EMAIL_HOST_USER, BASE_DIR, MEDIA_ROOT
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -21,6 +21,7 @@ import os
 from .serializers import UserSerializerWithToken, UserSerializer
 
 from .models import CustomUser, EmailVerificationToken
+from product.models import Product
 
 # Create your views here.
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -42,7 +43,7 @@ def register_user(request):
 
     try:
         if CustomUser.objects.filter(email=data['email']).exists():
-            return Response({'detail': 'User with this email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'massage': 'User with this email already exists'}, status=status.HTTP_400_BAD_REQUEST)
         
         first_name_lower = data['first_name'].lower()
         first_name = first_name_lower.replace(' ', '').capitalize()
@@ -65,7 +66,7 @@ def register_user(request):
         return Response(serializer.data)
 
     except:
-        return Response({'detail': 'An error occurred while processing your request'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'massage': 'An error occurred while processing your request'}, status=status.HTTP_400_BAD_REQUEST)
 
 def send_verification_email(request, user):
     try:
@@ -93,7 +94,7 @@ def send_verification_email(request, user):
             html_message=html_message
             )
     except:
-        return Response({'detail': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'massage': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def generate_verification_token(user):
@@ -140,10 +141,10 @@ def update_user(request, pk):
 
     password = data.get('password')
     if password:
-        user.make_password(password)
+        user.set_password(password)
 
     user.save()
-    return Response({'detail': 'User updated successfully'})
+    return Response({'massage': 'User updated successfully'})
 
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
@@ -197,4 +198,40 @@ def get_users(request):
 def delete_user(request, pk):
     user = CustomUser.objects.get(id=pk)
     user.delete()
-    return Response({'detail': 'User deleted successfully'})
+    return Response({'massage': 'User deleted successfully'})
+
+import logging
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_all_images(request):
+    try:
+        users = CustomUser.objects.all()
+        profile_images = [user.profile_image for user in users if user.profile_image]
+        products = Product.objects.all()
+        product_images = [product.image for product in products if product.image]
+
+        file_list = []
+        for i in profile_images:
+            file_list.append(i)
+        filenames = [file.name for file in file_list]
+
+        profiles = []
+        for i in profile_images:
+            filename = os.path.basename(i.name)
+            profiles.append(filename)
+
+        productsImages = []
+        for i in product_images:
+            filename = os.path.basename(i.name)
+            productsImages.append(filename)
+
+
+        for root, dirs, files in os.walk(MEDIA_ROOT):
+            for file in files:
+                if file not in profiles and file not in productsImages:
+                    os.remove(os.path.join(root, file))
+                        
+        return Response({'message': 'All images deleted successfully'}, status=200)
+    except Exception as e:
+        logging.error(e)
+        return Response({'massage': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)

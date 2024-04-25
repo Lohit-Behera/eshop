@@ -8,7 +8,10 @@ function Rating({ value, reviews, className = "" }) {
         {value >= 1 ? (
           <Star fill="currentColor" />
         ) : value >= 0.5 ? (
-          <StarHalf fill="currentColor" />
+          <div className="relative">
+            <Star className="absolute" style={{ zIndex: 1 }} />
+            <StarHalf fill="currentColor" className="relative" />
+          </div>
         ) : (
           <Star />
         )}
@@ -17,7 +20,10 @@ function Rating({ value, reviews, className = "" }) {
         {value >= 2 ? (
           <Star fill="currentColor" />
         ) : value >= 1.5 ? (
-          <StarHalf fill="currentColor" />
+          <div className="relative">
+            <Star className="absolute" style={{ zIndex: 1 }} />
+            <StarHalf fill="currentColor" className="relative" />
+          </div>
         ) : (
           <Star />
         )}
@@ -26,7 +32,10 @@ function Rating({ value, reviews, className = "" }) {
         {value >= 3 ? (
           <Star fill="currentColor" />
         ) : value >= 2.5 ? (
-          <StarHalf fill="currentColor" />
+          <div className="relative">
+            <Star className="absolute" style={{ zIndex: 1 }} />
+            <StarHalf fill="currentColor" className="relative" />
+          </div>
         ) : (
           <Star />
         )}
@@ -35,7 +44,10 @@ function Rating({ value, reviews, className = "" }) {
         {value >= 4 ? (
           <Star fill="currentColor" />
         ) : value >= 3.5 ? (
-          <StarHalf fill="currentColor" />
+          <div className="relative">
+            <Star className="absolute" style={{ zIndex: 1 }} />
+            <StarHalf fill="currentColor" className="relative" />
+          </div>
         ) : (
           <Star />
         )}
@@ -44,7 +56,10 @@ function Rating({ value, reviews, className = "" }) {
         {value >= 5 ? (
           <Star fill="currentColor" />
         ) : value >= 4.5 ? (
-          <StarHalf fill="currentColor" />
+          <div className="relative">
+            <Star className="absolute" style={{ zIndex: 1 }} />
+            <StarHalf fill="currentColor" className="relative" />
+          </div>
         ) : (
           <Star />
         )}
