@@ -1,4 +1,4 @@
-from .models import Product, Review
+from .models import Product, Cart
 from rest_framework import serializers
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -22,3 +22,8 @@ class ProductSerializer(serializers.ModelSerializer):
             }
             serialized_reviews.append(serialized_review)
         return serialized_reviews
+    
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = '__all__'

@@ -56,6 +56,18 @@ function Header() {
                   </NavLink>
                 </li>
                 <li>
+                  <NavLink to="/cart">
+                    {({ isActive, isPending, isTransitioning }) => (
+                      <Button
+                        variant={isActive ? "default" : "ghost"}
+                        disabled={isPending || isTransitioning}
+                      >
+                        Cart
+                      </Button>
+                    )}
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink to="/contactus">
                     {({ isActive, isPending, isTransitioning }) => (
                       <Button

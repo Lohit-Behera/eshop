@@ -1,5 +1,8 @@
 import React from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Loader2 } from "lucide-react";
 import Rating from "./Rating";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +13,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { fetchCreateCart, resetCreateCart } from "@/features/CartSlice";
 
 function Product({ product }) {
+  const dispatch = useDispatch();
+
+  const createCartStatus = useSelector((state) => state.cart.createCartStatus);
+
+  useEffect(() => {
+    if (createCartStatus === "succeeded" || createCartStatus === "failed") {
+      dispatch(resetCreateCart());
+    }
+  }, [dispatch, createCartStatus]);
+
+  const addToCart = () => {
+    dispatch(
+      fetchCreateCart({
+        product_id: product.id,
+        quantity: 1,
+      })
+    );
+  };
   return (
     <Card className="h-full">
       <CardHeader>
@@ -52,7 +74,22 @@ function Product({ product }) {
               Price -&nbsp;₹{product.price}
             </h1>
             {product.countInStock === 0 ? null : (
-              <Button variant="default">Add to Cart</Button>
+              <>
+                {createCartStatus === "idle" ? (
+                  <Button variant="default" onClick={addToCart}>
+                    Add to Cart
+                  </Button>
+                ) : createCartStatus === "loading" ? (
+                  <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Add to Cart
+                  </Button>
+                ) : (
+                  <Button variant="default" disabled>
+                    Add to Cart
+                  </Button>
+                )}
+              </>
             )}
           </div>
         </div>
