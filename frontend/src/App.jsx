@@ -13,6 +13,8 @@ import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import CartPage from "./Pages/CartPage";
 import ProfilePage from "./Pages/ProfilePage";
+import CheckoutPage from "./Pages/CheckoutPage";
+import AddressPage from "./Pages/AddressPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +25,8 @@ const router = createBrowserRouter(
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/address" element={<AddressPage />} />
     </Route>
   )
 );

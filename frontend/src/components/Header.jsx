@@ -4,11 +4,21 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@/features/UserSlice";
 import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
-import { ImageMinus, Menu } from "lucide-react";
+import {
+  Home,
+  ImageMinus,
+  LogIn,
+  LogOut,
+  Mail,
+  Menu,
+  ShoppingCart,
+  UserCog,
+} from "lucide-react";
 import Logo from "../assets/Logo.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -63,23 +73,27 @@ function Header() {
                       <Button
                         variant={isActive ? "default" : "ghost"}
                         disabled={isPending || isTransitioning}
+                        size="icon"
                       >
-                        Home
+                        <Home />
                       </Button>
                     )}
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/cart">
-                    {({ isActive, isPending, isTransitioning }) => (
-                      <Button
-                        variant={isActive ? "default" : "ghost"}
-                        disabled={isPending || isTransitioning}
-                      >
-                        Cart
-                      </Button>
-                    )}
-                  </NavLink>
+                  {userInfo && (
+                    <NavLink to="/cart">
+                      {({ isActive, isPending, isTransitioning }) => (
+                        <Button
+                          variant={isActive ? "default" : "ghost"}
+                          disabled={isPending || isTransitioning}
+                          size="icon"
+                        >
+                          <ShoppingCart />
+                        </Button>
+                      )}
+                    </NavLink>
+                  )}
                 </li>
                 <li>
                   <NavLink to="/contactus">
@@ -87,8 +101,9 @@ function Header() {
                       <Button
                         variant={isActive ? "default" : "ghost"}
                         disabled={isPending || isTransitioning}
+                        size="icon"
                       >
-                        Contact Us
+                        <Mail />
                       </Button>
                     )}
                   </NavLink>
@@ -97,7 +112,9 @@ function Header() {
                   <li>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost">Admin</Button>
+                        <Button variant="ghost" size="icon">
+                          <UserCog />
+                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="text-center">
                         <DropdownMenuLabel>Admin</DropdownMenuLabel>
@@ -117,8 +134,8 @@ function Header() {
                 )}
                 {userInfo ? (
                   <li>
-                    <Button variant="ghost" onClick={logoutHandler}>
-                      Log Out
+                    <Button variant="ghost" onClick={logoutHandler} size="icon">
+                      <LogOut />
                     </Button>
                   </li>
                 ) : (
@@ -128,8 +145,9 @@ function Header() {
                         <Button
                           variant={isActive ? "default" : "ghost"}
                           disabled={isPending || isTransitioning}
+                          size="icon"
                         >
-                          Login
+                          <LogIn />
                         </Button>
                       )}
                     </NavLink>
@@ -143,7 +161,7 @@ function Header() {
               <SheetTrigger>
                 <Menu color="#3b82f6" />
               </SheetTrigger>
-              <SheetContent side="left">
+              <SheetContent side="left" className="w-[30%]">
                 <SheetHeader className="items-center">
                   <SheetTitle>
                     <Avatar>
@@ -157,24 +175,45 @@ function Header() {
                         <li>
                           <NavLink to="/">
                             {({ isActive, isPending, isTransitioning }) => (
-                              <Button
-                                variant={isActive ? "default" : "ghost"}
-                                disabled={isPending || isTransitioning}
-                              >
-                                Home
-                              </Button>
+                              <SheetClose asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                  size="icon"
+                                >
+                                  <Home />
+                                </Button>
+                              </SheetClose>
+                            )}
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink to="/cart">
+                            {({ isActive, isPending, isTransitioning }) => (
+                              <SheetClose asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                  size="icon"
+                                >
+                                  <ShoppingCart />
+                                </Button>
+                              </SheetClose>
                             )}
                           </NavLink>
                         </li>
                         <li>
                           <NavLink to="/contactus">
                             {({ isActive, isPending, isTransitioning }) => (
-                              <Button
-                                variant={isActive ? "default" : "ghost"}
-                                disabled={isPending || isTransitioning}
-                              >
-                                Contact Us
-                              </Button>
+                              <SheetClose asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                  size="icon"
+                                >
+                                  <Mail />
+                                </Button>
+                              </SheetClose>
                             )}
                           </NavLink>
                         </li>
@@ -182,25 +221,33 @@ function Header() {
                           <li>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost">Admin</Button>
+                                <Button variant="ghost" size="icon">
+                                  <UserCog />
+                                </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent className="text-center">
                                 <DropdownMenuLabel>Admin</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem>
-                                  <Link to="/user/dashboard">
-                                    User Dashboard
-                                  </Link>
+                                  <SheetClose asChild>
+                                    <Link to="/user/dashboard">
+                                      User Dashboard
+                                    </Link>
+                                  </SheetClose>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                  <Link to="/product/dashboard">
-                                    Product Dashboard
-                                  </Link>
+                                  <SheetClose asChild>
+                                    <Link to="/product/dashboard">
+                                      Product Dashboard
+                                    </Link>
+                                  </SheetClose>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                  <Link to="/order/dashboard">
-                                    Order Dashboard
-                                  </Link>
+                                  <SheetClose asChild>
+                                    <Link to="/order/dashboard">
+                                      Order Dashboard
+                                    </Link>
+                                  </SheetClose>
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -208,20 +255,29 @@ function Header() {
                         )}
                         {userInfo ? (
                           <li>
-                            <Button variant="ghost" onClick={logoutHandler}>
-                              Log Out
-                            </Button>
+                            <SheetClose asChild>
+                              <Button
+                                variant="ghost"
+                                onClick={logoutHandler}
+                                size="icon"
+                              >
+                                <LogOut />
+                              </Button>
+                            </SheetClose>
                           </li>
                         ) : (
                           <li>
                             <NavLink to="/login">
                               {({ isActive, isPending, isTransitioning }) => (
-                                <Button
-                                  variant={isActive ? "default" : "ghost"}
-                                  disabled={isPending || isTransitioning}
-                                >
-                                  Login
-                                </Button>
+                                <SheetClose asChild>
+                                  <Button
+                                    variant={isActive ? "default" : "ghost"}
+                                    disabled={isPending || isTransitioning}
+                                    size="icon"
+                                  >
+                                    <LogIn />
+                                  </Button>
+                                </SheetClose>
                               )}
                             </NavLink>
                           </li>
@@ -249,15 +305,17 @@ function Header() {
               <li className="mt-0.5">
                 <DarkModeToggle />
               </li>
-              <li className="mt-0.5">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={deleteImagesHandler}
-                >
-                  <ImageMinus />
-                </Button>
-              </li>
+              {userDetails && userDetails.is_staff && (
+                <li className="mt-0.5 ml-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={deleteImagesHandler}
+                  >
+                    <ImageMinus />
+                  </Button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

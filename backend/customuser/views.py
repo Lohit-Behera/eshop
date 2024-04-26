@@ -18,9 +18,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 import os
 
-from .serializers import UserSerializerWithToken, UserSerializer
+from .serializers import UserSerializerWithToken, UserSerializer, AddressSerializer
 
-from .models import CustomUser, EmailVerificationToken
+from .models import CustomUser, EmailVerificationToken, Address
 from product.models import Product
 
 # Create your views here.
@@ -200,7 +200,46 @@ def delete_user(request, pk):
     user.delete()
     return Response({'massage': 'User deleted successfully'})
 
-import logging
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def add_address(request):
+    try:
+        user = request.user
+        data = request.data
+        address = Address.objects.create(
+            user=user,
+            house_no = data['house_no'],
+            landmark = data['landmark'],
+            city = data['city'],
+            state = data['state'],
+            country = data['country'],
+            pincode = data['pincode'],
+        )
+        address.save()
+        return Response({'message': 'Address added successfully'})
+    except:
+        return Response({'message': 'An error occurred while adding address'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_address(request):
+    user = request.user
+    address = Address.objects.filter(user=user)
+    serializer = AddressSerializer(address, many=True)
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_address(request, pk):
+    try:
+        address = Address.objects.get(id=pk)
+        address.delete()
+        return Response({'message': 'Address deleted successfully'})
+    except:
+        return Response({'message': 'An error occurred while deleting address'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def delete_all_images(request):
@@ -232,6 +271,5 @@ def delete_all_images(request):
                     os.remove(os.path.join(root, file))
                         
         return Response({'message': 'All images deleted successfully'}, status=200)
-    except Exception as e:
-        logging.error(e)
+    except:
         return Response({'massage': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)
