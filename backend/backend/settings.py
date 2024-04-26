@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     
     'customuser.apps.CustomuserConfig',
     'product.apps.ProductConfig',
+    'order.apps.OrderConfig',
 ]
 
 REST_FRAMEWORK = {
@@ -168,3 +169,6 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+RAZORPAY_API_KEY = os.getenv('RAZORPAY_API_KEY')
+RAZORPAY_API_SECRET = os.getenv('RAZORPAY_API_SECRET')

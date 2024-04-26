@@ -7,6 +7,8 @@ import { fetchGetAddress, fetchDeleteAddress } from "@/features/AddressSlice";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Trash } from "lucide-react";
+import axios from "axios";
+import { fetchCreateOrder } from "@/features/OrderSlice";
 
 function CheckoutPage() {
   const dispatch = useDispatch();
@@ -22,18 +24,70 @@ function CheckoutPage() {
     }
   }, [dispatch]);
 
+  const userDetails = useSelector((state) => state.user.userDetails) || {};
   const getCart = useSelector((state) => state.cart.getCart) || [];
   const getAddress = useSelector((state) => state.address.getAddress) || [];
   const getCartStatus = useSelector((state) => state.cart.getCartStatus);
+
+  const [addressId, setAddressId] = useState("");
+
   const totalPrice = getCart.reduce((total, item) => {
     if (item.quantity > 0) {
       return total + item.price * item.quantity;
     }
     return total;
   }, 0);
-  const [address, setAddress] = useState(null);
 
   const shippingPrice = totalPrice > 2000 ? 0 : 200;
+
+  const amount = totalPrice + shippingPrice;
+
+  const orderItems = getCart.map((item, index) => ({
+    product: item.product,
+    qty: item.quantity,
+    product_imge: item.image,
+    price: item.price,
+  }));
+  const handlePayment = () => {
+    axios
+      .post("/api/order/payment/", { amount: amount })
+      .then((response) => {
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY,
+          amount: response.data.amount,
+          currency: "INR",
+          name: "EShop",
+          description: "Purchase Description",
+          image:
+            "https://drive.google.com/uc?id=1B0OMXhgGxNViotjCcJKuN5EVpHEf7OLU",
+          order_id: response.data.id,
+          handler: function (response) {
+            dispatch(
+              fetchCreateOrder({
+                address: addressId,
+                shipping_price: shippingPrice,
+                total_price: totalPrice,
+                order_payment_id: response.razorpay_order_id,
+                orderItems: orderItems,
+              })
+            );
+            console.log(response);
+          },
+          prefill: {
+            name: userDetails.first_name + " " + userDetails.last_name,
+            email: userDetails.email,
+          },
+          theme: {
+            color: "#3b82f6",
+          },
+        };
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      })
+      .catch((error) => {
+        console.error("Error initiating payment:", error);
+      });
+  };
 
   return (
     <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg space-x-4">
@@ -53,7 +107,7 @@ function CheckoutPage() {
                       <RadioGroupItem
                         value={address.id}
                         id={address.id}
-                        onClick={() => setAddress(address.id)}
+                        onClick={() => setAddressId(address.id)}
                       />
                       <div className="w-[95%] flex-grow md:flex justify-between text-sm md:text-base space-y-2">
                         <div>
@@ -100,8 +154,8 @@ function CheckoutPage() {
           )}
           <div>
             <h1 className="text-xl font-semibold">Items</h1>
-            {getCart.map((item) => (
-              <>
+            {getCart.map((item, index) => (
+              <React.Fragment key={index}>
                 {item.quantity > 0 && (
                   <div
                     key={item.id}
@@ -123,7 +177,7 @@ function CheckoutPage() {
                     <p className="font-semibold">Quantity: {item.quantity}</p>
                   </div>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>
@@ -137,7 +191,9 @@ function CheckoutPage() {
             <p className="font-semibold">
               Total: ₹ {totalPrice + shippingPrice}
             </p>
-            <Button className="w-full mt-4"> Place Order</Button>
+            <Button onClick={handlePayment} className="w-full mt-4">
+              Pay Now
+            </Button>
           </div>
         </div>
       </div>

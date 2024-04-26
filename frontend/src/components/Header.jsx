@@ -20,7 +20,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -163,128 +162,124 @@ function Header() {
               </SheetTrigger>
               <SheetContent side="left" className="w-[30%]">
                 <SheetHeader className="items-center">
-                  <SheetTitle>
+                  <SheetTitle className="space-y-3">
                     <Avatar>
                       <AvatarImage src={Logo} />
                       <AvatarFallback>MP</AvatarFallback>
                     </Avatar>
-                  </SheetTitle>
-                  <SheetDescription>
-                    <div>
-                      <ul className="space-y-4">
-                        <li>
-                          <NavLink to="/">
-                            {({ isActive, isPending, isTransitioning }) => (
-                              <SheetClose asChild>
-                                <Button
-                                  variant={isActive ? "default" : "ghost"}
-                                  disabled={isPending || isTransitioning}
-                                  size="icon"
-                                >
-                                  <Home />
-                                </Button>
-                              </SheetClose>
-                            )}
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink to="/cart">
-                            {({ isActive, isPending, isTransitioning }) => (
-                              <SheetClose asChild>
-                                <Button
-                                  variant={isActive ? "default" : "ghost"}
-                                  disabled={isPending || isTransitioning}
-                                  size="icon"
-                                >
-                                  <ShoppingCart />
-                                </Button>
-                              </SheetClose>
-                            )}
-                          </NavLink>
-                        </li>
-                        <li>
-                          <NavLink to="/contactus">
-                            {({ isActive, isPending, isTransitioning }) => (
-                              <SheetClose asChild>
-                                <Button
-                                  variant={isActive ? "default" : "ghost"}
-                                  disabled={isPending || isTransitioning}
-                                  size="icon"
-                                >
-                                  <Mail />
-                                </Button>
-                              </SheetClose>
-                            )}
-                          </NavLink>
-                        </li>
-                        {userDetails && userDetails.is_staff && (
-                          <li>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <UserCog />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="text-center">
-                                <DropdownMenuLabel>Admin</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                  <SheetClose asChild>
-                                    <Link to="/user/dashboard">
-                                      User Dashboard
-                                    </Link>
-                                  </SheetClose>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <SheetClose asChild>
-                                    <Link to="/product/dashboard">
-                                      Product Dashboard
-                                    </Link>
-                                  </SheetClose>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <SheetClose asChild>
-                                    <Link to="/order/dashboard">
-                                      Order Dashboard
-                                    </Link>
-                                  </SheetClose>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </li>
-                        )}
-                        {userInfo ? (
-                          <li>
+                    <ul className="space-y-4">
+                      <li>
+                        <NavLink to="/">
+                          {({ isActive, isPending, isTransitioning }) => (
                             <SheetClose asChild>
                               <Button
-                                variant="ghost"
-                                onClick={logoutHandler}
+                                variant={isActive ? "default" : "ghost"}
+                                disabled={isPending || isTransitioning}
                                 size="icon"
                               >
-                                <LogOut />
+                                <Home />
                               </Button>
                             </SheetClose>
-                          </li>
-                        ) : (
-                          <li>
-                            <NavLink to="/login">
-                              {({ isActive, isPending, isTransitioning }) => (
+                          )}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/cart">
+                          {({ isActive, isPending, isTransitioning }) => (
+                            <SheetClose asChild>
+                              <Button
+                                variant={isActive ? "default" : "ghost"}
+                                disabled={isPending || isTransitioning}
+                                size="icon"
+                              >
+                                <ShoppingCart />
+                              </Button>
+                            </SheetClose>
+                          )}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/contactus">
+                          {({ isActive, isPending, isTransitioning }) => (
+                            <SheetClose asChild>
+                              <Button
+                                variant={isActive ? "default" : "ghost"}
+                                disabled={isPending || isTransitioning}
+                                size="icon"
+                              >
+                                <Mail />
+                              </Button>
+                            </SheetClose>
+                          )}
+                        </NavLink>
+                      </li>
+                      {userDetails && userDetails.is_staff && (
+                        <li>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <UserCog />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="text-center">
+                              <DropdownMenuLabel>Admin</DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem>
                                 <SheetClose asChild>
-                                  <Button
-                                    variant={isActive ? "default" : "ghost"}
-                                    disabled={isPending || isTransitioning}
-                                    size="icon"
-                                  >
-                                    <LogIn />
-                                  </Button>
+                                  <Link to="/user/dashboard">
+                                    User Dashboard
+                                  </Link>
                                 </SheetClose>
-                              )}
-                            </NavLink>
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  </SheetDescription>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <SheetClose asChild>
+                                  <Link to="/product/dashboard">
+                                    Product Dashboard
+                                  </Link>
+                                </SheetClose>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <SheetClose asChild>
+                                  <Link to="/order/dashboard">
+                                    Order Dashboard
+                                  </Link>
+                                </SheetClose>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </li>
+                      )}
+                      {userInfo ? (
+                        <li>
+                          <SheetClose asChild>
+                            <Button
+                              variant="ghost"
+                              onClick={logoutHandler}
+                              size="icon"
+                            >
+                              <LogOut />
+                            </Button>
+                          </SheetClose>
+                        </li>
+                      ) : (
+                        <li>
+                          <NavLink to="/login">
+                            {({ isActive, isPending, isTransitioning }) => (
+                              <SheetClose asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                  size="icon"
+                                >
+                                  <LogIn />
+                                </Button>
+                              </SheetClose>
+                            )}
+                          </NavLink>
+                        </li>
+                      )}
+                    </ul>
+                  </SheetTitle>
                 </SheetHeader>
               </SheetContent>
             </Sheet>

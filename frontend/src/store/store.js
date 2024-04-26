@@ -5,6 +5,7 @@ import UserSlice from "@/features/UserSlice";
 import CartSlice from "@/features/CartSlice";
 import DeleteImages from "@/features/DeleteImages";
 import AddressSlice from "@/features/AddressSlice";
+import OrderSlice from "@/features/OrderSlice";
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         product: productSlice,
         cart: CartSlice,
         address: AddressSlice,
+        order: OrderSlice,
         deleteImages: DeleteImages
     },
 });

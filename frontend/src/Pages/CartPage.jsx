@@ -17,7 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { checkoutAdd } from "@/features/CheckoutSlice";
 
 function CartPage() {
   const dispatch = useDispatch();
