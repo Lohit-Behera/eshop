@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserUpdate } from "@/features/UserSlice";
 import CustomPassword from "@/components/CustomPassword";
@@ -8,6 +8,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -16,6 +25,8 @@ function ProfilePage() {
   const userInfo = useSelector((state) => state.user.userInfo);
   const userDetails = useSelector((state) => state.user.userDetails) || {};
   const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus);
+  const getAllOrders = useSelector((state) => state.order.getAllOrders) || [];
+  console.log(getAllOrders);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -101,7 +112,7 @@ function ProfilePage() {
                     id="first-name"
                     placeholder="First Name"
                     onChange={(e) => setFirstName(e.target.value)}
-                    value={firstName}
+                    value={firstName || ""}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -110,7 +121,7 @@ function ProfilePage() {
                     id="last-name"
                     placeholder="Last Name"
                     onChange={(e) => setLastName(e.target.value)}
-                    value={lastName}
+                    value={lastName || ""}
                   />
                 </div>
               </div>
@@ -121,7 +132,7 @@ function ProfilePage() {
                   type="email"
                   placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
-                  value={email}
+                  value={email || ""}
                 />
               </div>
               <div className="grid gap-2">
@@ -162,6 +173,51 @@ function ProfilePage() {
         </div>
         <div className="w-[98%] m-3 mx-auto lg:mx-3 lg:w-3/5 border-2 rounded-lg">
           <h1 className="text-2xl font-bold text-center my-4">Orders</h1>
+          <div>
+            <Table>
+              <TableCaption>A list of your recent invoices.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Order Id</TableHead>
+                  <TableHead>Purchase Date</TableHead>
+                  <TableHead>Total Price</TableHead>
+                  <TableHead className="w-[100px]">Shipping Price</TableHead>
+                  <TableHead>Paid</TableHead>
+                  <TableHead>Delivered</TableHead>
+                  <TableHead>Deliver Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {getAllOrders.map((order) => (
+                  <TableRow>
+                    <TableCell className="font-medium truncate">
+                      <Link
+                        to={`/order/${order.id}`}
+                        className="hover:underline"
+                      >
+                        {order.id}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{order.created_at.substring(0, 10)}</TableCell>
+                    <TableCell>
+                      <span className="text-base font-bold">₹&nbsp;</span>
+                      {order.total_price ? Math.round(order.total_price) : 0}
+                    </TableCell>
+                    <TableCell>
+                      {order.shipping_price < 1 ? "Free" : order.shipping_price}
+                    </TableCell>
+                    <TableCell>{order.is_paid ? "Yes" : "No"}</TableCell>
+                    <TableCell>{order.is_delivered ? "Yes" : "No"}</TableCell>
+                    <TableCell>
+                      {order.is_delivered
+                        ? order.delivered_at.substring(0, 10)
+                        : ""}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </div>

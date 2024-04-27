@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Trash } from "lucide-react";
 import axios from "axios";
 import { fetchCreateOrder } from "@/features/OrderSlice";
+import Logo from "../assets/Logo.svg";
 
 function CheckoutPage() {
   const dispatch = useDispatch();
@@ -28,6 +29,14 @@ function CheckoutPage() {
   const getCart = useSelector((state) => state.cart.getCart) || [];
   const getAddress = useSelector((state) => state.address.getAddress) || [];
   const getCartStatus = useSelector((state) => state.cart.getCartStatus);
+  const order = useSelector((state) => state.order.order) || {};
+  const orderStatus = useSelector((state) => state.order.orderStatus);
+
+  useEffect(() => {
+    if (orderStatus === "succeeded") {
+      navigate(`/order/${order.id}`);
+    }
+  }, [orderStatus]);
 
   const [addressId, setAddressId] = useState("");
 
@@ -42,51 +51,59 @@ function CheckoutPage() {
 
   const amount = totalPrice + shippingPrice;
 
-  const orderItems = getCart.map((item, index) => ({
-    product: item.product,
-    qty: item.quantity,
-    product_imge: item.image,
-    price: item.price,
-  }));
+  const orderItems = getCart
+    .filter((item) => item.quantity > 0)
+    .map((item, index) => ({
+      cart_id: item.id,
+      product: item.product,
+      qty: item.quantity,
+      product_image: item.image,
+      price: item.price,
+    }));
+
   const handlePayment = () => {
-    axios
-      .post("/api/order/payment/", { amount: amount })
-      .then((response) => {
-        const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY,
-          amount: response.data.amount,
-          currency: "INR",
-          name: "EShop",
-          description: "Purchase Description",
-          image:
-            "https://drive.google.com/uc?id=1B0OMXhgGxNViotjCcJKuN5EVpHEf7OLU",
-          order_id: response.data.id,
-          handler: function (response) {
-            dispatch(
-              fetchCreateOrder({
-                address: addressId,
-                shipping_price: shippingPrice,
-                total_price: totalPrice,
-                order_payment_id: response.razorpay_order_id,
-                orderItems: orderItems,
-              })
-            );
-            console.log(response);
-          },
-          prefill: {
-            name: userDetails.first_name + " " + userDetails.last_name,
-            email: userDetails.email,
-          },
-          theme: {
-            color: "#3b82f6",
-          },
-        };
-        const rzp1 = new window.Razorpay(options);
-        rzp1.open();
-      })
-      .catch((error) => {
-        console.error("Error initiating payment:", error);
-      });
+    if (!addressId) {
+      alert("Please select an address");
+      return;
+    } else {
+      axios
+        .post("/api/order/payment/", { amount: amount })
+        .then((response) => {
+          const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY,
+            amount: response.data.amount,
+            currency: "INR",
+            name: "EShop",
+            description: "Purchase Description",
+            image: Logo,
+            order_id: response.data.id,
+            handler: function (response) {
+              dispatch(
+                fetchCreateOrder({
+                  address: addressId,
+                  shipping_price: shippingPrice,
+                  total_price: totalPrice,
+                  order_payment_id: response.razorpay_order_id,
+                  orderItems: orderItems,
+                })
+              );
+              console.log(response);
+            },
+            prefill: {
+              name: userDetails.first_name + " " + userDetails.last_name,
+              email: userDetails.email,
+            },
+            theme: {
+              color: "#3b82f6",
+            },
+          };
+          const rzp1 = new window.Razorpay(options);
+          rzp1.open();
+        })
+        .catch((error) => {
+          console.error("Error initiating payment:", error);
+        });
+    }
   };
 
   return (

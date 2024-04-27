@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchGetProducts } from "./features/ProductSlice";
 import { fetchUserDetails } from "./features/UserSlice";
 import { fetchGetCart } from "./features/CartSlice";
+import { fetchGetAllOrders } from "./features/OrderSlice";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -17,6 +18,7 @@ function Layout() {
     if (userInfo) {
       dispatch(fetchUserDetails(userInfo.id));
       dispatch(fetchGetCart());
+      dispatch(fetchGetAllOrders());
     }
   }, [dispatch, userInfo]);
 
@@ -25,12 +27,16 @@ function Layout() {
   );
   const productsStatus = useSelector((state) => state.product.status);
   const getCartStatus = useSelector((state) => state.cart.getCartStatus);
+  const getAllOrderStatus = useSelector(
+    (state) => state.order.getAllOrderStatus
+  );
 
   return (
     <>
       {productsStatus === "loading" &&
       userDetailsStatus === "loading" &&
-      getCartStatus === "loading" ? (
+      getCartStatus === "loading" &&
+      getAllOrderStatus === "loading" ? (
         <div>Loading...</div>
       ) : (
         <>

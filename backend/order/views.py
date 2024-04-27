@@ -9,8 +9,9 @@ from razorpay import Client
 
 from customuser.models import Address
 from .models import Order, OrderItem
-from product.models import Product
+from product.models import Product, Cart
 from .serializers import OrderSerializer, OrderItemSerializer
+from customuser.serializers import AddressSerializer
 
 @api_view(['POST'])
 def create_payment(request):
@@ -23,8 +24,6 @@ def create_payment(request):
         logging.error(e)
         return Response({'error': 'Something went wrong. Try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-
-import logging
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def create_order(request):
@@ -50,6 +49,7 @@ def create_order(request):
 
             for i in orderItems:
                 product = Product.objects.get(id=i['product'])
+                cart = Cart.objects.get(user=user, product=product)
 
                 item = OrderItem.objects.create(
                     product=product,
@@ -60,12 +60,32 @@ def create_order(request):
                     image=f'/images/{product.image}',
                 )
 
-                # update stock
-                product.countInStock -= int(item.qty)
+                product.countInStock -= int(i['qty'])
                 product.save()
-        
-            return Response({'message': 'Order created successfully'}, status=status.HTTP_201_CREATED)
+                cart.delete()
 
-    except Exception as e:
-        logging.error(e)
+            serializer = OrderSerializer(order, many=False)
+            return Response(serializer.data)
+
+    except:
         return Response({'detail': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_orders(request):
+    user = request.user
+    orders = user.order_set.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_order_by_id(request, pk):
+    order = Order.objects.get(id=pk)
+    order_items = OrderItem.objects.filter(order=order)
+    address = Address.objects.get(id=order.address.id)
+    address_serializer = AddressSerializer(address, many=False)
+    item_serializer = OrderItemSerializer(order_items, many=True)
+    serializer = OrderSerializer(order, many=False)
+    return Response({'order': serializer.data, 'items': item_serializer.data, 'address': address_serializer.data})

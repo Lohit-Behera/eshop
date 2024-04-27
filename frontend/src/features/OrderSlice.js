@@ -25,13 +25,67 @@ export const fetchCreateOrder = createAsyncThunk('create/order', async (order, {
     }
 });
 
+export const fetchGetOrderById = createAsyncThunk('get/order', async (id, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.get(
+            `/api/order/get/${id}/`,
+            config
+        );
+        return data;
+    } catch (error) {
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+});
+
+export const fetchGetAllOrders = createAsyncThunk('get/all/orders', async (_, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.get(
+            '/api/order/get/',
+            config
+        );
+        return data;
+    } catch (error) {
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+});
+
 
 const orderSlice = createSlice({
     name: 'order',
     initialState: {
         order: null,
         orderStatus: 'idle',
-        orderError: null
+        orderError: null,
+
+        getOrder: null,
+        getOrderStatus: 'idle',
+        getOrderError: null,
+
+        getAllOrders: null,
+        getAllOrdersStatus: 'idle',
+        getAllOrdersError: null
     },
     reducers: {
     },
@@ -47,6 +101,30 @@ const orderSlice = createSlice({
             .addCase(fetchCreateOrder.rejected, (state, action) => {
                 state.orderStatus = 'failed';
                 state.orderError = action.error.message;
+            })
+
+            .addCase(fetchGetOrderById.pending, (state) => {
+                state.getOrderStatus = 'loading';
+            })
+            .addCase(fetchGetOrderById.fulfilled, (state, action) => {
+                state.getOrderStatus = 'succeeded';
+                state.getOrder = action.payload;
+            })
+            .addCase(fetchGetOrderById.rejected, (state, action) => {
+                state.getOrderStatus = 'failed';
+                state.getOrderError = action.error.message;
+            })
+
+            .addCase(fetchGetAllOrders.pending, (state) => {
+                state.getAllOrdersStatus = 'loading';
+            })
+            .addCase(fetchGetAllOrders.fulfilled, (state, action) => {
+                state.getAllOrdersStatus = 'succeeded';
+                state.getAllOrders = action.payload;
+            })
+            .addCase(fetchGetAllOrders.rejected, (state, action) => {
+                state.getAllOrdersStatus = 'failed';
+                state.getAllOrdersError = action.error.message;
             })
     }
 });
