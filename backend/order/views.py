@@ -16,6 +16,7 @@ from customuser.serializers import AddressSerializer
 @api_view(['POST'])
 def create_payment(request):
     try:
+        print(RAZORPAY_API_KEY)
         client = Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRET))
         amount = int(request.data['amount']) * 100 
         payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})

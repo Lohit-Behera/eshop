@@ -32,6 +32,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { fetchDeleteImages } from "@/features/DeleteImages";
 
 function Header() {
@@ -60,22 +67,40 @@ function Header() {
               <ul className="flex space-x-3">
                 <li>
                   <Link to="/">
-                    <Avatar>
-                      <AvatarImage src={Logo} />
-                      <AvatarFallback>ES</AvatarFallback>
-                    </Avatar>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Avatar className="mr-4">
+                            <AvatarImage src={Logo} />
+                            <AvatarFallback>ES</AvatarFallback>
+                          </Avatar>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>EShop</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </Link>
                 </li>
                 <li>
                   <NavLink to="/">
                     {({ isActive, isPending, isTransitioning }) => (
-                      <Button
-                        variant={isActive ? "default" : "ghost"}
-                        disabled={isPending || isTransitioning}
-                        size="icon"
-                      >
-                        <Home />
-                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant={isActive ? "default" : "ghost"}
+                              disabled={isPending || isTransitioning}
+                              size="icon"
+                            >
+                              <Home />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Home</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     )}
                   </NavLink>
                 </li>
@@ -83,13 +108,22 @@ function Header() {
                   {userInfo && (
                     <NavLink to="/cart">
                       {({ isActive, isPending, isTransitioning }) => (
-                        <Button
-                          variant={isActive ? "default" : "ghost"}
-                          disabled={isPending || isTransitioning}
-                          size="icon"
-                        >
-                          <ShoppingCart />
-                        </Button>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant={isActive ? "default" : "ghost"}
+                                disabled={isPending || isTransitioning}
+                                size="icon"
+                              >
+                                <ShoppingCart />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Cart</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                     </NavLink>
                   )}
@@ -97,13 +131,22 @@ function Header() {
                 <li>
                   <NavLink to="/contactus">
                     {({ isActive, isPending, isTransitioning }) => (
-                      <Button
-                        variant={isActive ? "default" : "ghost"}
-                        disabled={isPending || isTransitioning}
-                        size="icon"
-                      >
-                        <Mail />
-                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant={isActive ? "default" : "ghost"}
+                              disabled={isPending || isTransitioning}
+                              size="icon"
+                            >
+                              <Mail />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Contact Us</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     )}
                   </NavLink>
                 </li>
@@ -119,7 +162,7 @@ function Header() {
                         <DropdownMenuLabel>Admin</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                          <Link to="/user/dashboard">User Dashboard</Link>
+                          <Link to="/admin/user">User Dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link to="/product/dashboard">Product Dashboard</Link>
@@ -133,21 +176,43 @@ function Header() {
                 )}
                 {userInfo ? (
                   <li>
-                    <Button variant="ghost" onClick={logoutHandler} size="icon">
-                      <LogOut />
-                    </Button>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            onClick={logoutHandler}
+                            size="icon"
+                          >
+                            <LogOut />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>LogOut</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </li>
                 ) : (
                   <li>
                     <NavLink to="/login">
                       {({ isActive, isPending, isTransitioning }) => (
-                        <Button
-                          variant={isActive ? "default" : "ghost"}
-                          disabled={isPending || isTransitioning}
-                          size="icon"
-                        >
-                          <LogIn />
-                        </Button>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant={isActive ? "default" : "ghost"}
+                                disabled={isPending || isTransitioning}
+                                size="icon"
+                              >
+                                <LogIn />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Log In</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                     </NavLink>
                   </li>
@@ -163,10 +228,19 @@ function Header() {
               <SheetContent side="left" className="w-[30%]">
                 <SheetHeader className="items-center">
                   <SheetTitle className="space-y-3">
-                    <Avatar>
-                      <AvatarImage src={Logo} />
-                      <AvatarFallback>MP</AvatarFallback>
-                    </Avatar>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Avatar>
+                            <AvatarImage src={Logo} />
+                            <AvatarFallback>MP</AvatarFallback>
+                          </Avatar>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Menu</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                     <ul className="space-y-4">
                       <li>
                         <NavLink to="/">
@@ -226,9 +300,7 @@ function Header() {
                               <DropdownMenuSeparator />
                               <DropdownMenuItem>
                                 <SheetClose asChild>
-                                  <Link to="/user/dashboard">
-                                    User Dashboard
-                                  </Link>
+                                  <Link to="/admin/user">User Dashboard</Link>
                                 </SheetClose>
                               </DropdownMenuItem>
                               <DropdownMenuItem>
@@ -290,10 +362,19 @@ function Header() {
               {userInfo && (
                 <li className="mr-3">
                   <Link to="/profile">
-                    <Avatar>
-                      <AvatarImage src={profileImage} />
-                      <AvatarFallback>P</AvatarFallback>
-                    </Avatar>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Avatar>
+                            <AvatarImage src={profileImage} />
+                            <AvatarFallback>P</AvatarFallback>
+                          </Avatar>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Profile</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </Link>
                 </li>
               )}
@@ -302,13 +383,22 @@ function Header() {
               </li>
               {userDetails && userDetails.is_staff && (
                 <li className="mt-0.5 ml-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={deleteImagesHandler}
-                  >
-                    <ImageMinus />
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={deleteImagesHandler}
+                        >
+                          <ImageMinus />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Delete Unused Images</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </li>
               )}
             </ul>

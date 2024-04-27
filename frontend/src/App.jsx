@@ -16,6 +16,7 @@ import ProfilePage from "./Pages/ProfilePage";
 import CheckoutPage from "./Pages/CheckoutPage";
 import AddressPage from "./Pages/AddressPage";
 import OrderPage from "./Pages/OrderPage";
+import AdminUserPage from "./Pages/AdminUserPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/address" element={<AddressPage />} />
       <Route path="/order/:id" element={<OrderPage />} />
+      <Route path="/admin/user" element={<AdminUserPage />} />
     </Route>
   )
 );
