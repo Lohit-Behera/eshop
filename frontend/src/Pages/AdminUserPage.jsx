@@ -11,7 +11,7 @@ import {
 } from "@/features/AdminUsers";
 
 import { Check, X } from "lucide-react";
-
+import CustomPagination from "@/components/CustomPagination";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -22,16 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 
 import {
   AlertDialog,
@@ -48,6 +38,7 @@ import {
 function AdminUserPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   let keyword = location.search;
 
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -72,7 +63,6 @@ function AdminUserPage() {
   const is_staff = userInfo ? userInfo.is_staff : false;
 
   const [currentPage, setCurrentPage] = useState(allUsers ? allUsers.page : 1);
-  console.log(currentPage);
 
   useEffect(() => {
     if (!is_staff) {
@@ -119,111 +109,18 @@ function AdminUserPage() {
     dispatch(fetchDeleteUser(id));
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const previousHandler = (page) => {
-    if (page > 1) {
-      setCurrentPage(page - 1);
-    }
-  };
-
-  const nextHandler = (page) => {
-    if (page < pages) {
-      setCurrentPage(page + 1);
-    }
-  };
-
   return (
     <div className="w-[96%] min-h-screen mx-auto bg-background border-2 rounded-lg mt-6">
       <Table>
         <TableCaption className="my-4">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  className={`${
-                    currentPage === 1 ? "cursor-not-allowed opacity-50" : ""
-                  }`}
-                  disabled={currentPage === 1}
-                  to={`/admin/user/?page=${
-                    currentPage === 1 ? 1 : currentPage - 1
-                  }`}
-                  onClick={() =>
-                    currentPage === 1
-                      ? setCurrentPage(1)
-                      : setCurrentPage(currentPage - 1)
-                  }
-                />
-              </PaginationItem>
-              {[...Array(pages)].map((_, index) => {
-                if (pages <= 6) {
-                  return (
-                    <PaginationItem key={index}>
-                      <PaginationLink
-                        className={`${
-                          currentPage === index + 1
-                            ? "bg-primary text-primary-foreground"
-                            : ""
-                        }`}
-                        to={`/admin/user/?page=${index + 1}`}
-                        onClick={() => handlePageChange(index + 1)}
-                        isActive={index + 1 === currentPage}
-                      >
-                        {index + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                } else {
-                  if (
-                    index === 0 ||
-                    index === pages - 1 ||
-                    (index >= currentPage - 2 && index <= currentPage + 1)
-                  ) {
-                    return (
-                      <PaginationItem key={index}>
-                        <PaginationLink
-                          className={`${
-                            currentPage === index + 1
-                              ? "bg-primary text-primary-foreground"
-                              : ""
-                          }`}
-                          to={`/admin/user/?page=${index + 1}`}
-                          onClick={() => handlePageChange(index + 1)}
-                          isActive={index + 1 === currentPage}
-                        >
-                          {index + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  } else if (index === 1 && currentPage > 3) {
-                    return <PaginationEllipsis key={index} />;
-                  } else if (index === pages - 2 && currentPage < pages - 2) {
-                    return <PaginationEllipsis key={index} />;
-                  } else {
-                    return null;
-                  }
-                }
-              })}
-              <PaginationItem>
-                <PaginationNext
-                  className={`${
-                    currentPage === pages ? "cursor-not-allowed opacity-50" : ""
-                  }`}
-                  disabled={currentPage === pages}
-                  to={`/admin/user/?page=${
-                    currentPage === pages ? pages : currentPage + 1
-                  }`}
-                  onClick={() =>
-                    currentPage === pages
-                      ? setCurrentPage(pages)
-                      : setCurrentPage(currentPage + 1)
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <CustomPagination
+            keyword="?page="
+            page={currentPage}
+            pages={pages}
+            link="/admin/user"
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
         </TableCaption>
         <TableHeader>
           <TableRow>

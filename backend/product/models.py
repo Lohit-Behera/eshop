@@ -9,7 +9,7 @@ class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
-    image = models.ImageField(upload_to='product_images/',null=True, blank=True, default='product_images/gojo.jpg')
+    image = models.ImageField(upload_to='product_images/',null=True, blank=True, default='product_images/product_sample.jpg')
     brand = models.CharField(max_length=200, null=True, blank=True)
     category = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)

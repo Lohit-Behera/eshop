@@ -165,7 +165,7 @@ function Header() {
                           <Link to="/admin/user">User Dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to="/product/dashboard">Product Dashboard</Link>
+                          <Link to="/admin/product">Product Dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link to="/order/dashboard">Order Dashboard</Link>
@@ -225,22 +225,13 @@ function Header() {
               <SheetTrigger>
                 <Menu color="#3b82f6" />
               </SheetTrigger>
-              <SheetContent side="left" className="w-[30%]">
+              <SheetContent side="left" className="w-[50%]">
                 <SheetHeader className="items-center">
                   <SheetTitle className="space-y-3">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Avatar>
-                            <AvatarImage src={Logo} />
-                            <AvatarFallback>MP</AvatarFallback>
-                          </Avatar>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Menu</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Avatar className="ml-8 w-16 h-16">
+                      <AvatarImage src={Logo} />
+                      <AvatarFallback>ES</AvatarFallback>
+                    </Avatar>
                     <ul className="space-y-4">
                       <li>
                         <NavLink to="/">
@@ -249,9 +240,9 @@ function Header() {
                               <Button
                                 variant={isActive ? "default" : "ghost"}
                                 disabled={isPending || isTransitioning}
-                                size="icon"
                               >
-                                <Home />
+                                <Home className="mr-2 h-4 w-4" />
+                                Home
                               </Button>
                             </SheetClose>
                           )}
@@ -264,9 +255,8 @@ function Header() {
                               <Button
                                 variant={isActive ? "default" : "ghost"}
                                 disabled={isPending || isTransitioning}
-                                size="icon"
                               >
-                                <ShoppingCart />
+                                <ShoppingCart className="mr-2 h-4 w-4" /> Cart
                               </Button>
                             </SheetClose>
                           )}
@@ -279,20 +269,19 @@ function Header() {
                               <Button
                                 variant={isActive ? "default" : "ghost"}
                                 disabled={isPending || isTransitioning}
-                                size="icon"
                               >
-                                <Mail />
+                                <Mail className="mr-2 h-4 w-4" /> Contact Us
                               </Button>
                             </SheetClose>
                           )}
                         </NavLink>
                       </li>
-                      {userDetails && userDetails.is_staff && (
+                      {userInfo && userDetails && userDetails.is_staff && (
                         <li>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <UserCog />
+                              <Button variant="ghost">
+                                <UserCog className="mr-2 h-4 w-4" /> Admin
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-center">
@@ -305,7 +294,7 @@ function Header() {
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 <SheetClose asChild>
-                                  <Link to="/product/dashboard">
+                                  <Link to="/admin/product">
                                     Product Dashboard
                                   </Link>
                                 </SheetClose>
@@ -321,33 +310,13 @@ function Header() {
                           </DropdownMenu>
                         </li>
                       )}
-                      {userInfo ? (
+                      {userInfo && (
                         <li>
                           <SheetClose asChild>
-                            <Button
-                              variant="ghost"
-                              onClick={logoutHandler}
-                              size="icon"
-                            >
-                              <LogOut />
+                            <Button variant="ghost" onClick={logoutHandler}>
+                              <LogOut className="mr-2 h-4 w-4" /> Logout
                             </Button>
                           </SheetClose>
-                        </li>
-                      ) : (
-                        <li>
-                          <NavLink to="/login">
-                            {({ isActive, isPending, isTransitioning }) => (
-                              <SheetClose asChild>
-                                <Button
-                                  variant={isActive ? "default" : "ghost"}
-                                  disabled={isPending || isTransitioning}
-                                  size="icon"
-                                >
-                                  <LogIn />
-                                </Button>
-                              </SheetClose>
-                            )}
-                          </NavLink>
                         </li>
                       )}
                     </ul>
@@ -378,10 +347,24 @@ function Header() {
                   </Link>
                 </li>
               )}
+              {!userInfo && (
+                <li className="block md:hidden">
+                  <NavLink to="/login">
+                    {({ isActive, isPending, isTransitioning }) => (
+                      <Button
+                        variant={isActive ? "default" : "ghost"}
+                        disabled={isPending || isTransitioning}
+                      >
+                        <LogIn className="mr-2 h-4 w-4" /> Login
+                      </Button>
+                    )}
+                  </NavLink>
+                </li>
+              )}
               <li className="mt-0.5">
                 <DarkModeToggle />
               </li>
-              {userDetails && userDetails.is_staff && (
+              {userInfo && userDetails && userDetails.is_staff && (
                 <li className="mt-0.5 ml-2">
                   <TooltipProvider>
                     <Tooltip>

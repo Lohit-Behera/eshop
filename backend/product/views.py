@@ -79,3 +79,68 @@ def delete_cart(request, pk):
     cart = Cart.objects.get(id=pk)
     cart.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_all_products(request):
+    products = Product.objects.all().order_by('name')
+    
+    page = request.query_params.get('page')
+    paginator = Paginator(products, 1)
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+    
+    serializer = ProductSerializer(products, many=True)
+    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_product(request, pk):
+    try:
+        product = Product.objects.get(id=pk)
+        product.delete()
+        return Response({'massage': 'Product deleted successfully'})
+    except:
+        return Response({'message': 'An error occurred while deleting product'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def create_product(request):
+    user = request.user
+    
+    product = Product.objects.create(
+        user=user,
+        name='Sample Name',
+        price=0,
+        brand='Sample Brand',
+        category='Sample Category',
+        countInStock=0,
+        description=''
+    )
+    serializer = ProductSerializer(product, many=False)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def update_product(request, pk):
+    data = request.data
+    product = Product.objects.get(id=pk)
+    product.name = data['name']
+    product.image = request.FILES.get('image')
+    product.price = data['price']
+    product.brand = data['brand']
+    product.category = data['category']
+    product.countInStock = data['countInStock']
+    product.description = data['description']
+    product.save()
+    serializer = ProductSerializer(product, many=False)
+    return Response(serializer.data)
