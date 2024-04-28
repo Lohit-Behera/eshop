@@ -8,6 +8,7 @@ urlpatterns = [
     path('get/all/', views.get_all_orders, name='get_all_orders'),
     
     path('get/<str:pk>/', views.get_order_by_id, name='get_order_by_id'),
+    path('admin/get/<str:pk>/', views.get_order_by_id_admin, name='get_order_by_id_admin'),
     path('update/<str:pk>/', views.update_order, name='update_order'),
     path('delete/<str:pk>/', views.delete_order, name='delete_order'),
 ]

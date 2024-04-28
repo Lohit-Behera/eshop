@@ -26,7 +26,6 @@ function ProfilePage() {
   const userDetails = useSelector((state) => state.user.userDetails) || {};
   const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus);
   const getAllOrders = useSelector((state) => state.order.getAllOrders) || [];
-  console.log(getAllOrders);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -144,13 +143,7 @@ function ProfilePage() {
                   accept="image/*"
                   label="Upload Image"
                   onChange={(e) => imageHandler(e)}
-                  className="block w-full text-primary font-semibold
-                                        file:me-4 file:py-2 file:px-4
-                                        file:rounded-lg file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-primary file:text-primary-foreground file:hover:cursor-pointer
-                                        hover:file:bg-primary/90
-                                        file:disabled:opacity-50 file:disabled:pointer-events-none cursor-pointer"
+                  className="block w-full text-primary font-semibold file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:hover:cursor-pointer hover:file:bg-primary/90  file:disabled:opacity-50 file:disabled:pointer-events-none cursor-pointer"
                 />
               </div>
               <CustomPassword

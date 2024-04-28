@@ -20,6 +20,7 @@ import AdminUserPage from "./Pages/AdminUserPage";
 import AdminProductPage from "./Pages/AdminProductPage";
 import ProductEditPage from "./Pages/ProductEditPage";
 import AdminOrderPage from "./Pages/AdminOrderPage";
+import AdminOrderUpdatePage from "./Pages/AdminOrderUpdatePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,10 @@ const router = createBrowserRouter(
       <Route path="/admin/product" element={<AdminProductPage />} />
       <Route path="/admin/update/product/:id" element={<ProductEditPage />} />
       <Route path="/admin/order" element={<AdminOrderPage />} />
+      <Route
+        path="/admin/update/order/:id"
+        element={<AdminOrderUpdatePage />}
+      />
     </Route>
   )
 );

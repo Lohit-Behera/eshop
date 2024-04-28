@@ -114,6 +114,13 @@ def get_all_orders(request):
     serializer = OrderSerializer(orders, many=True)
     return Response({'orders': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_order_by_id_admin(request, pk):
+    orders = Order.objects.get(id=pk)
+    serializer = OrderSerializer(orders, many=False)
+    return Response(serializer.data)
+
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def update_order(request, pk):

@@ -24,7 +24,30 @@ export const fetchGetOrders = createAsyncThunk('get/orders', async (keyword = ''
     }
 })
 
-export const fetchUpdateOrder = createAsyncThunk('update/order', async (_, { rejectWithValue, getState }) => {
+export const fetchAdminGetOrderById = createAsyncThunk('get/order/id/admin', async (id, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.get(
+            `/api/order/get/${id}/`,
+            config
+        );
+        return data;
+    } catch (error) {
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+})
+
+export const fetchUpdateOrder = createAsyncThunk('update/order', async (id, { rejectWithValue, getState }) => {
     try {
         const { user: { userInfo } = {} } = getState();
         const config = {
@@ -34,7 +57,8 @@ export const fetchUpdateOrder = createAsyncThunk('update/order', async (_, { rej
             },
         };
         const { data } = await axios.put(
-            `/api/order/update/${order.id}/`,
+            `/api/order/update/${id}/`,
+            id,
             config
         );
         return data;
@@ -77,6 +101,10 @@ const adminOrderSlice = createSlice({
         getAllOrderStatus: 'idle',
         getAllOrderError: null,
 
+        getOrderById: null,
+        getOrderByIdStatus: 'idle',
+        getOrderByIdError: null,
+
         updateOrder: null,
         updateOrderStatus: 'idle',
         updateOrderError: null,
@@ -86,6 +114,11 @@ const adminOrderSlice = createSlice({
         deleteOrderError: null
     },
     reducers: {
+        resetGetOrderById: (state) => {
+            state.getOrderById = null;
+            state.getOrderByIdStatus = 'idle';
+            state.getOrderByIdError = null;
+        },
         resetUpdateOrder: (state) => {
             state.updateOrder = null;
             state.updateOrderStatus = 'idle';
@@ -109,6 +142,18 @@ const adminOrderSlice = createSlice({
             .addCase(fetchGetOrders.rejected, (state, action) => {
                 state.getAllOrderStatus = 'failed';
                 state.getAllOrderError = action.error.message;
+            })
+
+            .addCase(fetchAdminGetOrderById.pending, (state) => {
+                state.getOrderByIdStatus = 'loading';
+            })
+            .addCase(fetchAdminGetOrderById.fulfilled, (state, action) => {
+                state.getOrderById = action.payload;
+                state.getOrderByIdStatus = 'succeeded';
+            })
+            .addCase(fetchAdminGetOrderById.rejected, (state, action) => {
+                state.getOrderByIdStatus = 'failed';
+                state.getOrderByIdError = action.error.message;
             })
 
             .addCase(fetchUpdateOrder.pending, (state) => {
@@ -137,5 +182,5 @@ const adminOrderSlice = createSlice({
     }
 });
 
-export const { resetUpdateOrder, resetDeleteOrder } = adminOrderSlice.actions
+export const { resetUpdateOrder, resetDeleteOrder, resetGetOrderById } = adminOrderSlice.actions
 export default adminOrderSlice.reducer

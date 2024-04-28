@@ -112,7 +112,9 @@ function AdminOrderPage() {
               <TableCell>{order.created_at.substr(0, 10)}</TableCell>
               <TableCell>{order.is_paid ? "Yes" : "No"}</TableCell>
               <TableCell>{order.is_delivered ? "Yes" : "No"}</TableCell>
-              <TableCell>{order.delivery_date}</TableCell>
+              <TableCell>
+                {order.delivered_at ? order.delivered_at.substr(0, 10) : ""}
+              </TableCell>
               <TableCell>
                 <Button
                   variant="ghost"
