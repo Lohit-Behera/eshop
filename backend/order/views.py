@@ -1,5 +1,6 @@
 from django.utils import timezone
 from backend.settings import RAZORPAY_API_KEY, RAZORPAY_API_SECRET
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -90,3 +91,43 @@ def get_order_by_id(request, pk):
     item_serializer = OrderItemSerializer(order_items, many=True)
     serializer = OrderSerializer(order, many=False)
     return Response({'order': serializer.data, 'items': item_serializer.data, 'address': address_serializer.data})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_all_orders(request):
+    orders = Order.objects.all().order_by('created_at')
+    
+    page = request.query_params.get('page')
+    paginator = Paginator(orders, 10)
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+    
+    serializer = OrderSerializer(orders, many=True)
+    return Response({'orders': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def update_order(request, pk):
+    order = Order.objects.get(id=pk)
+    order.is_delivered = True
+    order.delivered_at = timezone.now()
+    order.save()
+
+    serializer = OrderSerializer(order, many=False)
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_order(request, pk):
+    order = Order.objects.get(id=pk)
+    order.delete()
+    return Response('Order was deleted')

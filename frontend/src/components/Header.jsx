@@ -168,7 +168,7 @@ function Header() {
                           <Link to="/admin/product">Product Dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to="/order/dashboard">Order Dashboard</Link>
+                          <Link to="/admin/order">Order Dashboard</Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -301,9 +301,7 @@ function Header() {
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 <SheetClose asChild>
-                                  <Link to="/order/dashboard">
-                                    Order Dashboard
-                                  </Link>
+                                  <Link to="/admin/order">Order Dashboard</Link>
                                 </SheetClose>
                               </DropdownMenuItem>
                             </DropdownMenuContent>

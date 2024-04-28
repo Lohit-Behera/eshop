@@ -8,6 +8,7 @@ import AddressSlice from "@/features/AddressSlice";
 import OrderSlice from "@/features/OrderSlice";
 import AdminUsers from "@/features/AdminUsers";
 import AdminProductSlice from "@/features/AdminProductSlice";
+import AdminOrderSlice from "@/features/AdminOrderSlice";
 
 const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
         order: OrderSlice,
         adminUsers: AdminUsers,
         adminProduct: AdminProductSlice,
+        adminOrder: AdminOrderSlice,
         deleteImages: DeleteImages
     },
 });
