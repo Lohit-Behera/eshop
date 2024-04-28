@@ -154,7 +154,9 @@ function AdminProductPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => navigate(`/admin/product/edit/${product.id}`)}
+                  onClick={() =>
+                    navigate(`/admin/update/product/${product.id}`)
+                  }
                 >
                   <Pencil />
                 </Button>

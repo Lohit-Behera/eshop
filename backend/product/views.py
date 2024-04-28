@@ -86,7 +86,7 @@ def get_all_products(request):
     products = Product.objects.all().order_by('name')
     
     page = request.query_params.get('page')
-    paginator = Paginator(products, 1)
+    paginator = Paginator(products, 10)
     try:
         products = paginator.page(page)
     except PageNotAnInteger:
@@ -124,6 +124,8 @@ def create_product(request):
         brand='Sample Brand',
         category='Sample Category',
         countInStock=0,
+        rating=0,
+        numReviews=0,
         description=''
     )
     serializer = ProductSerializer(product, many=False)
@@ -133,14 +135,18 @@ def create_product(request):
 @permission_classes([IsAdminUser])
 def update_product(request, pk):
     data = request.data
+    image = request.FILES.get('image')
+    
     product = Product.objects.get(id=pk)
+    
     product.name = data['name']
-    product.image = request.FILES.get('image')
     product.price = data['price']
     product.brand = data['brand']
     product.category = data['category']
     product.countInStock = data['countInStock']
     product.description = data['description']
+    if image is not None:
+        product.image = request.FILES.get('image')
     product.save()
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)

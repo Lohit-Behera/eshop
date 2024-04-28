@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchGetProducts = createAsyncThunk('get/products', async (_, { rejectWithValue }) => {
+export const fetchGetProducts = createAsyncThunk('get/all/products', async (_, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
@@ -22,7 +22,7 @@ export const fetchGetProducts = createAsyncThunk('get/products', async (_, { rej
     }
 })
 
-export const fetchProductDetail = createAsyncThunk('get/productdetail', async (id, { rejectWithValue }) => {
+export const fetchProductDetail = createAsyncThunk('get/product/detail', async (id, { rejectWithValue }) => {
     try {
         const config = {
             headers: {

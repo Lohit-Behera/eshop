@@ -144,12 +144,12 @@ function ProfilePage() {
                   accept="image/*"
                   label="Upload Image"
                   onChange={(e) => imageHandler(e)}
-                  className="block w-full text-white
+                  className="block w-full text-primary font-semibold
                                         file:me-4 file:py-2 file:px-4
                                         file:rounded-lg file:border-0
                                         file:text-sm file:font-semibold
-                                        file:bg-[#3b82f6] file:text-white
-                                        hover:file:bg-[#306dd0]
+                                        file:bg-primary file:text-primary-foreground file:hover:cursor-pointer
+                                        hover:file:bg-primary/90
                                         file:disabled:opacity-50 file:disabled:pointer-events-none cursor-pointer"
                 />
               </div>

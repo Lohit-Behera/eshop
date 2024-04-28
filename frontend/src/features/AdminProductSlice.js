@@ -127,6 +127,11 @@ const adminProductSlice = createSlice({
             state.createProduct = null;
             state.createProductStatus = 'idle';
             state.createProductError = null
+        },
+        resetUpdateProduct: (state) => {
+            state.updateProduct = null;
+            state.updateProductStatus = 'idle';
+            state.updateProductError = null
         }
     },
     extraReducers: (builder) => {
@@ -182,5 +187,5 @@ const adminProductSlice = createSlice({
     }
 })
 
-export const { resetDeleteProduct, resetCreateProduct } = adminProductSlice.actions
+export const { resetDeleteProduct, resetCreateProduct,resetUpdateProduct } = adminProductSlice.actions
 export default adminProductSlice.reducer
