@@ -1,7 +1,7 @@
 import React from "react";
 import { Star, StarHalf } from "lucide-react";
 
-function Rating({ value, reviews, className = "" }) {
+function Rating({ value, reviews, className = "", text }) {
   return (
     <div className={`flex ${className} drop-shadow-md text-amber-400`}>
       <span className="mx-[0.1rem] ">
@@ -64,8 +64,7 @@ function Rating({ value, reviews, className = "" }) {
           <Star />
         )}
       </span>
-
-      <span className="ml-2 mb-1">Reviews({reviews})</span>
+      {text && <span className="ml-2 mb-1">Reviews({reviews})</span>}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGetProducts } from "./features/ProductSlice";
+import { fetchGetProducts, fetchTopProducts } from "./features/ProductSlice";
 import { fetchUserDetails } from "./features/UserSlice";
 import { fetchGetCart } from "./features/CartSlice";
 import { fetchGetAllOrders } from "./features/OrderSlice";
@@ -15,6 +15,7 @@ function Layout() {
 
   useEffect(() => {
     dispatch(fetchGetProducts());
+    dispatch(fetchTopProducts());
     if (userInfo) {
       dispatch(fetchUserDetails(userInfo.id));
       dispatch(fetchGetCart());

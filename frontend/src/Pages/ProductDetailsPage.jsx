@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -22,7 +24,9 @@ function ProductDetailsPage() {
     dispatch(fetchProductDetail(id));
   }, [dispatch]);
 
+  const userInfo = useSelector((state) => state.user.userInfo);
   const product = useSelector((state) => state.product.productDetail);
+  const reviews = product ? product.reviews : [];
   const productStatus = useSelector(
     (state) => state.product.productDetailStatus
   );
@@ -116,6 +120,73 @@ function ProductDetailsPage() {
             </div>
           </div>
         ) : null}
+      </div>
+      <div className="w-[95%] mx-auto border-2 rounded-lg p-4 space-y-4">
+        <h1 className="text-2xl font-bold text-center mb-6">Product Reviews</h1>
+        {userInfo ? (
+          <div className="border-2 rounded-lg p-4 space-y-4">
+            <h2 className="text-xl font-semibold mb-2">Write a Review</h2>
+            <div className="flex space-x-6">
+              <Label htmlFor="rating" className="md:text-base mt-1.5">
+                Select Rating
+              </Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="default">Select Rating</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Select Rating</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Poor</DropdownMenuItem>
+                  <DropdownMenuItem>Fair</DropdownMenuItem>
+                  <DropdownMenuItem>Good</DropdownMenuItem>
+                  <DropdownMenuItem>Very Good</DropdownMenuItem>
+                  <DropdownMenuItem>Excellent</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="grid gap-2">
+              <Label className="md:text-base" htmlFor="description">
+                Product Description
+              </Label>
+              <Textarea
+                id="description"
+                type="description"
+                placeholder="Product Description"
+                className="md:text-base resize-none"
+                rows={6}
+              />
+            </div>
+          </div>
+        ) : (
+          <h1>
+            Please{" "}
+            <Link
+              to="/login"
+              className="font-bold hover:text-primary hover:underline"
+            >
+              login
+            </Link>{" "}
+            to write a review
+          </h1>
+        )}
+        <div className="border-2 rounded-lg p-4 space-y-4">
+          <h2 className="text-xl font-semibold">Reviews</h2>
+          {reviews.length === 0 ? (
+            <h1>No Reviews</h1>
+          ) : (
+            reviews.map((review) => (
+              <div
+                key={review.id}
+                className="border-2 rounded-lg p-4 space-y-2"
+              >
+                <h1 className="text-lg font-semibold">{review.name}</h1>
+                <Rating value={review.rating} text={false} />
+                <p className="text-base">{review.comment}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

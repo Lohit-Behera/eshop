@@ -174,3 +174,45 @@ def update_product(request, pk):
     product.save()
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_product_review(request, pk):
+    user = request.user
+    product = Product.objects.get(_id=pk)
+    data = request.data
+
+    alreadyExists = Review.objects.filter(product=product, user=user).exists()
+
+    if alreadyExists:
+        content = {'detail': 'Product already reviewed'}
+        return Response(content,status=status.HTTP_400_BAD_REQUEST)
+
+    elif data['rating'] == 0:
+        content = {'detail': 'Please select a rating'}
+        return Response(content,status=status.HTTP_400_BAD_REQUEST)
+    
+    else:
+        review = Review.objects.create(
+            user=user,
+            product=product,
+            name=user.first_name + ' ' + user.last_name,
+            rating=data['rating'],
+            comment=data['comment'],
+        )
+        product.numReviews = Review.objects.filter(product=product).count()
+
+        reviews = Review.objects.filter(product=product)
+        total_rating = sum(review.rating for review in reviews)
+        product.rating = total_rating / product.numReviews if product.numReviews > 0 else 0
+
+        product.save()
+
+        return Response('Review Added')
+    
+@api_view(['GET'])
+def get_top_products(request):
+    products = Product.objects.filter(rating__gte=4).order_by('-rating')[0:5]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
