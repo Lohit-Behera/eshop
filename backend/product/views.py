@@ -12,9 +12,33 @@ from .serializers import ProductSerializer, CartSerializer
 # Create your views here.
 @api_view(['GET'])
 def getProducts(request):
-    products = Product.objects.all()
+    search = request.query_params.get('search', '')
+    brand = request.query_params.get('brand', '')
+    
+    if brand != '':
+        products = Product.objects.filter(brand__icontains=brand).order_by('name')
+    elif search != '':
+        products = Product.objects.filter(name__icontains=search).order_by('name')
+    else:
+        products = Product.objects.all().order_by('-createdAt')[:36]
+
+    page = request.query_params.get('page')
+    paginator = Paginator(products, 12)
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+
     serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 @api_view(['GET'])
 def get_product_details(request, pk):
@@ -145,8 +169,8 @@ def update_product(request, pk):
     product.category = data['category']
     product.countInStock = data['countInStock']
     product.description = data['description']
-    if image is not None:
-        product.image = request.FILES.get('image')
+    if image:
+        product.image = image
     product.save()
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)

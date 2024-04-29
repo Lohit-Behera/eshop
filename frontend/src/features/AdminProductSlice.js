@@ -79,7 +79,7 @@ export const fetchUpdateProduct = createAsyncThunk('update/product', async (prod
         const { user: { userInfo } = {} } = getState();
         const config = {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${userInfo.token}`,
             },
         };

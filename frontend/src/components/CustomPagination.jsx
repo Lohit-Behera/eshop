@@ -20,7 +20,7 @@ function CustomPagination({
   currentPage,
 }) {
   return (
-    <Pagination>
+    <Pagination disabled>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

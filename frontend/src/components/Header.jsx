@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@/features/UserSlice";
@@ -11,6 +12,7 @@ import {
   LogOut,
   Mail,
   Menu,
+  Search,
   ShoppingCart,
   UserCog,
 } from "lucide-react";
@@ -38,7 +40,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import { fetchDeleteImages } from "@/features/DeleteImages";
 
 function Header() {
@@ -48,6 +57,14 @@ function Header() {
   const userInfo = useSelector((state) => state.user.userInfo);
   const userDetails = useSelector((state) => state.user.userDetails);
   const profileImage = userDetails ? userDetails.profile_image : "";
+
+  const [search, setSearch] = useState("");
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/?search=${search}`);
+    }
+  };
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -326,6 +343,36 @@ function Header() {
 
           <div>
             <ul className="flex">
+              <li className="mr-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Search />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="space-y-2">
+                    <Label htmlFor="search" className="md:text-base">
+                      Search
+                    </Label>
+                    <div className="flex h-9 w-full rounded-md border border-input bg-transparent shadow-sm transition-colors placeholder:text-muted-foreground focus-within:ring-1 ring-ring">
+                      <Input
+                        className="text-sm md:text-base h-auto border-0 focus-visible:outline-none focus-visible:ring-0 bg-background w-full"
+                        id="search"
+                        type="search"
+                        placeholder="Search"
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={(e) => handleKeyPress(e)}
+                      />
+                      <span
+                        className="cursor-pointer hover:bg-primary p-1 rounded-md duration-200"
+                        onClick={() => navigate(`/?search=${search}`)}
+                      >
+                        <Search />
+                      </span>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </li>
               {userInfo && (
                 <li className="mr-3">
                   <Link to="/profile">
@@ -368,7 +415,7 @@ function Header() {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="icon"
                           onClick={deleteImagesHandler}
                         >

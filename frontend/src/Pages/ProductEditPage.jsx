@@ -24,7 +24,6 @@ function ProductEditPage() {
   const updateProductStatus = useSelector(
     (state) => state.adminProduct.updateProductStatus
   );
-  console.log(updateProductStatus);
 
   useEffect(() => {
     if (userInfo && userInfo.is_staff) {
@@ -36,7 +35,7 @@ function ProductEditPage() {
 
   useEffect(() => {
     if (updateProductStatus === "succeeded") {
-      navigate(`/product/${id}`);
+      alert("Product updated successfully");
       dispatch(resetUpdateProduct());
     } else if (updateProductStatus === "failed") {
       alert("Update failed");

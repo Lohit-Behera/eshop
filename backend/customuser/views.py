@@ -264,12 +264,13 @@ def delete_all_images(request):
             filename = os.path.basename(i.name)
             productsImages.append(filename)
 
+        excluded_files = ['product_sample.jpg', 'profile.png']
 
         for root, dirs, files in os.walk(MEDIA_ROOT):
             for file in files:
-                if file not in profiles and file not in productsImages:
+                if file not in profiles and file not in productsImages and file not in excluded_files:
                     os.remove(os.path.join(root, file))
                         
         return Response({'message': 'All images deleted successfully'}, status=200)
     except:
-        return Response({'massage': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)

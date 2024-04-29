@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail } from "@/features/ProductSlice";
 import Rating from "@/components/Rating";
@@ -46,8 +46,8 @@ function ProductDetailsPage() {
             </div>
             <div className="w-[95%] md:w-1/2 space-y-2 mt-4">
               <div>
-                <h1 className="text-sm md:text-base text-muted-foreground">
-                  {product.brand}
+                <h1 className="text-sm md:text-base text-muted-foreground hover:underline cursor-pointer">
+                  <Link to={`/?brand=${product.brand}`}>{product.brand}</Link>
                 </h1>
                 <h1 className="text-lg md:text-xl lg:text-2xl font-bold">
                   {product.name}

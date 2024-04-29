@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchGetProducts = createAsyncThunk('get/all/products', async (_, { rejectWithValue }) => {
+export const fetchGetProducts = createAsyncThunk('get/all/products', async (keyword = '', { rejectWithValue }) => {
     try {
         const config = {
             headers: {
@@ -9,7 +9,7 @@ export const fetchGetProducts = createAsyncThunk('get/all/products', async (_, {
             },
         };
         const { data } = await axios.get(
-            '/api/product/',
+            `/api/product/${keyword}`,
             config
         );
         return data;

@@ -40,13 +40,17 @@ function Product({ product }) {
         <CardTitle>
           <Link to={`/product/${product.id}`}>
             <img
-              className="w-full h-60 object-cover rounded-lg "
+              className="w-full h-60 object-cover rounded-lg"
               src={product.image}
               alt={product.name}
             />
           </Link>
         </CardTitle>
-        <CardDescription>{product.brand}</CardDescription>
+        <CardDescription>
+          <Link to={`/?brand=${product.brand}`} className="hover:underline">
+            {product.brand}
+          </Link>
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <Link to={`/product/${product.id}`}>
