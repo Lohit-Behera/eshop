@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,9 +15,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-// import Loader from "@/components/Loader/Loader";
-// import ServerError from "@/components/ServerError";
+import Loader from "@/components/Loader/Loader";
+import ServerError from "@/Pages/ServerError";
 import SuccessContactUs from "@/components/SuccessContactUs";
+import { toast } from "react-toastify";
 
 function ContactUsPage() {
   const dispatch = useDispatch();
@@ -29,14 +30,22 @@ function ContactUsPage() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [massage, setMassage] = useState("");
-  const [empty, setEmpty] = useState(false);
+
+  useEffect(() => {
+    if (contactusStatus === "succeeded") {
+      toast.success("Thank you for contacting us");
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMassage("");
+    } else if (contactusStatus === "failed") {
+      toast.error("Something went wrong");
+    }
+  }, [contactusStatus]);
 
   const contactHandler = () => {
     if (name === "" && email === "" && subject === "" && massage === "") {
-      setEmpty(true);
-      setTimeout(() => {
-        setEmpty(false);
-      }, 3400);
+      toast.warning("Please fill all the fields");
     } else {
       dispatch(fetchContactUs({ name, email, subject, massage }));
     }
@@ -124,9 +133,10 @@ function ContactUsPage() {
             <CardTitle className="text-lg md:text-2xl text-center">
               Contact Us
             </CardTitle>
-            <CardDescription className="">loading...</CardDescription>
           </CardHeader>
-          <CardContent>{/* <Loader /> */}</CardContent>
+          <CardContent>
+            <Loader />
+          </CardContent>
           <CardFooter></CardFooter>
         </Card>
       ) : contactusStatus === "failed" ? (
@@ -135,11 +145,10 @@ function ContactUsPage() {
             <CardTitle className="text-lg md:text-2xl text-center">
               Contact Us
             </CardTitle>
-            <CardDescription className="">
-              Something went wrong.
-            </CardDescription>
           </CardHeader>
-          <CardContent>{/* <ServerError /> */}</CardContent>
+          <CardContent>
+            <ServerError />
+          </CardContent>
           <CardFooter>
             <Button onClick={resetHandler} className="w-full">
               Go Home

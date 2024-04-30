@@ -6,6 +6,7 @@ import {
   fetchGetCart,
   fetchDeleteCart,
   resetCreateCart,
+  resetDeleteCart,
 } from "@/features/CartSlice";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -17,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "react-toastify";
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -27,8 +29,6 @@ function CartPage() {
   const deleteCartStatus = useSelector((state) => state.cart.deleteCartStatus);
   const getCartStatus = useSelector((state) => state.cart.getCartStatus);
 
-  const [qty, setQty] = useState(0);
-
   const totalPrice = getCart.reduce((total, item) => {
     if (item.quantity > 0) {
       return total + item.price * item.quantity;
@@ -38,13 +38,30 @@ function CartPage() {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/");
+      navigate("/login");
     }
   }, [dispatch, userInfo]);
 
   useEffect(() => {
-    dispatch(fetchGetCart());
-  }, [dispatch, createCartStatus, deleteCartStatus]);
+    if (createCartStatus === "succeeded") {
+      dispatch(fetchGetCart());
+      dispatch(resetCreateCart());
+    } else if (createCartStatus === "failed") {
+      toast.error("Something went wrong");
+      dispatch(fetchGetCart());
+    }
+  }, [dispatch, createCartStatus]);
+
+  useEffect(() => {
+    if (deleteCartStatus === "succeeded") {
+      toast.success("Item deleted successfully");
+      dispatch(fetchGetCart());
+      dispatch(resetDeleteCart());
+    } else if (deleteCartStatus === "failed") {
+      toast.error("Something went wrong");
+      dispatch(fetchGetCart());
+    }
+  }, [dispatch, deleteCartStatus]);
 
   const deleteItem = (id) => {
     dispatch(fetchDeleteCart(id));

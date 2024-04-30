@@ -16,6 +16,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { toast } from "react-toastify";
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -29,6 +30,15 @@ function LoginPage() {
       navigate("/");
     }
   }, [userInfo, navigate]);
+
+  useEffect(() => {
+    if (userInfoStatus === "succeeded") {
+      navigate("/");
+      toast.success("Login successful");
+    } else if (userInfoStatus === "failed") {
+      toast.error("Login failed");
+    }
+  }, [userInfoStatus, navigate]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

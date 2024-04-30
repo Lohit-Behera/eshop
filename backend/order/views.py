@@ -17,7 +17,6 @@ from customuser.serializers import AddressSerializer
 @api_view(['POST'])
 def create_payment(request):
     try:
-        print(RAZORPAY_API_KEY)
         client = Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRET))
         amount = int(request.data['amount']) * 100 
         payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
@@ -77,7 +76,7 @@ def create_order(request):
 @permission_classes([IsAuthenticated])
 def get_user_orders(request):
     user = request.user
-    orders = user.order_set.all()
+    orders = user.order_set.all().order_by('-created_at')
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
 
@@ -95,7 +94,7 @@ def get_order_by_id(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_orders(request):
-    orders = Order.objects.all().order_by('created_at')
+    orders = Order.objects.all().order_by('-created_at')
     
     page = request.query_params.get('page')
     paginator = Paginator(orders, 10)

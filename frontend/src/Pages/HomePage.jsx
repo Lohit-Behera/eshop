@@ -4,6 +4,12 @@ import { useLocation, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Product from "@/components/Product";
 import { fetchGetProducts } from "@/features/ProductSlice";
+import {
+  fetchCreateCart,
+  resetCreateCart,
+  fetchGetCart,
+} from "@/features/CartSlice";
+import { toast } from "react-toastify";
 import CustomPagination from "@/components/CustomPagination";
 import {
   Carousel,
@@ -12,14 +18,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Loader from "@/components/Loader/Loader";
 
 function HomePage() {
   const location = useLocation();
   const dispatch = useDispatch();
   let keyword = location.search;
+  console.log(
+    `keyword: ${keyword} type: ${typeof keyword} value: '${keyword}' ${
+      keyword !== ""
+    }`
+  );
   const getProducts = useSelector((state) => state.product.products) || {};
   const topProducts = useSelector((state) => state.product.topProducts) || [];
+  const createCartStatus = useSelector((state) => state.cart.createCartStatus);
   const products = getProducts.products || [];
   const page = getProducts.page || 1;
   const pages = getProducts.pages || 1;
@@ -34,11 +45,34 @@ function HomePage() {
     : `${keyword}&page=`;
 
   useEffect(() => {
-    dispatch(fetchGetProducts(keyword));
+    if (createCartStatus === "succeeded") {
+      toast.success("Item added to cart!");
+      dispatch(fetchGetCart());
+      dispatch(resetCreateCart());
+    } else if (createCartStatus === "failed") {
+      toast.error("Something went wrong!");
+      dispatch(fetchGetCart());
+      dispatch(resetCreateCart());
+    }
+  }, [dispatch, createCartStatus]);
+
+  useEffect(() => {
+    if (keyword !== "") {
+      dispatch(fetchGetProducts(keyword));
+    }
   }, [dispatch, keyword]);
+
+  const handleAddToCart = (productId) => {
+    dispatch(
+      fetchCreateCart({
+        product_id: productId,
+        quantity: 1,
+      })
+    );
+  };
+
   return (
     <div className="w-[95%] mx-auto bg-inherit border-2 rounded-lg space-y-4">
-      <Loader />
       <div className="m-2 md:m-4">
         {!keyword || keyword === "?page=1" ? (
           <>
@@ -77,7 +111,7 @@ function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((product) => (
             <div key={product.id}>
-              <Product product={product} />
+              <Product product={product} onAddToCart={handleAddToCart} />
             </div>
           ))}
         </div>

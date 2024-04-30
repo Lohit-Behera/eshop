@@ -5,8 +5,10 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Layout from "./Layout";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+import Layout from "./Layout";
 import HomePage from "./Pages/HomePage";
 import ProductDetailsPage from "./Pages/ProductDetailsPage";
 import LoginPage from "./Pages/LoginPage";
@@ -22,6 +24,7 @@ import ProductEditPage from "./Pages/ProductEditPage";
 import AdminOrderPage from "./Pages/AdminOrderPage";
 import AdminOrderUpdatePage from "./Pages/AdminOrderUpdatePage";
 import ContactUsPage from "./Pages/ContactUsPage";
+import VerificationPage from "./Pages/VerificationPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,14 +47,32 @@ const router = createBrowserRouter(
         element={<AdminOrderUpdatePage />}
       />
       <Route path="/contact-us" element={<ContactUsPage />} />
+      <Route path="/verification" element={<VerificationPage />} />
     </Route>
   )
 );
 
 function App() {
+  const mode = localStorage.getItem("vite-ui-theme");
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = mode === "dark" ? "dark" : systemTheme ? "dark" : "light";
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <RouterProvider router={router} />
+      <ToastContainer
+        stacked
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme={theme}
+        transition={Slide}
+      />
     </ThemeProvider>
   );
 }

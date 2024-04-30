@@ -11,6 +11,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FallBack from "./components/FallBack";
 import Loader from "./components/Loader/Loader";
+import ServerError from "./Pages/ServerError";
+import { toast } from "react-toastify";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -35,6 +37,17 @@ function Layout() {
     (state) => state.order.getAllOrderStatus
   );
 
+  useEffect(() => {
+    if (
+      productsStatus === "failed" ||
+      userDetailsStatus === "failed" ||
+      getCartStatus === "failed" ||
+      getAllOrderStatus === "failed"
+    ) {
+      toast.error("Something went wrong");
+    }
+  }, [productsStatus, userDetailsStatus, getCartStatus, getAllOrderStatus]);
+
   return (
     <>
       <Header />
@@ -44,6 +57,11 @@ function Layout() {
         getCartStatus === "loading" ||
         getAllOrderStatus === "loading" ? (
           <Loader hight="min-h-screen" />
+        ) : productsStatus === "failed" ||
+          userDetailsStatus === "failed" ||
+          getCartStatus === "failed" ||
+          getAllOrderStatus === "failed" ? (
+          <ServerError />
         ) : (
           <Outlet />
         )}

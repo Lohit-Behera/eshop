@@ -93,6 +93,11 @@ const cartSlice = createSlice({
             state.createCart = null;
             state.createCartStatus = 'idle';
             state.createCartError = null;
+        },
+        resetDeleteCart: (state) => {
+            state.deleteCart = null;
+            state.deleteCartStatus = 'idle';
+            state.deleteCartError = null;
         }
     },
     extraReducers: (builder) => {
@@ -135,5 +140,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { resetCreateCart } = cartSlice.actions
+export const { resetCreateCart, resetDeleteCart } = cartSlice.actions
 export default cartSlice.reducer

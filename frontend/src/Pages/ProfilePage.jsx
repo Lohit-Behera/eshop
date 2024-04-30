@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toast } from "react-toastify";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -37,6 +38,9 @@ function ProfilePage() {
   useEffect(() => {
     if (userUpdateStatus === "succeeded") {
       window.location.reload();
+      toast.success("User updated successfully");
+    } else if (userUpdateStatus === "failed") {
+      toast.error("User update failed");
     }
   }, [userUpdateStatus]);
 
@@ -56,13 +60,13 @@ function ProfilePage() {
     if (file.type.startsWith("image/")) {
       setProfileImage(file);
     } else {
-      alert("Please select an image file");
+      toast.success("Please select an image file");
     }
   };
 
   const updateHandler = (e) => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.warning("Passwords do not match");
     } else {
       dispatch(
         fetchUserUpdate({

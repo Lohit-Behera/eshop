@@ -1,5 +1,6 @@
 import React from "react";
 import { ServerCrash } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function ServerError() {
   return (
@@ -16,8 +17,11 @@ function ServerError() {
           </h1>
           <p className="mt-5 lg:text-lg">
             Oops something went wrong. Try to refresh this page or <br /> feel
-            free to contact us if the problem presists.
+            free to contact us if the problem persists.
           </p>
+          <Button className="mt-5" onClick={() => window.location.reload()}>
+            Try again
+          </Button>
         </div>
       </div>
     </div>

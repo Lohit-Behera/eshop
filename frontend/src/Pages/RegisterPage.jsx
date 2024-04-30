@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-// TODO fix custom password
-import { fetchRegister } from "@/features/UserSlice";
+import { fetchRegister, resetRegister } from "@/features/UserSlice";
 import CustomPassword from "@/components/CustomPassword";
 import { Button } from "../components/ui/button";
 import {
@@ -15,6 +14,9 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { toast } from "react-toastify";
+import Loader from "@/components/Loader/Loader";
+import ServerError from "./ServerError";
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -24,7 +26,12 @@ function RegisterPage() {
 
   useEffect(() => {
     if (registerStatus === "succeeded") {
-      navigate("/varification");
+      navigate("/verification");
+      toast.success("Registration successful");
+      dispatch(resetRegister());
+    } else if (registerStatus === "failed") {
+      toast.error("Something went wrong!");
+      dispatch(resetRegister());
     }
   }, [registerStatus, navigate]);
 
@@ -33,16 +40,13 @@ function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [wrongPassword, setWrongPassword] = useState(false);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setWrongPassword(true);
-      const timer = setTimeout(() => {
-        setWrongPassword(false);
-      }, 3700);
-      return () => clearTimeout(timer);
+      toast.warning("Passwords do not match");
+    } else if (!firstName || !lastName || !email || !password) {
+      toast.warning("Please fill in all fields");
     } else {
       dispatch(
         fetchRegister({
@@ -58,9 +62,9 @@ function RegisterPage() {
   return (
     <>
       {registerStatus === "loading" ? (
-        <p>Loading...</p>
+        <Loader hight="min-h-screen" />
       ) : registerStatus === "failed" ? (
-        <p>failed</p>
+        <ServerError />
       ) : (
         <div className="mt-32">
           <Card className="mx-auto max-w-sm">

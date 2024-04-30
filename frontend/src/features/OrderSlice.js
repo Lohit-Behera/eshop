@@ -88,6 +88,11 @@ const orderSlice = createSlice({
         getAllOrdersError: null
     },
     reducers: {
+        resetOrder: (state) => {
+            state.order = null;
+            state.orderStatus = 'idle';
+            state.orderError = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -129,4 +134,5 @@ const orderSlice = createSlice({
     }
 });
 
+export const { resetOrder } = orderSlice.actions
 export default orderSlice.reducer

@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Pencil, Trash } from "lucide-react";
+import { toast } from "react-toastify";
 
 function AdminProductPage() {
   const navigate = useNavigate();
@@ -72,20 +73,21 @@ function AdminProductPage() {
 
   useEffect(() => {
     if (deleteProductStatus === "succeeded") {
-      alert("Product deleted successfully");
+      toast.success("Product deleted successfully");
       dispatch(resetDeleteProduct());
     } else if (deleteProductStatus === "failed") {
-      alert("Failed to delete product");
+      toast.error("Something went wrong");
       dispatch(resetDeleteProduct());
     }
   }, [dispatch, deleteProductStatus]);
 
   useEffect(() => {
     if (createProductStatus === "succeeded") {
+      toast.success("Product created successfully");
       navigate(`/admin/update/product/${createProduct.id}`);
       dispatch(resetCreateProduct());
     } else if (createProductStatus === "failed") {
-      alert("Failed to create product");
+      toast.error("Something went wrong");
       dispatch(resetDeleteProduct());
     }
   }, [dispatch, createProductStatus]);

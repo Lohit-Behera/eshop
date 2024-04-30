@@ -34,6 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "react-toastify";
 
 function AdminUserPage() {
   const dispatch = useDispatch();
@@ -43,23 +44,15 @@ function AdminUserPage() {
 
   const userInfo = useSelector((state) => state.user.userInfo);
   const allUsers = useSelector((state) => state.adminUsers.allUsers);
-  const admin = useSelector((state) => state.adminUsers.admin);
   const adminStatus = useSelector((state) => state.adminUsers.adminStatus);
-  const adminSuccess = adminStatus === "succeeded";
-  const removeAdmin = useSelector((state) => state.adminUsers.removeAdmin);
   const removeAdminStatus = useSelector(
     (state) => state.adminUsers.removeAdminStatus
   );
-  const removeAdminSuccess = removeAdminStatus === "succeeded";
   const deleteUserStatus = useSelector(
     (state) => state.adminUsers.deleteUserStatus
   );
-  const deleteUserSuccess = deleteUserStatus === "succeeded";
-
   const users = allUsers ? allUsers.users : [];
   const pages = allUsers ? allUsers.pages : 1;
-  const adminEmail = admin ? admin.email : "";
-  const removeAdminEmail = removeAdmin ? removeAdmin.email : "";
   const is_staff = userInfo ? userInfo.is_staff : false;
 
   const [currentPage, setCurrentPage] = useState(allUsers ? allUsers.page : 1);
@@ -72,20 +65,31 @@ function AdminUserPage() {
 
   useEffect(() => {
     dispatch(fetchGetAllUsers(keyword));
-  }, [
-    dispatch,
-    adminSuccess,
-    currentPage,
-    deleteUserSuccess,
-    removeAdminSuccess,
-  ]);
+  }, [dispatch, currentPage]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (adminStatus === "succeeded") {
+      toast.success("Admin added successfully");
+      dispatch(fetchGetAllUsers(keyword));
       dispatch(reset());
-    }, 3700);
-    return () => clearTimeout(timer);
-  }, [dispatch, adminSuccess, deleteUserSuccess, removeAdminSuccess]);
+    } else if (removeAdminStatus === "succeeded") {
+      toast.success("Admin removed successfully");
+      dispatch(fetchGetAllUsers(keyword));
+      dispatch(reset());
+    } else if (deleteUserStatus === "succeeded") {
+      toast.success("User deleted successfully");
+      dispatch(fetchGetAllUsers(keyword));
+      dispatch(reset());
+    } else if (
+      adminStatus === "failed" ||
+      deleteUserStatus === "failed" ||
+      removeAdminStatus === "failed"
+    ) {
+      toast.error("Something went wrong");
+      dispatch(fetchGetAllUsers(keyword));
+      dispatch(reset());
+    }
+  }, [dispatch, adminStatus, removeAdminStatus, deleteUserStatus]);
 
   const adminHandler = (id) => {
     dispatch(

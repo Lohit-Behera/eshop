@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import Loader from "@/components/Loader/Loader";
+import { toast } from "react-toastify";
 
 function ProductEditPage() {
   const dispatch = useDispatch();
@@ -35,10 +37,10 @@ function ProductEditPage() {
 
   useEffect(() => {
     if (updateProductStatus === "succeeded") {
-      alert("Product updated successfully");
+      toast.success("Product updated successfully");
       dispatch(resetUpdateProduct());
     } else if (updateProductStatus === "failed") {
-      alert("Update failed");
+      toast.error("Update failed");
       dispatch(resetUpdateProduct());
     }
   }, [updateProductStatus, dispatch, navigate]);
@@ -61,18 +63,29 @@ function ProductEditPage() {
   }, [product]);
 
   const updateHandler = () => {
-    dispatch(
-      fetchUpdateProduct({
-        name: name,
-        image: image,
-        price: price,
-        brand: brand,
-        category: category,
-        countInStock: countInStock,
-        description: description,
-        id: id,
-      })
-    );
+    if (!name || !image || !price || !brand || !category || !countInStock) {
+      toast.warning("Please fill all the fields");
+      return;
+    } else if (countInStock < 0) {
+      toast.warning("Count in stock cannot be negative");
+      return;
+    } else if (price < 0) {
+      toast.warning("Price cannot be negative");
+      return;
+    } else {
+      dispatch(
+        fetchUpdateProduct({
+          name: name,
+          image: image,
+          price: price,
+          brand: brand,
+          category: category,
+          countInStock: countInStock,
+          description: description,
+          id: id,
+        })
+      );
+    }
   };
 
   const imageHandler = (e) => {
@@ -80,17 +93,16 @@ function ProductEditPage() {
     if (file.type.startsWith("image/")) {
       setImage(file);
     } else {
-      alert("Please select an image file");
+      toast.warning("Please select an image file");
     }
   };
   return (
     <div className="w-[95%] mx-auto border-2 rounded-lg mt-8 p-6">
       <h1 className="text-2xl font-bold text-center mb-4">Product Edit</h1>
       {productDetailStatus === "loading" ? (
-        <div>Loading...</div>
-      ) : productDetailStatus === "failed" ? (
-        <p>failed</p>
-      ) : productDetailStatus === "succeeded" ? (
+        <Loader />
+      ) : productDetailStatus === "succeeded" ||
+        productDetailStatus === "idle" ? (
         <div className="space-y-4 mb-4">
           <div className="grid gap-2 ">
             <Label className="md:text-base" htmlFor="name">
