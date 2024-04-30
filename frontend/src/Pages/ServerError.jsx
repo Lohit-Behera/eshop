@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 function ServerError() {
   return (
     <div>
-      <div className="flex h-[calc(100vh-80px)] items-center justify-center p-5 w-full">
+      <div className="flex w-[95%] h-[calc(100vh-80px)] items-center justify-center p-5 rounded-lg mx-auto mt-4 border-2 bg-background/50">
         <div className="text-center">
           <div className="inline-flex rounded-full bg-red-100 p-6 shadow-lg shadow-red-500 ">
             <div className="rounded-full stroke-red-600 shadow-md shadow-red-500 bg-red-200 p-4">

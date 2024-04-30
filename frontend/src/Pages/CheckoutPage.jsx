@@ -111,14 +111,14 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg space-x-4">
+    <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg space-x-4 backdrop-blur bg-background/50">
       {orderStatus === "loading" ? (
         <Loader />
       ) : (
         <>
           <h1 className="text-2xl font-bold text-center my-4">Order Summary</h1>
           <div className="flex-grow lg:flex ">
-            <div className="w-[95%] lg:w-4/6 space-y-2 mb-4 m-2 border-2 rounded-lg p-4">
+            <div className="w-[95%] lg:w-4/6 space-y-2 mb-4 m-2 border-2 rounded-lg p-4 backdrop-blur bg-background/50">
               {getAddress.length > 0 ? (
                 <>
                   <h2 className="text-xl font-semibold">Select Address</h2>
@@ -210,7 +210,7 @@ function CheckoutPage() {
                 ))}
               </div>
             </div>
-            <div className="w-[95%] lg:w-2/6 space-y-2 border-2 rounded-lg p-4 m-2 mb-4">
+            <div className="w-[95%] lg:w-2/6 space-y-2 border-2 rounded-lg p-4 m-2 mb-4 backdrop-blur bg-background/50">
               <h1 className="text-xl font-semibold text-center">Place Order</h1>
               <div className="w-[95%] mx-auto">
                 <p className="font-semibold">Total Price: ₹ {totalPrice}</p>

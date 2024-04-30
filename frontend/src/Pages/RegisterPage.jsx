@@ -60,14 +60,14 @@ function RegisterPage() {
   };
 
   return (
-    <>
+    <div className="min-h-[80vh]">
       {registerStatus === "loading" ? (
         <Loader hight="min-h-screen" />
       ) : registerStatus === "failed" ? (
         <ServerError />
       ) : (
-        <div className="mt-32">
-          <Card className="mx-auto max-w-sm">
+        <div className="mt-20">
+          <Card className="mx-auto max-w-sm bg-background/70">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl text-center">
                 Sign Up
@@ -145,7 +145,7 @@ function RegisterPage() {
           </Card>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

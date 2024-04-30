@@ -83,7 +83,7 @@ function AdminOrderPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg p-4 mt-8">
+    <div className="w-[95%] mx-auto border-2 rounded-lg p-4 mt-8 bg-background/70">
       {deleteOrderStatus === "loading" ? (
         <Loader />
       ) : deleteOrderStatus === "succeeded" || deleteOrderStatus === "idle" ? (

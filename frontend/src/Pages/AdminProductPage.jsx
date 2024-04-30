@@ -96,7 +96,7 @@ function AdminProductPage() {
     dispatch(fetchDeleteProduct(id));
   };
   return (
-    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg">
+    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg bg-background/70">
       <h1 className="text-2xl font-bold text-center my-6 ml-8">
         Admin Product
       </h1>

@@ -61,7 +61,7 @@ function ContactUsPage() {
   };
 
   return (
-    <div className="min-h-screen w-[95%] md:w-[70%] mx-auto mt-6">
+    <div className="min-h-screen w-[95%] md:w-[70%] mx-auto mt-6 bg-background/50">
       {contactusStatus === "idle" ? (
         <Card>
           <CardHeader>

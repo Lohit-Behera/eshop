@@ -52,11 +52,11 @@ function AddressPage() {
     );
   };
   return (
-    <div className="min-h-[80vh]">
+    <div className="min-h-[80vh] ">
       {addAddressStatus === "loading" ? (
         <Loader />
       ) : addAddressStatus === "succeeded" || addAddressStatus === "idle" ? (
-        <div className="w-[95%] md:w-[70%] lg:w-[50%] mx-auto border-2 mt-8 rounded-lg">
+        <div className="w-[95%] md:w-[70%] lg:w-[50%] mx-auto border-2 mt-8 rounded-lg bg-background/70">
           <h1 className="text-2xl font-bold text-center my-4">Address</h1>
           <div className="m-4">
             <div className="grid gap-2">

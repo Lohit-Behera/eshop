@@ -15,8 +15,8 @@ import {
 function VerificationPage() {
   const navigate = useNavigate();
   return (
-    <div className="w-full min-h-screen flex justify-center items-center ">
-      <Card className="w-[350px]">
+    <div className="w-full min-h-[80vh] flex justify-center items-center ">
+      <Card className="w-[350px] bg-background/70">
         <CardHeader>
           <CardTitle className="text-center">Verification</CardTitle>
         </CardHeader>

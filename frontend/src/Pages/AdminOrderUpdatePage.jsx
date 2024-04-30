@@ -48,7 +48,7 @@ function AdminOrderUpdatePage() {
   }, [dispatch, updateOrderStatus]);
 
   return (
-    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg">
+    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg bg-background/50">
       {updateOrderStatus === "loading" ? (
         <Loader />
       ) : (
@@ -56,7 +56,7 @@ function AdminOrderUpdatePage() {
           <h1 className="text-2xl font-bold text-center my-6">Order Summary</h1>
           <div className="w-[95%] mx-auto">
             <h2 className="text-xl font-semibold mb-2">Order Details</h2>
-            <div className="w-[95%] text-sm md:text-base border-2 p-2 rounded-lg my-4 mx-auto space-y-2">
+            <div className="w-[95%] text-sm md:text-base border-2 p-2 rounded-lg my-4 mx-auto space-y-2 bg-background/50">
               <p>Order Id: {order.id} </p>
               <p>
                 Purchase Date:{" "}
@@ -95,7 +95,7 @@ function AdminOrderUpdatePage() {
               </div>
             )}
             <h2 className="text-xl font-semibold mb-2">Address</h2>
-            <div className="w-[95%] grid grid-cols-2 lg:grid-cols-3 text-sm md:text-base border-2 p-2 rounded-lg my-4 mx-auto space-y-2">
+            <div className="w-[95%] grid grid-cols-2 lg:grid-cols-3 text-sm md:text-base border-2 p-2 rounded-lg my-4 mx-auto space-y-2 bg-background/50">
               <div>
                 <p>House No: {address.house_no} </p>
                 <p>LandMark: {address.landmark} </p>
@@ -116,7 +116,7 @@ function AdminOrderUpdatePage() {
                   {item.qty > 0 && (
                     <div
                       key={item.id}
-                      className="w-[95%] mx-auto flex-grow lg:flex justify-center lg:justify-between items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center"
+                      className="w-[95%] mx-auto flex-grow lg:flex justify-center lg:justify-between items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center bg-background/50"
                     >
                       <Link to={`/product/${item.id}`}>
                         <img

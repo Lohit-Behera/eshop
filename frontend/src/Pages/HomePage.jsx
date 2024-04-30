@@ -72,7 +72,7 @@ function HomePage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 rounded-lg space-y-4">
+    <div className="w-[95%] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50 mt-4">
       <div className="m-2 md:m-4">
         {!keyword || keyword === "?page=1" ? (
           <>

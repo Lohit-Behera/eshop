@@ -81,9 +81,9 @@ function ProfilePage() {
     }
   };
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg">
+    <div className="w-[95%] mx-auto border-2 rounded-lg backdrop-blur bg-background/50">
       <div className="w-full flex-grow lg:flex">
-        <div className="w-[98%] m-3 mx-auto lg:mx-3 lg:w-2/5 border-2 rounded-lg ">
+        <div className="w-[98%] m-3 mx-auto lg:mx-3 lg:w-2/5 border-2 rounded-lg backdrop-blur bg-background/50">
           <h1 className="text-2xl font-bold text-center my-4">Profile</h1>
           <div className="flex-col mx-6 my-4 space-y-2">
             <Avatar className="w-24 h-24 mx-auto">
@@ -168,7 +168,7 @@ function ProfilePage() {
             </div>
           </div>
         </div>
-        <div className="w-[98%] m-3 mx-auto lg:mx-3 lg:w-3/5 border-2 rounded-lg">
+        <div className="w-[98%] m-3 mx-auto lg:mx-3 lg:w-3/5 border-2 rounded-lg backdrop-blur bg-background/50">
           <h1 className="text-2xl font-bold text-center my-4">Orders</h1>
           <div>
             <Table>

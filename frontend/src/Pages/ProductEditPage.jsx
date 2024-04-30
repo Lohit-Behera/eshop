@@ -97,7 +97,7 @@ function ProductEditPage() {
     }
   };
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg mt-8 p-6">
+    <div className="w-[95%] mx-auto border-2 rounded-lg mt-8 p-6 bg-background/70">
       <h1 className="text-2xl font-bold text-center mb-4">Product Edit</h1>
       {productDetailStatus === "loading" ? (
         <Loader />

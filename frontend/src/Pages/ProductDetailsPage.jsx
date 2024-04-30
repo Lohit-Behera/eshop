@@ -32,7 +32,7 @@ function ProductDetailsPage() {
   );
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg">
+    <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
         <h1 className="text-2xl font-bold text-center mb-6">Product Details</h1>
         {productStatus === "loading" ? (
@@ -121,7 +121,7 @@ function ProductDetailsPage() {
           </div>
         ) : null}
       </div>
-      <div className="w-[95%] mx-auto border-2 rounded-lg p-4 space-y-4">
+      <div className="w-[95%] mx-auto border-2 rounded-lg p-4 space-y-4 backdrop-blur bg-background/50">
         <h1 className="text-2xl font-bold text-center mb-6">Product Reviews</h1>
         {userInfo ? (
           <div className="border-2 rounded-lg p-4 space-y-4">

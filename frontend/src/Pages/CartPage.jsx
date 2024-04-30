@@ -68,11 +68,11 @@ function CartPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 rounded-lg min-h-screen">
+    <div className="w-[95%] mx-auto bg-inherit border-2 rounded-lg min-h-screen backdrop-blur bg-background/50">
       <div className="m-2 lg:m-4">
         <h1 className="text-2xl font-bold text-center mb-6">Cart</h1>
         {getCart.length === 0 ? (
-          <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="flex flex-col items-center justify-center space-y-4 p-8 w-60 rounded-lg mx-auto mt-4 border-2 backdrop-blur bg-background/50">
             <p className="text-center text-xl font-semibold">Cart is empty</p>
             <Button className="mx-auto">
               <Link to="/">Continue Shopping</Link>
@@ -87,7 +87,7 @@ function CartPage() {
               {getCart.map((item) => (
                 <div
                   key={item.id}
-                  className={`flex-grow lg:flex justify-center lg:justify-between items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center ${
+                  className={`flex-grow lg:flex justify-center lg:justify-between backdrop-blur bg-background/50 items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center ${
                     item.quantity === 0 && "opacity-50"
                   }`}
                 >
@@ -143,7 +143,7 @@ function CartPage() {
                 </div>
               ))}
             </div>
-            <div className="w-[95%] lg:w-1/4 m-auto border-2 mx-2 rounded-lg ">
+            <div className="w-[95%] lg:w-1/4 m-auto border-2 mx-2 rounded-lg backdrop-blur bg-background/50">
               <h1 className="text-xl font-semibold text-center my-2">
                 Cart Summary
               </h1>

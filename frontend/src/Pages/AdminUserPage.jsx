@@ -114,7 +114,7 @@ function AdminUserPage() {
   };
 
   return (
-    <div className="w-[96%] min-h-screen mx-auto bg-background border-2 rounded-lg mt-6">
+    <div className="w-[96%] min-h-screen mx-auto backdrop-blur bg-background/70 border-2 rounded-lg mt-6">
       <Table>
         <TableCaption className="my-4">
           <CustomPagination

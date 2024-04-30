@@ -13,6 +13,7 @@ import FallBack from "./components/FallBack";
 import Loader from "./components/Loader/Loader";
 import ServerError from "./Pages/ServerError";
 import { toast } from "react-toastify";
+import { AuroraBackground } from "./components/ui/aurora-background";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -49,7 +50,10 @@ function Layout() {
   }, [productsStatus, userDetailsStatus, getCartStatus, getAllOrderStatus]);
 
   return (
-    <>
+    <div className="relative min-h-screen h-full w-full">
+      <div className="fixed inset-0 w-full h-full overflow-hidden object-cover -z-10">
+        <AuroraBackground />
+      </div>
       <Header />
       <ErrorBoundary FallbackComponent={FallBack}>
         {productsStatus === "loading" ||
@@ -67,7 +71,7 @@ function Layout() {
         )}
       </ErrorBoundary>
       <Footer />
-    </>
+    </div>
   );
 }
 

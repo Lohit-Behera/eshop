@@ -76,7 +76,7 @@ function Header() {
   };
 
   return (
-    <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
+    <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-background/50 shadow  ">
       <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
         <div className="flex justify-between w-[95%] mx-auto py-3 md:py-3">
           <div className="hidden md:block">
