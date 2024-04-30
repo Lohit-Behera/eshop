@@ -6,8 +6,11 @@ import { fetchGetProducts, fetchTopProducts } from "./features/ProductSlice";
 import { fetchUserDetails } from "./features/UserSlice";
 import { fetchGetCart } from "./features/CartSlice";
 import { fetchGetAllOrders } from "./features/OrderSlice";
+import { ErrorBoundary } from "react-error-boundary";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import FallBack from "./components/FallBack";
+import Loader from "./components/Loader/Loader";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -34,18 +37,18 @@ function Layout() {
 
   return (
     <>
-      {productsStatus === "loading" &&
-      userDetailsStatus === "loading" &&
-      getCartStatus === "loading" &&
-      getAllOrderStatus === "loading" ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <Header />
+      <Header />
+      <ErrorBoundary FallbackComponent={FallBack}>
+        {productsStatus === "loading" ||
+        userDetailsStatus === "loading" ||
+        getCartStatus === "loading" ||
+        getAllOrderStatus === "loading" ? (
+          <Loader hight="min-h-screen" />
+        ) : (
           <Outlet />
-          <Footer />
-        </>
-      )}
+        )}
+      </ErrorBoundary>
+      <Footer />
     </>
   );
 }

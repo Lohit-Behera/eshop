@@ -8,7 +8,7 @@ urlpatterns = [
     
     path('add/address/', views.add_address, name='add_address'),
     path('get/address/', views.get_address, name='get_address'),
-
+    path('contactus/', views.create_contact_us, name='contact_us'),
     path('admin/delete/images/', views.delete_all_images, name='delete_images'),
     
     path('verify/<str:token>/', views.verify_email, name='verify_email'),

@@ -146,7 +146,7 @@ function Header() {
                   )}
                 </li>
                 <li>
-                  <NavLink to="/contactus">
+                  <NavLink to="/contact-us">
                     {({ isActive, isPending, isTransitioning }) => (
                       <TooltipProvider>
                         <Tooltip>

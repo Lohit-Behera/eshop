@@ -12,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Loader from "@/components/Loader/Loader";
 
 function HomePage() {
   const location = useLocation();
@@ -35,9 +36,9 @@ function HomePage() {
   useEffect(() => {
     dispatch(fetchGetProducts(keyword));
   }, [dispatch, keyword]);
-
   return (
     <div className="w-[95%] mx-auto bg-inherit border-2 rounded-lg space-y-4">
+      <Loader />
       <div className="m-2 md:m-4">
         {!keyword || keyword === "?page=1" ? (
           <>

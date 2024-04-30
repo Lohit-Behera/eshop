@@ -75,3 +75,10 @@ class Address(models.Model):
     state = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     pincode = models.CharField(max_length=255)
+    
+class ContactUs(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    subject = models.CharField(max_length=255 , null=False, blank=False)
+    message = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
