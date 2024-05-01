@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "react-toastify";
+import CustomImage from "@/components/CustomImage";
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ function CartPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 rounded-lg min-h-screen backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 rounded-lg min-h-screen backdrop-blur bg-background/50">
       <div className="m-2 lg:m-4">
         <h1 className="text-2xl font-bold text-center mb-6">Cart</h1>
         {getCart.length === 0 ? (
@@ -92,8 +93,8 @@ function CartPage() {
                   }`}
                 >
                   <Link to={`/product/${item.product}`}>
-                    <img
-                      className="w-24 h-20 object-cover rounded-lg mx-auto lg:mx-0"
+                    <CustomImage
+                      className="w-24 h-20 lg:mx-0"
                       src={item.image}
                       alt={item.name}
                     />

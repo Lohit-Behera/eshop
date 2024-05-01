@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetOrderById } from "@/features/OrderSlice";
+import CustomImage from "@/components/CustomImage";
 
 function OrderPage() {
   const { id } = useParams();
@@ -84,8 +85,8 @@ function OrderPage() {
                   className="w-[95%] mx-auto flex-grow lg:flex justify-center lg:justify-between items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center backdrop-blur bg-background/50"
                 >
                   <Link to={`/product/${item.id}`}>
-                    <img
-                      className="w-24 h-20 object-cover rounded-lg mx-auto lg:mx-0"
+                    <CustomImage
+                      className="w-24 h-20 lg:mx-0"
                       src={item.image}
                       alt={item.name}
                     />

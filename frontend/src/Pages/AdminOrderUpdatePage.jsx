@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import Loader from "@/components/Loader/Loader";
+import CustomImage from "@/components/CustomImage";
 
 function AdminOrderUpdatePage() {
   const { id } = useParams();
@@ -119,8 +120,8 @@ function AdminOrderUpdatePage() {
                       className="w-[95%] mx-auto flex-grow lg:flex justify-center lg:justify-between items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center bg-background/50"
                     >
                       <Link to={`/product/${item.id}`}>
-                        <img
-                          className="w-24 h-20 object-cover rounded-lg mx-auto lg:mx-0"
+                        <CustomImage
+                          className="w-24 h-20 lg:mx-0"
                           src={item.image}
                           alt={item.name}
                         />

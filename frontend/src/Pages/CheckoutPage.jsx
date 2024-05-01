@@ -11,6 +11,7 @@ import { fetchCreateOrder, resetOrder } from "@/features/OrderSlice";
 import Logo from "../assets/Logo.svg";
 import { toast } from "react-toastify";
 import Loader from "@/components/Loader/Loader";
+import CustomImage from "@/components/CustomImage";
 
 function CheckoutPage() {
   const dispatch = useDispatch();
@@ -111,7 +112,7 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg space-x-4 backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg space-x-4 backdrop-blur bg-background/50">
       {orderStatus === "loading" ? (
         <Loader />
       ) : (
@@ -189,8 +190,8 @@ function CheckoutPage() {
                         className="w-[95%] mx-auto flex-grow lg:flex justify-center lg:justify-between items-center border-2 p-2 rounded-lg my-4 space-y-2 text-center"
                       >
                         <Link to={`/product/${item.product}`}>
-                          <img
-                            className="w-24 h-20 object-cover rounded-lg mx-auto lg:mx-0"
+                          <CustomImage
+                            className="w-24 h-20 lg:mx-0"
                             src={item.image}
                             alt={item.name}
                           />

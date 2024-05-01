@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import CustomImage from "./CustomImage";
 
 function Product({ product, onAddToCart }) {
   const addToCart = () => {
@@ -21,8 +22,8 @@ function Product({ product, onAddToCart }) {
       <CardHeader>
         <CardTitle>
           <Link to={`/product/${product.id}`}>
-            <img
-              className="w-full h-60 object-cover rounded-lg"
+            <CustomImage
+              className="w-full h-60"
               src={product.image}
               alt={product.name}
             />

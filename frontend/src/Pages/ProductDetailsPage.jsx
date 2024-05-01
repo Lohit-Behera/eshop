@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import CustomImage from "@/components/CustomImage";
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -32,7 +33,7 @@ function ProductDetailsPage() {
   );
 
   return (
-    <div className="w-[95%] mx-auto bg-inherit border-2 mt-8 rounded-lg backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
         <h1 className="text-2xl font-bold text-center mb-6">Product Details</h1>
         {productStatus === "loading" ? (
@@ -42,11 +43,7 @@ function ProductDetailsPage() {
         ) : productStatus === "succeeded" ? (
           <div className="flex-grow md:flex justify-center w-[96%] mx-auto">
             <div className="w-[95%] md:w-1/2 m-auto">
-              <img
-                className="w-[90%] object-cover rounded-lg m-4"
-                src={product.image}
-                alt=""
-              />
+              <CustomImage className="w-[90%] m-4" src={product.image} alt="" />
             </div>
             <div className="w-[95%] md:w-1/2 space-y-2 mt-4">
               <div>

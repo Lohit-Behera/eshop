@@ -18,16 +18,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import CustomImage from "@/components/CustomImage";
 
 function HomePage() {
   const location = useLocation();
   const dispatch = useDispatch();
   let keyword = location.search;
-  console.log(
-    `keyword: ${keyword} type: ${typeof keyword} value: '${keyword}' ${
-      keyword !== ""
-    }`
-  );
   const getProducts = useSelector((state) => state.product.products) || {};
   const topProducts = useSelector((state) => state.product.topProducts) || [];
   const createCartStatus = useSelector((state) => state.cart.createCartStatus);
@@ -72,7 +68,7 @@ function HomePage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50 mt-4">
+    <div className="w-[95%] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
         {!keyword || keyword === "?page=1" ? (
           <>
@@ -85,8 +81,8 @@ function HomePage() {
                   {topProducts.map((product) => (
                     <CarouselItem key={product.id}>
                       <Link to={`/product/${product.id}`}>
-                        <img
-                          className="w-[70%] h-56 md:h-128 object-cover rounded-lg m-4 mx-auto"
+                        <CustomImage
+                          className="w-[70%] h-56 md:h-128 m-4"
                           src={product.image}
                           alt=""
                         />

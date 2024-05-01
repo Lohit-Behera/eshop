@@ -34,6 +34,7 @@ import {
 
 import { Pencil, Trash } from "lucide-react";
 import { toast } from "react-toastify";
+import CustomImage from "@/components/CustomImage";
 
 function AdminProductPage() {
   const navigate = useNavigate();
@@ -131,10 +132,10 @@ function AdminProductPage() {
             <TableRow key={product.id} className="max-h-24">
               <TableCell>
                 <Link to={`/product/${product.id}`}>
-                  <img
+                  <CustomImage
                     src={product.image}
                     alt={product.name}
-                    className="w-20 h-16 rounded-lg object-cover"
+                    className="w-20 h-16"
                   />
                 </Link>
               </TableCell>
