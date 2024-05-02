@@ -1,8 +1,9 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail } from "@/features/ProductSlice";
+import { fetchCreateCart } from "@/features/CartSlice";
 import Rating from "@/components/Rating";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import CustomImage from "@/components/CustomImage";
-import Loader from "@/components/Loader/Loader";
 import ServerError from "./ServerError";
 import ProductDetailsLoader from "@/components/PageLoader/ProductDetailsLoader";
 
@@ -28,6 +28,7 @@ function ProductDetailsPage() {
     dispatch(fetchProductDetail(id));
   }, [dispatch]);
 
+  const [quantity, setQuantity] = useState(1);
   const userInfo = useSelector((state) => state.user.userInfo);
   const product = useSelector((state) => state.product.productDetail);
   const reviews = product ? product.reviews : [];
@@ -104,7 +105,10 @@ function ProductDetailsPage() {
                             {[...Array(product.countInStock).keys()]
                               .slice(0, 5)
                               .map((i) => (
-                                <DropdownMenuItem key={i + 1}>
+                                <DropdownMenuItem
+                                  key={i + 1}
+                                  onClick={() => setQuantity(i + 1)}
+                                >
                                   {i + 1}
                                 </DropdownMenuItem>
                               ))}
@@ -121,6 +125,14 @@ function ProductDetailsPage() {
                       <Button
                         variant="default"
                         className="text-base md:text-lg"
+                        onClick={() =>
+                          dispatch(
+                            fetchCreateCart({
+                              product_id: product.id,
+                              quantity: quantity,
+                            })
+                          )
+                        }
                       >
                         Add to Cart
                       </Button>

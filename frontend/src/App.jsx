@@ -57,6 +57,7 @@ const router = createBrowserRouter(
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const mode = useSelector((state) => state.mode.mode);
+
   useEffect(() => {
     const systemTheme = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -69,9 +70,10 @@ function App() {
         : "light";
     setIsDarkMode(theme === "dark");
   }, [mode]);
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <RouterProvider router={router} />
+      <RouterProvider router={router}></RouterProvider>
       <ToastContainer
         stacked
         position="top-right"

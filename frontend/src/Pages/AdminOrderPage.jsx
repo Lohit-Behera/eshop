@@ -36,6 +36,7 @@ import { Pencil, Trash } from "lucide-react";
 import { toast } from "react-toastify";
 import Loader from "@/components/Loader/Loader";
 import ServerError from "./ServerError";
+import AdminOrderLoader from "@/components/PageLoader/AdminOrderLoader";
 
 function AdminOrderPage() {
   const navigate = useNavigate();
@@ -83,12 +84,12 @@ function AdminOrderPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg p-4 mt-8 bg-background/70">
+    <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 mt-8 bg-background/70">
       {deleteOrderStatus === "loading" ? (
-        <Loader />
+        <AdminOrderLoader />
       ) : deleteOrderStatus === "succeeded" || deleteOrderStatus === "idle" ? (
         <>
-          <h1 className="text-2xl font-bold text-center">Admin Order Page</h1>
+          <h1 className="text-2xl font-bold text-center">Admin Orders</h1>
           <Table>
             <TableCaption>
               <CustomPagination

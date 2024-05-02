@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetProducts, fetchTopProducts } from "./features/ProductSlice";
 import { fetchUserDetails } from "./features/UserSlice";
@@ -67,7 +67,10 @@ function Layout() {
           getAllOrderStatus === "failed" ? (
           <ServerError />
         ) : (
-          <Outlet />
+          <>
+            <ScrollRestoration />
+            <Outlet />
+          </>
         )}
       </ErrorBoundary>
       <Footer />

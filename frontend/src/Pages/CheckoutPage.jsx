@@ -18,20 +18,23 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.user.userInfo);
 
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/login");
-    } else {
-      dispatch(fetchGetAddress());
-    }
-  }, [dispatch, userInfo]);
-
   const userDetails = useSelector((state) => state.user.userDetails) || {};
   const getCart = useSelector((state) => state.cart.getCart) || [];
   const getAddress = useSelector((state) => state.address.getAddress) || [];
   const getCartStatus = useSelector((state) => state.cart.getCartStatus);
   const order = useSelector((state) => state.order.order) || {};
   const orderStatus = useSelector((state) => state.order.orderStatus);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    } else if (getCart.length === 0) {
+      navigate("/cart");
+      toast.warning("Cart is empty");
+    } else {
+      dispatch(fetchGetAddress());
+    }
+  }, [dispatch, userInfo]);
 
   useEffect(() => {
     if (orderStatus === "succeeded") {
@@ -68,6 +71,8 @@ function CheckoutPage() {
     if (!addressId) {
       toast.warning("Please select an address");
       return;
+    } else if (totalPrice > 500000) {
+      toast.warning("Razor pay is not support for orders over 5,00,000");
     } else {
       axios
         .post("/api/order/payment/", { amount: amount })

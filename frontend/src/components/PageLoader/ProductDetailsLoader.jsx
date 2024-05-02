@@ -6,6 +6,7 @@ import "./LoaderAnimator.css";
 function ProductDetailsLoader() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const mode = useSelector((state) => state.mode.mode);
+
   useEffect(() => {
     const systemTheme = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -18,6 +19,7 @@ function ProductDetailsLoader() {
         : "light";
     setIsDarkMode(theme === "dark");
   }, [mode]);
+
   return (
     <div
       className={`loader-page ${
