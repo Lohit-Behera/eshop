@@ -21,8 +21,7 @@ def create_payment(request):
         amount = int(request.data['amount']) * 100 
         payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
         return Response(payment)
-    except Exception as e:
-        logging.error(e)
+    except:
         return Response({'error': 'Something went wrong. Try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 @api_view(['PUT'])

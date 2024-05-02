@@ -1,4 +1,6 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   Route,
   RouterProvider,
@@ -53,9 +55,20 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const mode = localStorage.getItem("vite-ui-theme");
-  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const theme = mode === "dark" ? "dark" : systemTheme ? "dark" : "light";
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const mode = useSelector((state) => state.mode.mode);
+  useEffect(() => {
+    const systemTheme = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const theme =
+      mode === "dark"
+        ? "dark"
+        : systemTheme && mode === "system"
+        ? "dark"
+        : "light";
+    setIsDarkMode(theme === "dark");
+  }, [mode]);
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <RouterProvider router={router} />
@@ -70,7 +83,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover={false}
-        theme={theme}
+        theme={isDarkMode ? "dark" : "light"}
         transition={Slide}
       />
     </ThemeProvider>

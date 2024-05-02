@@ -1,5 +1,6 @@
 import { Moon, Sun } from "lucide-react";
-
+import { useDispatch } from "react-redux";
+import { toggleMode } from "@/features/ModeSlice";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -10,8 +11,22 @@ import {
 import { useTheme } from "./theme-provider";
 
 function DarkModeToggle() {
+  const dispatch = useDispatch();
   const { setTheme } = useTheme();
 
+  const handleLightMode = () => {
+    setTheme("light");
+    dispatch(toggleMode("light"));
+  };
+  const handleDarkMode = () => {
+    setTheme("dark");
+    dispatch(toggleMode("dark"));
+  };
+
+  const handleSystemMode = () => {
+    setTheme("system");
+    dispatch(toggleMode("system"));
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,15 +37,9 @@ function DarkModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLightMode}>Light</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDarkMode}>Dark</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSystemMode}>System</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -30,7 +30,7 @@ function CustomImage({ className, src, alt }) {
         <ImageLoader />
       </div>
       <img
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover rounded-lg"
         src={error ? ErrorImage : src}
         alt={alt}
         style={imagesStyle}

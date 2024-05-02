@@ -10,9 +10,11 @@ import AdminUsers from "@/features/AdminUsers";
 import AdminProductSlice from "@/features/AdminProductSlice";
 import AdminOrderSlice from "@/features/AdminOrderSlice";
 import ContactUsSlice from "@/features/ContactUsSlice";
+import ModeSlice from "@/features/ModeSlice";
 
 const store = configureStore({
     reducer: {
+        mode: ModeSlice,
         user: UserSlice,
         product: productSlice,
         cart: CartSlice,
