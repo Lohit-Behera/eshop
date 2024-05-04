@@ -120,7 +120,7 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg space-x-4 backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg space-x-4 backdrop-blur bg-background/50">
       {orderStatus === "loading" ? (
         <Loader />
       ) : (

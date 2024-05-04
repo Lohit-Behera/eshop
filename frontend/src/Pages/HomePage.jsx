@@ -68,7 +68,7 @@ function HomePage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50">
+    <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
         {productsStatus === "loading" ? (
           <Loader hight="min-h-[80vh]" />

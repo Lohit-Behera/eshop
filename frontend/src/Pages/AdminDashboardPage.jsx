@@ -47,7 +47,7 @@ function AdminDashboardPage() {
   const orders = dashboard.orders || [];
   const products = dashboard.products || [];
   return (
-    <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 mt-8 bg-background/70">
+    <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 bg-background/70">
       {adminDashboardStatus === "loading" ? (
         <Loader />
       ) : adminDashboardStatus === "failed" ? (

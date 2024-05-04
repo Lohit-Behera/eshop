@@ -118,7 +118,7 @@ function AdminUserPage() {
   };
 
   return (
-    <div className="w-[96%] min-h-screen mx-auto backdrop-blur bg-background/70 border-2 rounded-lg mt-6">
+    <div className="w-[96%] min-h-[80vh] mx-auto backdrop-blur bg-background/70 border-2 rounded-lg">
       {adminStatus === "loading" ||
       removeAdminStatus === "loading" ||
       deleteUserStatus === "loading" ||

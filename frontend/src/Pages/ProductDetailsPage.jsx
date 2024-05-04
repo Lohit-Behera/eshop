@@ -37,7 +37,7 @@ function ProductDetailsPage() {
   );
 
   return (
-    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
         <h1 className="text-2xl font-bold text-center mb-6">Product Details</h1>
         {productStatus === "loading" ? (

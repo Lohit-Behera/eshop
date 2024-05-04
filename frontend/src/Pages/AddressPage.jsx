@@ -52,7 +52,7 @@ function AddressPage() {
     );
   };
   return (
-    <div className="min-h-[80vh] ">
+    <div className="min-h-[80vh]">
       {addAddressStatus === "loading" ? (
         <Loader />
       ) : addAddressStatus === "succeeded" || addAddressStatus === "idle" ? (

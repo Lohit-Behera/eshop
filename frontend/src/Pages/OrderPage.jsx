@@ -28,7 +28,7 @@ function OrderPage() {
   }, [dispatch, userInfo]);
 
   return (
-    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg backdrop-blur bg-background/50">
       <h1 className="text-2xl font-bold text-center my-6">Order Summary</h1>
       <div className="w-[95%] mx-auto">
         <h2 className="text-xl font-semibold mb-2">Order Details</h2>

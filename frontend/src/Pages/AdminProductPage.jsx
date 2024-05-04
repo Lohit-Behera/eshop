@@ -102,7 +102,7 @@ function AdminProductPage() {
     dispatch(fetchDeleteProduct(id));
   };
   return (
-    <div className="w-[95%] min-h-[80vh] mx-auto border-2 mt-8 rounded-lg bg-background/70">
+    <div className="w-[95%] min-h-[80vh] mx-auto border-2rounded-lg bg-background/70">
       {adminProductsStatus === "loading" ||
       deleteProductStatus === "loading" ||
       createProductStatus === "loading" ? (

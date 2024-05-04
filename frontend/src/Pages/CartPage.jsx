@@ -69,7 +69,7 @@ function CartPage() {
   };
 
   return (
-    <div className="w-[95%] mx-auto border-2 rounded-lg min-h-screen backdrop-blur bg-background/50">
+    <div className="w-[95%] mx-auto border-2 rounded-lg min-h-[80vh] backdrop-blur bg-background/50">
       <div className="m-2 lg:m-4">
         <h1 className="text-2xl font-bold text-center mb-6">Cart</h1>
         {getCart.length === 0 ? (

@@ -54,7 +54,7 @@ function LoginPage() {
 
   return (
     <>
-      <div className="w-full flex justify-center items-center mt-10 md:mt-20 ">
+      <div className="w-full flex justify-center items-center min-h-[80vh] ">
         <Card className="mx-auto max-w-sm mb-56 bg-background/70">
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl">Login</CardTitle>

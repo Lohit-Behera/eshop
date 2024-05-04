@@ -49,7 +49,7 @@ function AdminOrderUpdatePage() {
   }, [dispatch, updateOrderStatus]);
 
   return (
-    <div className="w-[95%] mx-auto border-2 mt-8 rounded-lg bg-background/50">
+    <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg bg-background/50">
       {updateOrderStatus === "loading" ? (
         <Loader />
       ) : (
