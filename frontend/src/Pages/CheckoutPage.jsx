@@ -41,6 +41,9 @@ function CheckoutPage() {
       toast.success("Order placed successfully");
       dispatch(resetOrder());
       navigate(`/order/${order.id}`);
+    } else if (orderStatus === "failed") {
+      toast.error("Something went wrong");
+      dispatch(resetOrder());
     }
   }, [orderStatus]);
 

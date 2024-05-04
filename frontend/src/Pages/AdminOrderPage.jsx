@@ -11,6 +11,7 @@ import {
   resetDeleteOrder,
 } from "@/features/AdminOrderSlice";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -34,8 +35,6 @@ import {
 
 import { Pencil, Trash } from "lucide-react";
 import { toast } from "react-toastify";
-import Loader from "@/components/Loader/Loader";
-import ServerError from "./ServerError";
 import AdminOrderLoader from "@/components/PageLoader/AdminOrderLoader";
 
 function AdminOrderPage() {
@@ -47,6 +46,9 @@ function AdminOrderPage() {
   const userInfo = useSelector((state) => state.user.userInfo);
   const getAllOrder =
     useSelector((state) => state.adminOrder.getAllOrder) || [];
+  const getAllOrderStatus = useSelector(
+    (state) => state.adminOrder.getAllOrderStatus
+  );
   const deleteOrderStatus = useSelector(
     (state) => state.adminOrder.deleteOrderStatus
   );
@@ -85,46 +87,75 @@ function AdminOrderPage() {
 
   return (
     <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 mt-8 bg-background/70">
-      {deleteOrderStatus === "loading" ? (
+      {deleteOrderStatus === "loading" || getAllOrderStatus === "loading" ? (
         <AdminOrderLoader />
       ) : deleteOrderStatus === "succeeded" || deleteOrderStatus === "idle" ? (
         <>
           <h1 className="text-2xl font-bold text-center">Admin Orders</h1>
           <Table>
             <TableCaption>
-              <CustomPagination
-                keyword="?page="
-                page={currentPage}
-                pages={pages}
-                link="/admin/order"
-                setCurrentPage={setCurrentPage}
-                currentPage={currentPage}
-              />
+              {pages > 1 && (
+                <CustomPagination
+                  keyword="?page="
+                  page={currentPage}
+                  pages={pages}
+                  link="/admin/order"
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                />
+              )}
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-56">Order Id</TableHead>
-                <TableHead className="w-28">Total Price</TableHead>
-                <TableHead className="w-32">Purchase Date</TableHead>
-                <TableHead className="w-14">Paid</TableHead>
-                <TableHead className="w-20">Delivered</TableHead>
-                <TableHead className="w-32">Delivery Date</TableHead>
-                <TableHead className="w-20">Edit</TableHead>
-                <TableHead className="w-20">Delete</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Total Price</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  Purchase Date
+                </TableHead>
+                <TableHead>Paid</TableHead>
+                <TableHead>Delivered</TableHead>
+                <TableHead className=" hidden lg:table-cell">
+                  Delivery Date
+                </TableHead>
+                <TableHead className=" hidden lg:table-cell">Edit</TableHead>
+                <TableHead className=" hidden lg:table-cell">Delete</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {allOrders.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>₹{order.total_price}</TableCell>
-                  <TableCell>{order.created_at.substr(0, 10)}</TableCell>
-                  <TableCell>{order.is_paid ? "Yes" : "No"}</TableCell>
-                  <TableCell>{order.is_delivered ? "Yes" : "No"}</TableCell>
                   <TableCell>
-                    {order.delivered_at ? order.delivered_at.substr(0, 10) : ""}
+                    <div className="font-medium">{order.name}</div>
+                    <div className="hidden text-sm text-muted-foreground lg:inline">
+                      {order.email}
+                    </div>
+                  </TableCell>
+                  <TableCell>₹{order.total_price}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {order.created_at.substr(0, 10)}
                   </TableCell>
                   <TableCell>
+                    <Badge
+                      className="text-xs"
+                      variant={order.is_paid ? "default" : "secondary"}
+                    >
+                      {order.is_paid ? "Paid" : "Pending"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      className="text-xs"
+                      variant={order.is_delivered ? "default" : "secondary"}
+                    >
+                      {order.is_delivered ? "Delivered" : "Pending"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className=" hidden lg:table-cell">
+                    {order.delivered_at
+                      ? order.delivered_at.substr(0, 10)
+                      : "Not Delivered Yet"}
+                  </TableCell>
+                  <TableCell className=" hidden lg:table-cell">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -135,7 +166,7 @@ function AdminOrderPage() {
                       <Pencil />
                     </Button>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className=" hidden lg:table-cell">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="destructive" size="icon">

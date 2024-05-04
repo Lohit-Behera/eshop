@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserUpdate } from "@/features/UserSlice";
 import CustomPassword from "@/components/CustomPassword";
@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -18,16 +19,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "react-toastify";
+import CustomPagination from "@/components/CustomPagination";
+import { fetchGetAllOrders } from "@/features/OrderSlice";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  let keyword = location.search;
 
   const userInfo = useSelector((state) => state.user.userInfo);
   const userDetails = useSelector((state) => state.user.userDetails) || {};
   const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus);
   const getAllOrders = useSelector((state) => state.order.getAllOrders) || [];
+  const page = getAllOrders.page || 1;
+  const pages = getAllOrders.pages || 1;
+  const orders = getAllOrders.orders || [];
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,6 +63,10 @@ function ProfilePage() {
       setProfileImage(userDetails.profile_image);
     }
   }, [userInfo, userDetails, userUpdateStatus]);
+
+  useEffect(() => {
+    dispatch(fetchGetAllOrders(keyword));
+  }, [dispatch, keyword]);
 
   const imageHandler = (e) => {
     const file = e.target.files[0];
@@ -88,7 +101,7 @@ function ProfilePage() {
           <div className="flex-col mx-6 my-4 space-y-2">
             <Avatar className="w-24 h-24 mx-auto">
               <AvatarImage src={userDetails.profile_image} />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>Profile</AvatarFallback>
             </Avatar>
             <p className="text-base lg:text-lg text-center">
               Name: {userDetails.first_name} {userDetails.last_name}
@@ -172,43 +185,53 @@ function ProfilePage() {
           <h1 className="text-2xl font-bold text-center my-4">Orders</h1>
           <div>
             <Table>
-              <TableCaption>A list of your recent invoices.</TableCaption>
+              <TableCaption>
+                {pages > 1 && (
+                  <CustomPagination
+                    keyword="?page="
+                    page={currentPage}
+                    pages={pages}
+                    link="/profile"
+                    setCurrentPage={setCurrentPage}
+                    currentPage={currentPage}
+                  />
+                )}
+              </TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Order Id</TableHead>
-                  <TableHead>Purchase Date</TableHead>
+                  <TableHead>Order ID</TableHead>
                   <TableHead>Total Price</TableHead>
-                  <TableHead className="w-[100px]">Shipping Price</TableHead>
-                  <TableHead>Paid</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Purchase Date
+                  </TableHead>
                   <TableHead>Delivered</TableHead>
-                  <TableHead>Deliver Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {getAllOrders.map((order) => (
-                  <TableRow>
+                {orders.map((order) => (
+                  <TableRow key={order.id}>
                     <TableCell className="font-medium truncate">
                       <Link
                         to={`/order/${order.id}`}
                         className="hover:underline"
                       >
-                        {order.id}
+                        <div className="font-medium ">{order.id}</div>
                       </Link>
                     </TableCell>
-                    <TableCell>{order.created_at.substring(0, 10)}</TableCell>
                     <TableCell>
                       <span className="text-base font-bold">₹&nbsp;</span>
                       {order.total_price ? Math.round(order.total_price) : 0}
                     </TableCell>
-                    <TableCell>
-                      {order.shipping_price < 1 ? "Free" : order.shipping_price}
+                    <TableCell className="hidden md:table-cell">
+                      {order.created_at.substring(0, 10)}
                     </TableCell>
-                    <TableCell>{order.is_paid ? "Yes" : "No"}</TableCell>
-                    <TableCell>{order.is_delivered ? "Yes" : "No"}</TableCell>
                     <TableCell>
-                      {order.is_delivered
-                        ? order.delivered_at.substring(0, 10)
-                        : ""}
+                      <Badge
+                        className="text-xs"
+                        variant={order.is_delivered ? "default" : "secondary"}
+                      >
+                        {order.is_delivered ? "Delivered" : "Pending"}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                 ))}

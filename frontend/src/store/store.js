@@ -11,6 +11,7 @@ import AdminProductSlice from "@/features/AdminProductSlice";
 import AdminOrderSlice from "@/features/AdminOrderSlice";
 import ContactUsSlice from "@/features/ContactUsSlice";
 import ModeSlice from "@/features/ModeSlice";
+import AdminDashboardSlice from "@/features/AdminDashboardSlice";
 
 const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
         cart: CartSlice,
         address: AddressSlice,
         order: OrderSlice,
+        adminDashboard: AdminDashboardSlice,
         adminUsers: AdminUsers,
         adminProduct: AdminProductSlice,
         adminOrder: AdminOrderSlice,

@@ -45,6 +45,9 @@ function AdminUserPage() {
 
   const userInfo = useSelector((state) => state.user.userInfo);
   const allUsers = useSelector((state) => state.adminUsers.allUsers);
+  const allUsersStatus = useSelector(
+    (state) => state.adminUsers.allUsersStatus
+  );
   const adminStatus = useSelector((state) => state.adminUsers.adminStatus);
   const removeAdminStatus = useSelector(
     (state) => state.adminUsers.removeAdminStatus
@@ -118,7 +121,8 @@ function AdminUserPage() {
     <div className="w-[96%] min-h-screen mx-auto backdrop-blur bg-background/70 border-2 rounded-lg mt-6">
       {adminStatus === "loading" ||
       removeAdminStatus === "loading" ||
-      deleteUserStatus === "loading" ? (
+      deleteUserStatus === "loading" ||
+      allUsersStatus === "loading" ? (
         <AdminUserLoader />
       ) : (
         <>
@@ -130,7 +134,7 @@ function AdminUserPage() {
                   keyword="?page="
                   page={currentPage}
                   pages={pages}
-                  link="/admin/user"
+                  link="/admin/users"
                   setCurrentPage={setCurrentPage}
                   currentPage={currentPage}
                 />
@@ -140,11 +144,15 @@ function AdminUserPage() {
               <TableRow>
                 <TableHead className="w-[20%]">Email</TableHead>
                 <TableHead className="w-[20%]">Name</TableHead>
-                <TableHead>Verified</TableHead>
-                <TableHead>Admin</TableHead>
-                <TableHead>Change to Admin</TableHead>
-                <TableHead>Remove Admin</TableHead>
-                <TableHead>Delete</TableHead>
+                <TableHead className="hidden md:table-cell">Verified</TableHead>
+                <TableHead className="hidden md:table-cell">Admin</TableHead>
+                <TableHead className="hidden lg:table-cell">
+                  Change to Admin
+                </TableHead>
+                <TableHead className="hidden lg:table-cell">
+                  Remove Admin
+                </TableHead>
+                <TableHead className="hidden lg:table-cell">Delete</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -154,21 +162,21 @@ function AdminUserPage() {
                   <TableCell>
                     {user.first_name + " " + user.last_name}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     {user.is_verified ? (
                       <Check className="text-primary" strokeWidth={4} />
                     ) : (
                       <X className="text-primary" strokeWidth={4} />
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     {user.is_staff ? (
                       <Check className="text-primary" strokeWidth={4} />
                     ) : (
                       <X className="text-primary" strokeWidth={4} />
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button disabled={user.is_staff}>Admin</Button>
@@ -193,7 +201,7 @@ function AdminUserPage() {
                       </AlertDialogContent>
                     </AlertDialog>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button disabled={!user.is_staff}>Remove Admin</Button>
@@ -218,7 +226,7 @@ function AdminUserPage() {
                       </AlertDialogContent>
                     </AlertDialog>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="destructive">Delete</Button>

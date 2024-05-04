@@ -32,9 +32,9 @@ assets_url_pattern = '|'.join([
     settings.ASSETS_URL.lstrip('/')
 ])
 
-urlpatterns += [
-    re_path(rf'^(?!({assets_url_pattern})).*$', TemplateView.as_view(template_name='index.html')),
-]
+# urlpatterns += [
+#     re_path(rf'^(?!({assets_url_pattern})).*$', TemplateView.as_view(template_name='index.html')),
+# ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

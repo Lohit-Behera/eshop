@@ -48,7 +48,7 @@ export const fetchGetOrderById = createAsyncThunk('get/order', async (id, { reje
     }
 });
 
-export const fetchGetAllOrders = createAsyncThunk('get/all/orders', async (_, { rejectWithValue, getState }) => {
+export const fetchGetAllOrders = createAsyncThunk('get/all/orders', async (keyword = '', { rejectWithValue, getState }) => {
     try {
         const { user: { userInfo } = {} } = getState();
         const config = {
@@ -58,7 +58,7 @@ export const fetchGetAllOrders = createAsyncThunk('get/all/orders', async (_, { 
             },
         };
         const { data } = await axios.get(
-            '/api/order/get/',
+            `/api/order/get/${keyword}`,
             config
         );
         return data;

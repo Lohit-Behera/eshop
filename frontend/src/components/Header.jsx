@@ -169,26 +169,26 @@ function Header() {
                 </li>
                 {userDetails && userDetails.is_staff && (
                   <li>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <UserCog />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="text-center">
-                        <DropdownMenuLabel>Admin</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                          <Link to="/admin/user">User Dashboard</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Link to="/admin/product">Product Dashboard</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Link to="/admin/order">Order Dashboard</Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <NavLink to="/admin/dashboard">
+                      {({ isActive, isPending, isTransitioning }) => (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant={isActive ? "default" : "ghost"}
+                                disabled={isPending || isTransitioning}
+                                size="icon"
+                              >
+                                <UserCog />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Admin Dashboard</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                    </NavLink>
                   </li>
                 )}
                 {userInfo ? (
@@ -280,7 +280,7 @@ function Header() {
                         </NavLink>
                       </li>
                       <li>
-                        <NavLink to="/contactus">
+                        <NavLink to="/contact-us">
                           {({ isActive, isPending, isTransitioning }) => (
                             <SheetClose asChild>
                               <Button
@@ -295,34 +295,19 @@ function Header() {
                       </li>
                       {userInfo && userDetails && userDetails.is_staff && (
                         <li>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost">
-                                <UserCog className="mr-2 h-4 w-4" /> Admin
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="text-center">
-                              <DropdownMenuLabel>Admin</DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <SheetClose asChild>
-                                  <Link to="/admin/user">User Dashboard</Link>
-                                </SheetClose>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <SheetClose asChild>
-                                  <Link to="/admin/product">
-                                    Product Dashboard
-                                  </Link>
-                                </SheetClose>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <SheetClose asChild>
-                                  <Link to="/admin/order">Order Dashboard</Link>
-                                </SheetClose>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                          <NavLink to="/admin/dashboard">
+                            {({ isActive, isPending, isTransitioning }) => (
+                              <SheetClose asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                >
+                                  <UserCog className="mr-2 h-4 w-4" />
+                                  Admin
+                                </Button>
+                              </SheetClose>
+                            )}
+                          </NavLink>
                         </li>
                       )}
                       {userInfo && (

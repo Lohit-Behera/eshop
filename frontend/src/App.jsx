@@ -27,6 +27,7 @@ import AdminOrderPage from "./Pages/AdminOrderPage";
 import AdminOrderUpdatePage from "./Pages/AdminOrderUpdatePage";
 import ContactUsPage from "./Pages/ContactUsPage";
 import VerificationPage from "./Pages/VerificationPage";
+import AdminDashboardPage from "./Pages/AdminDashboardPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,16 +41,17 @@ const router = createBrowserRouter(
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/address" element={<AddressPage />} />
       <Route path="/order/:id" element={<OrderPage />} />
-      <Route path="/admin/user" element={<AdminUserPage />} />
-      <Route path="/admin/product" element={<AdminProductPage />} />
+      <Route path="/admin/users" element={<AdminUserPage />} />
+      <Route path="/admin/products" element={<AdminProductPage />} />
       <Route path="/admin/update/product/:id" element={<ProductEditPage />} />
-      <Route path="/admin/order" element={<AdminOrderPage />} />
+      <Route path="/admin/orders" element={<AdminOrderPage />} />
       <Route
         path="/admin/update/order/:id"
         element={<AdminOrderUpdatePage />}
       />
       <Route path="/contact-us" element={<ContactUsPage />} />
       <Route path="/verification" element={<VerificationPage />} />
+      <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
     </Route>
   )
 );

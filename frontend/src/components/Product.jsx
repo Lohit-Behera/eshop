@@ -40,7 +40,7 @@ function Product({ product, onAddToCart }) {
             {product.name}
           </h2>
         </Link>
-        <Rating value={product.rating} reviews={product.numReviews} />
+        <Rating value={product.rating} reviews={product.numReviews} text />
       </CardContent>
       <CardFooter>
         <div className="flex flex-col w-full space-y-2">

@@ -19,6 +19,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import CustomImage from "@/components/CustomImage";
+import Loader from "@/components/Loader/Loader";
 
 function HomePage() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function HomePage() {
   const getProducts = useSelector((state) => state.product.products) || {};
   const topProducts = useSelector((state) => state.product.topProducts) || [];
   const createCartStatus = useSelector((state) => state.cart.createCartStatus);
+  const productsStatus = useSelector((state) => state.product.productsStatus);
   const products = getProducts.products || [];
   const page = getProducts.page || 1;
   const pages = getProducts.pages || 1;
@@ -53,9 +55,7 @@ function HomePage() {
   }, [dispatch, createCartStatus]);
 
   useEffect(() => {
-    if (keyword !== "") {
-      dispatch(fetchGetProducts(keyword));
-    }
+    dispatch(fetchGetProducts(keyword));
   }, [dispatch, keyword]);
 
   const handleAddToCart = (productId) => {
@@ -70,57 +70,63 @@ function HomePage() {
   return (
     <div className="w-[95%] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
-        {!keyword || keyword === "?page=1" ? (
+        {productsStatus === "loading" ? (
+          <Loader hight="min-h-[80vh]" />
+        ) : (
           <>
+            {!keyword || keyword === "?page=1" ? (
+              <>
+                <h1 className="text-2xl font-bold text-center mb-6">
+                  Top Products
+                </h1>
+                <div className="w-[80%] mx-auto mb-4">
+                  <Carousel>
+                    <CarouselContent>
+                      {topProducts.map((product) => (
+                        <CarouselItem key={product.id}>
+                          <Link to={`/product/${product.id}`}>
+                            <CustomImage
+                              className="w-[70%] h-56 md:h-128 m-4"
+                              src={product.image}
+                              alt=""
+                            />
+                          </Link>
+                          <Link to={`/product/${product.id}`}>
+                            <p className="text-center text-lg md:text-xl font-semibold hover:underline">
+                              {product.name}
+                            </p>
+                          </Link>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
+                </div>
+              </>
+            ) : null}
             <h1 className="text-2xl font-bold text-center mb-6">
-              Top Products
+              {pageKeyword === "?page=" ? "Latest Products" : "Products"}
             </h1>
-            <div className="w-[80%] mx-auto mb-4">
-              <Carousel>
-                <CarouselContent>
-                  {topProducts.map((product) => (
-                    <CarouselItem key={product.id}>
-                      <Link to={`/product/${product.id}`}>
-                        <CustomImage
-                          className="w-[70%] h-56 md:h-128 m-4"
-                          src={product.image}
-                          alt=""
-                        />
-                      </Link>
-                      <Link to={`/product/${product.id}`}>
-                        <p className="text-center text-lg md:text-xl font-semibold hover:underline">
-                          {product.name}
-                        </p>
-                      </Link>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {products.map((product) => (
+                <div key={product.id}>
+                  <Product product={product} onAddToCart={handleAddToCart} />
+                </div>
+              ))}
+            </div>
+            <div className="mt-8">
+              {pages > 1 && (
+                <CustomPagination
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                  pages={pages}
+                  keyword={pageKeyword}
+                />
+              )}
             </div>
           </>
-        ) : null}
-        <h1 className="text-2xl font-bold text-center mb-6">
-          {pageKeyword === "?page=" ? "Latest Products" : "Products"}
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map((product) => (
-            <div key={product.id}>
-              <Product product={product} onAddToCart={handleAddToCart} />
-            </div>
-          ))}
-        </div>
-        <div className="mt-8">
-          {pages > 1 && (
-            <CustomPagination
-              setCurrentPage={setCurrentPage}
-              currentPage={currentPage}
-              pages={pages}
-              keyword={pageKeyword}
-            />
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

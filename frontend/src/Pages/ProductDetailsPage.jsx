@@ -69,6 +69,7 @@ function ProductDetailsPage() {
                     value={product.rating}
                     className="mt-1"
                     reviews={product.numReviews}
+                    text
                   />
                 </div>
                 <div className="min-h-80">

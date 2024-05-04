@@ -11,6 +11,7 @@ import {
 } from "@/features/AdminProductSlice";
 import CustomPagination from "@/components/CustomPagination";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -115,29 +116,41 @@ function AdminProductPage() {
                 keyword="?page="
                 page={currentPage}
                 pages={pages}
-                link="/admin/product"
+                link="/admin/products"
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}
               />
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-32">Image</TableHead>
+                <TableHead className="w-32 hidden lg:table-cell">
+                  Image
+                </TableHead>
                 <TableHead className="w-52">Name</TableHead>
                 <TableHead className="w-32">Brand</TableHead>
-                <TableHead className="w-32">Category</TableHead>
-                <TableHead className="w-32">Reviews</TableHead>
-                <TableHead className="w-32">Rating</TableHead>
+                <TableHead className="w-32 hidden lg:table-cell">
+                  Category
+                </TableHead>
+                <TableHead className="w-32 hidden lg:table-cell">
+                  Reviews
+                </TableHead>
+                <TableHead className="w-32 hidden md:table-cell">
+                  Rating
+                </TableHead>
                 <TableHead className="w-32">Price</TableHead>
                 <TableHead className="w-32">Stock</TableHead>
-                <TableHead className="w-32">Edit</TableHead>
-                <TableHead className="w-32">Delete</TableHead>
+                <TableHead className="w-32 hidden md:table-cell">
+                  Edit
+                </TableHead>
+                <TableHead className="w-32 hidden md:table-cell">
+                  Delete
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {products.map((product) => (
                 <TableRow key={product.id} className="max-h-24">
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     <Link to={`/product/${product.id}`}>
                       <CustomImage
                         src={product.image}
@@ -155,12 +168,31 @@ function AdminProductPage() {
                     </Link>
                   </TableCell>
                   <TableCell>{product.brand}</TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>{product.numReviews}</TableCell>
-                  <TableCell>{product.rating}</TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {product.category}
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {product.numReviews}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {product.rating}
+                  </TableCell>
                   <TableCell>{product.price}</TableCell>
-                  <TableCell>{product.countInStock}</TableCell>
                   <TableCell>
+                    <Badge
+                      className="text-xs"
+                      variant={
+                        product.countInStock >= 5
+                          ? "default"
+                          : product.countInStock < 5 && product.countInStock > 0
+                          ? "secondary"
+                          : "destructive"
+                      }
+                    >
+                      {product.countInStock}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -171,7 +203,7 @@ function AdminProductPage() {
                       <Pencil />
                     </Button>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="destructive" size="icon">

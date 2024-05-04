@@ -27,3 +27,8 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = '__all__'
+        
+class ProductAdminDashboardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name','image', 'countInStock', 'price','id']

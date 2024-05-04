@@ -7,11 +7,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from razorpay import Client
-
-from customuser.models import Address
+from django.db.models import Sum
+from customuser.models import Address, CustomUser
 from .models import Order, OrderItem
 from product.models import Product, Cart
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderSerializer, OrderItemSerializer, OrderAdminDashboardSerializer
+from product.serializers import ProductAdminDashboardSerializer
 from customuser.serializers import AddressSerializer
 
 @api_view(['POST'])
@@ -29,6 +30,7 @@ def create_payment(request):
 def create_order(request):
     try:
         user = request.user
+        print(user)
         data = request.data
         orderItems = data['orderItems']
         
@@ -39,6 +41,8 @@ def create_order(request):
             address = Address.objects.get(id=data['address'])
             order = Order.objects.create(
                 user=user,
+                name = user.first_name + ' ' + user.last_name,
+                email = user.email,
                 address = address,
                 shipping_price = data['shipping_price'],
                 total_price = data['total_price'],
@@ -67,7 +71,8 @@ def create_order(request):
             serializer = OrderSerializer(order, many=False)
             return Response(serializer.data)
 
-    except:
+    except Exception as e:
+        print(e)
         return Response({'detail': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
     
     
@@ -76,8 +81,22 @@ def create_order(request):
 def get_user_orders(request):
     user = request.user
     orders = user.order_set.all().order_by('-created_at')
+    page = request.query_params.get('page')
+    paginator = Paginator(orders, 10)
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+    
     serializer = OrderSerializer(orders, many=True)
-    return Response(serializer.data)
+    return Response({'orders': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -136,3 +155,17 @@ def delete_order(request, pk):
     order = Order.objects.get(id=pk)
     order.delete()
     return Response('Order was deleted')
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def admin_dashboard(request):
+    orders = Order.objects.all().order_by('-created_at')[0:10]
+    product = Product.objects.all().order_by('-createdAt')[0:10]
+    total_users = CustomUser.objects.all().count()
+    total_orders = Order.objects.all().count()
+    total_product = Product.objects.all().count()
+    total_sales = OrderItem.objects.all().aggregate(total_price=Sum('price'))['total_price']
+    product_serializer = ProductAdminDashboardSerializer(product, many=True)
+    orders = OrderAdminDashboardSerializer(orders, many=True)
+    print(orders)
+    return Response({'orders': orders.data, 'products': product_serializer.data, 'total_orders': total_orders, 'total_product': total_product, 'total_sales': total_sales, 'total_users': total_users})
