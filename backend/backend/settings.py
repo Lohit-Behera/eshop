@@ -180,7 +180,5 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 RAZORPAY_API_KEY = os.getenv('RAZORPAY_API_KEY')
 RAZORPAY_API_SECRET = os.getenv('RAZORPAY_API_SECRET')
 
-CORS_ALLOWED_ORIGINS = [
-    "https://eshop-frontend-pi.vercel.app",
-    "http://localhost:5173",
-]
+
+CORS_ALLOW_ALL_ORIGINS=True
