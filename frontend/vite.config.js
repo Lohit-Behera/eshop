@@ -11,12 +11,12 @@ export default defineConfig({
       '/api': {
         target: 'https://eshop-backend-nine.vercel.app',
         changeOrigin: true,
-        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/images': {
         target: 'https://eshop-backend-nine.vercel.app',
         changeOrigin: true,
-        secure: true,
+        rewrite: (path) => path.replace(/^\/image/, ''),
       },
     }
   },
