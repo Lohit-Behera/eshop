@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "https://eshop-backend-nine.vercel.app/api/:1",
+        "headers": {
+          "host": "eshop-backend-nine.vercel.app"
+        }
+      },
+      {
+        "src": "/images/(.*)",
+        "dest": "https://eshop-backend-nine.vercel.app/images/:1",
+        "headers": {
+          "host": "eshop-backend-nine.vercel.app"
+        }
+      }
+    ]
+  }
+  
