@@ -9,7 +9,7 @@ export const fetchGetProducts = createAsyncThunk('get/all/products', async (keyw
             },
         };
         const { data } = await axios.get(
-            `/api/product/${keyword}`,
+            `https://eshop-backend-nine.vercel.app/api/product/${keyword}`,
             config
         );
         return data;
