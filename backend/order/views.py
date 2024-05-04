@@ -30,7 +30,6 @@ def create_payment(request):
 def create_order(request):
     try:
         user = request.user
-        print(user)
         data = request.data
         orderItems = data['orderItems']
         
@@ -71,8 +70,7 @@ def create_order(request):
             serializer = OrderSerializer(order, many=False)
             return Response(serializer.data)
 
-    except Exception as e:
-        print(e)
+    except:
         return Response({'detail': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
     
     
@@ -167,5 +165,4 @@ def admin_dashboard(request):
     total_sales = OrderItem.objects.all().aggregate(total_price=Sum('price'))['total_price']
     product_serializer = ProductAdminDashboardSerializer(product, many=True)
     orders = OrderAdminDashboardSerializer(orders, many=True)
-    print(orders)
     return Response({'orders': orders.data, 'products': product_serializer.data, 'total_orders': total_orders, 'total_product': total_product, 'total_sales': total_sales, 'total_users': total_users})

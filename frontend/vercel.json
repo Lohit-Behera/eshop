@@ -8,6 +8,13 @@
         "source": "/images/(.*)",
         "destination": "https://eshop-backend-nine.vercel.app/images/$1"
       }
-    ]
+    ],
+    
+    "routes": [
+        {
+          "src": "/(.*)",
+          "dest": "/"
+        }
+      ]
   }
   

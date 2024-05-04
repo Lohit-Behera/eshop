@@ -51,7 +51,6 @@ def register_user(request):
         last_name = last_name_lower.replace(' ', '').capitalize()
 
         email = data['email'].lower()
-        
         user = CustomUser.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -64,7 +63,8 @@ def register_user(request):
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
 
-    except:
+    except Exception as e:
+        print(e)
         return Response({'massage': 'An error occurred while processing your request'}, status=status.HTTP_400_BAD_REQUEST)
 
 def send_verification_email(request, user):
@@ -92,7 +92,8 @@ def send_verification_email(request, user):
             recipient_list=[user.email],
             html_message=html_message
             )
-    except:
+    except Exception as e:
+        print(e)
         return Response({'massage': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
