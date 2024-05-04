@@ -1,20 +1,18 @@
 {
-    "rewrites": [
-      {
-        "source": "/api/(.*)",
-        "destination": "https://eshop-backend-nine.vercel.app/api/$1"
-      },
-      {
-        "source": "/images/(.*)",
-        "destination": "https://eshop-backend-nine.vercel.app/images/$1"
-      }
-    ],
-    
-    "routes": [
-        {
-          "src": "/(.*)",
-          "dest": "/"
-        }
-      ]
-  }
-  
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://eshop-backend-nine.vercel.app/api/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "https://eshop-backend-nine.vercel.app/images/$1"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
