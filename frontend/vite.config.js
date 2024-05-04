@@ -9,14 +9,14 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'https://eshop-backend-nine.vercel.app',
+        target: 'http://127.0.0.1:8000',
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
       '/images': {
-        target: 'https://eshop-backend-nine.vercel.app',
+        target: 'http://127.0.0.1:8000',
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
     }
   },
