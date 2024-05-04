@@ -30,7 +30,7 @@ export const fetchProductDetail = createAsyncThunk('get/product/detail', async (
             },
         };
         const { data } = await axios.get(
-            `/api/product/${id}/`,
+            `https://eshop-backend-nine.vercel.app/api/product/${id}/`,
             config
         );
         return data;
@@ -51,7 +51,7 @@ export const fetchTopProducts = createAsyncThunk('get/top/products', async (_, {
             },
         };
         const { data } = await axios.get(
-            `/api/product/top/`,
+            `https://eshop-backend-nine.vercel.app/api/product/top/`,
             config
         );
         return data;
