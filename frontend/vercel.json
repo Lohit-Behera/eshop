@@ -1,19 +1,12 @@
 {
-    "version": 2,
-    "routes": [
+    "rewrites": [
       {
-        "src": "/api/(.*)",
-        "dest": "https://eshop-backend-nine.vercel.app/api/:1",
-        "headers": {
-          "host": "eshop-backend-nine.vercel.app"
-        }
+        "source": "/api/(.*)",
+        "destination": "https://eshop-backend-nine.vercel.app/api/$1"
       },
       {
-        "src": "/images/(.*)",
-        "dest": "https://eshop-backend-nine.vercel.app/images/:1",
-        "headers": {
-          "host": "eshop-backend-nine.vercel.app"
-        }
+        "source": "/images/(.*)",
+        "destination": "https://eshop-backend-nine.vercel.app/images/$1"
       }
     ]
   }
