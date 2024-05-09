@@ -25,6 +25,7 @@ import {
 import CustomImage from "@/components/CustomImage";
 import ServerError from "./ServerError";
 import Loader from "@/components/Loader/Loader";
+import AdminDashboardLoader from "@/components/PageLoader/AdminDashboardLoader";
 
 function AdminDashboardPage() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ function AdminDashboardPage() {
   return (
     <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 bg-background/70">
       {adminDashboardStatus === "loading" ? (
-        <Loader />
+        <AdminDashboardLoader />
       ) : adminDashboardStatus === "failed" ? (
         <ServerError />
       ) : adminDashboardStatus === "succeeded" ||

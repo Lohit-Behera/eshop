@@ -19,7 +19,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import CustomImage from "@/components/CustomImage";
-import Loader from "@/components/Loader/Loader";
+import HomeLoader from "@/components/PageLoader/HomeLoader";
 
 function HomePage() {
   const location = useLocation();
@@ -71,7 +71,7 @@ function HomePage() {
     <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg space-y-4 backdrop-blur bg-background/50">
       <div className="m-2 md:m-4">
         {productsStatus === "loading" ? (
-          <Loader hight="min-h-[80vh]" />
+          <HomeLoader />
         ) : (
           <>
             {!keyword || keyword === "?page=1" ? (

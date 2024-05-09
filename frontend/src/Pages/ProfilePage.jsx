@@ -46,7 +46,6 @@ function ProfilePage() {
 
   useEffect(() => {
     if (userUpdateStatus === "succeeded") {
-      window.location.reload();
       toast.success("User updated successfully");
     } else if (userUpdateStatus === "failed") {
       toast.error("User update failed");

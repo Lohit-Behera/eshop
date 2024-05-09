@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail } from "@/features/ProductSlice";
-import { fetchCreateCart } from "@/features/CartSlice";
+import { fetchCreateCart, resetCreateCart } from "@/features/CartSlice";
 import Rating from "@/components/Rating";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import CustomImage from "@/components/CustomImage";
 import ServerError from "./ServerError";
 import ProductDetailsLoader from "@/components/PageLoader/ProductDetailsLoader";
+import { toast } from "react-toastify";
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -35,6 +36,17 @@ function ProductDetailsPage() {
   const productStatus = useSelector(
     (state) => state.product.productDetailStatus
   );
+  const createCartStatus = useSelector((state) => state.cart.createCartStatus);
+
+  useEffect(() => {
+    if (createCartStatus === "succeeded") {
+      toast.success("Product added to cart");
+      dispatch(resetCreateCart());
+    } else if (createCartStatus === "failed") {
+      toast.error("Something went wrong");
+      dispatch(resetCreateCart());
+    }
+  }, [createCartStatus]);
 
   return (
     <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg backdrop-blur bg-background/50">

@@ -275,7 +275,7 @@ def delete_all_images(request):
     except:
         return Response({'message': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)
 
-import logging
+
 @api_view(['PUT'])
 def create_contact_us(request):
     try:
@@ -312,6 +312,5 @@ def create_contact_us(request):
             html_message=html_message
             )
         return Response({'detail': 'Contact created successfully'})
-    except Exception as e:
-        logging.error(e)
+    except:
         return Response({'detail': 'An error occurred while processing your request'}, status=status.HTTP_400_BAD_REQUEST)

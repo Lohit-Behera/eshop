@@ -150,7 +150,10 @@ function CartPage() {
               </h1>
               <div className="flex-grow m-4 space-y-4">
                 <p className="text-sm md:text-base">
-                  Total Items:&nbsp;{getCart.length}
+                  Total Items:&nbsp;
+                  {getCart
+                    .map((item) => item.quantity)
+                    .reduce((a, b) => a + b, 0)}
                 </p>
                 <p className="text-sm md:text-base">
                   Total Price:&nbsp;₹{totalPrice}

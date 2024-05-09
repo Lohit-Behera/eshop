@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGetProducts, fetchTopProducts } from "./features/ProductSlice";
-import { fetchUserDetails } from "./features/UserSlice";
+import { fetchUserDetails, resetUserUpdate } from "./features/UserSlice";
 import { fetchGetCart } from "./features/CartSlice";
 import { fetchGetAllOrders } from "./features/OrderSlice";
 import { ErrorBoundary } from "react-error-boundary";
@@ -18,6 +18,7 @@ import { AuroraBackground } from "./components/ui/aurora-background";
 function Layout() {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
+  const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus);
 
   useEffect(() => {
     dispatch(fetchGetProducts());
@@ -28,6 +29,13 @@ function Layout() {
       dispatch(fetchGetAllOrders());
     }
   }, [dispatch, userInfo]);
+
+  useEffect(() => {
+    if (userUpdateStatus === "succeeded") {
+      dispatch(fetchUserDetails(userInfo.id));
+      dispatch(resetUserUpdate());
+    }
+  }, [userUpdateStatus]);
 
   const userDetailsStatus = useSelector(
     (state) => state.user.userDetailsStatus
@@ -50,7 +58,7 @@ function Layout() {
   }, [productsStatus, userDetailsStatus, getCartStatus, getAllOrderStatus]);
 
   return (
-    <div className="relative min-h-screen h-full w-full">
+    <div className="relative min-h-[80vh] h-full w-full">
       <div className="fixed inset-0 w-full h-full overflow-hidden object-cover -z-10">
         <AuroraBackground />
       </div>
@@ -60,7 +68,7 @@ function Layout() {
         userDetailsStatus === "loading" ||
         getCartStatus === "loading" ||
         getAllOrderStatus === "loading" ? (
-          <Loader hight="min-h-screen" />
+          <Loader hight="min-h-[80vh]" />
         ) : productsStatus === "failed" ||
           userDetailsStatus === "failed" ||
           getCartStatus === "failed" ||
