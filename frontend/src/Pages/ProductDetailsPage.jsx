@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetail } from "@/features/ProductSlice";
 import { fetchCreateCart, resetCreateCart } from "@/features/CartSlice";
@@ -30,6 +30,7 @@ function ProductDetailsPage() {
   }, [dispatch]);
 
   const [quantity, setQuantity] = useState(1);
+
   const userInfo = useSelector((state) => state.user.userInfo);
   const product = useSelector((state) => state.product.productDetail);
   const reviews = product ? product.reviews : [];
@@ -47,6 +48,19 @@ function ProductDetailsPage() {
       dispatch(resetCreateCart());
     }
   }, [createCartStatus]);
+
+  const handleAddToCart = () => {
+    if (!userInfo) {
+      navigator("/login");
+    } else {
+      dispatch(
+        fetchCreateCart({
+          product_id: product.id,
+          quantity: quantity,
+        })
+      );
+    }
+  };
 
   return (
     <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg backdrop-blur bg-background/50">
@@ -138,14 +152,7 @@ function ProductDetailsPage() {
                       <Button
                         variant="default"
                         className="text-base md:text-lg"
-                        onClick={() =>
-                          dispatch(
-                            fetchCreateCart({
-                              product_id: product.id,
-                              quantity: quantity,
-                            })
-                          )
-                        }
+                        onClick={addToCartHandler}
                       >
                         Add to Cart
                       </Button>

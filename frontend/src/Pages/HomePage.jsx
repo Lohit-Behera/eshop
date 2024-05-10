@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Product from "@/components/Product";
 import { fetchGetProducts } from "@/features/ProductSlice";
@@ -24,7 +24,10 @@ import HomeLoader from "@/components/PageLoader/HomeLoader";
 function HomePage() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   let keyword = location.search;
+
+  const userInfo = useSelector((state) => state.user.userInfo);
   const getProducts = useSelector((state) => state.product.products) || {};
   const topProducts = useSelector((state) => state.product.topProducts) || [];
   const createCartStatus = useSelector((state) => state.cart.createCartStatus);
@@ -59,12 +62,16 @@ function HomePage() {
   }, [dispatch, keyword]);
 
   const handleAddToCart = (productId) => {
-    dispatch(
-      fetchCreateCart({
-        product_id: productId,
-        quantity: 1,
-      })
-    );
+    if (!userInfo) {
+      navigate("/login");
+    } else {
+      dispatch(
+        fetchCreateCart({
+          product_id: productId,
+          quantity: 1,
+        })
+      );
+    }
   };
 
   return (
