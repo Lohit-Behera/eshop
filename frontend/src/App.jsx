@@ -28,11 +28,13 @@ import AdminOrderUpdatePage from "./Pages/AdminOrderUpdatePage";
 import ContactUsPage from "./Pages/ContactUsPage";
 import VerificationPage from "./Pages/VerificationPage";
 import AdminDashboardPage from "./Pages/AdminDashboardPage";
+import PageNotFoundPage from "./Pages/PageNotFoundPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route index element={<HomePage />} />
+      <Route path="*" element={<PageNotFoundPage />} />
       <Route path="/product/:id" element={<ProductDetailsPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

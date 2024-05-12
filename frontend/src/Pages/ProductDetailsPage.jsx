@@ -49,7 +49,7 @@ function ProductDetailsPage() {
     }
   }, [createCartStatus]);
 
-  const handleAddToCart = () => {
+  const addToCartHandler = () => {
     if (!userInfo) {
       navigator("/login");
     } else {
