@@ -81,4 +81,8 @@ class ContactUs(models.Model):
     email = models.EmailField(null=False, blank=False)
     subject = models.CharField(max_length=255 , null=False, blank=False)
     message = models.TextField(null=True, blank=True)
+    is_resolved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.email

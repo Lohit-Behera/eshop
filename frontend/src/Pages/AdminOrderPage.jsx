@@ -3,13 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CustomPagination from "@/components/CustomPagination";
-import {
-  fetchGetOrders,
-  fetchDeleteOrder,
-  fetchUpdateOrder,
-  resetUpdateOrder,
-  resetDeleteOrder,
-} from "@/features/AdminOrderSlice";
+import { fetchGetOrders, fetchDeleteOrder } from "@/features/AdminOrderSlice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {

@@ -17,7 +17,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import os
 
-from .serializers import UserSerializerWithToken, UserSerializer, AddressSerializer
+from .serializers import UserSerializerWithToken, UserSerializer, AddressSerializer, ContactUsSerializer
 
 from .models import CustomUser, EmailVerificationToken, Address, ContactUs
 from product.models import Product
@@ -282,7 +282,7 @@ def create_contact_us(request):
         name = request.data.get('name')
         email = request.data.get('email')
         subject = request.data.get('subject')
-        message = request.data.get('message')
+        message = request.data.get('massage')
         contact = ContactUs.objects.create(
             name = name,
             email = email,
@@ -314,3 +314,26 @@ def create_contact_us(request):
         return Response({'detail': 'Contact created successfully'})
     except:
         return Response({'detail': 'An error occurred while processing your request'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_all_queries(request):
+    queries = ContactUs.objects.all()
+    serializer = ContactUsSerializer(queries, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_query(request, pk):
+    query = ContactUs.objects.get(id=pk)
+    serializer = ContactUsSerializer(query, many=False)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def update_query(request, pk):
+    query = ContactUs.objects.get(id=pk)
+    query.is_resolved = True
+    query.save()
+    return Response({'message': 'Query updated successfully'})

@@ -29,6 +29,8 @@ import ContactUsPage from "./Pages/ContactUsPage";
 import VerificationPage from "./Pages/VerificationPage";
 import AdminDashboardPage from "./Pages/AdminDashboardPage";
 import PageNotFoundPage from "./Pages/PageNotFoundPage";
+import AdminContactPage from "./Pages/AdminContactPage";
+import AdminQueryPage from "./Pages/AdminQueryPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -54,6 +56,8 @@ const router = createBrowserRouter(
       <Route path="/contact-us" element={<ContactUsPage />} />
       <Route path="/verification" element={<VerificationPage />} />
       <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+      <Route path="/admin/contact" element={<AdminContactPage />} />
+      <Route path="/admin/query/:id" element={<AdminQueryPage />} />
     </Route>
   )
 );

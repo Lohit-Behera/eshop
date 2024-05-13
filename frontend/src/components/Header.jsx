@@ -11,6 +11,7 @@ import {
   LogIn,
   LogOut,
   Mail,
+  Mails,
   Menu,
   Search,
   ShoppingCart,
@@ -168,28 +169,52 @@ function Header() {
                   </NavLink>
                 </li>
                 {userDetails && userDetails.is_staff && (
-                  <li>
-                    <NavLink to="/admin/dashboard">
-                      {({ isActive, isPending, isTransitioning }) => (
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant={isActive ? "default" : "ghost"}
-                                disabled={isPending || isTransitioning}
-                                size="icon"
-                              >
-                                <UserCog />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Admin Dashboard</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      )}
-                    </NavLink>
-                  </li>
+                  <>
+                    <li>
+                      <NavLink to="/admin/dashboard">
+                        {({ isActive, isPending, isTransitioning }) => (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                  size="icon"
+                                >
+                                  <UserCog />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Admin Dashboard</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/admin/contact">
+                        {({ isActive, isPending, isTransitioning }) => (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant={isActive ? "default" : "ghost"}
+                                  disabled={isPending || isTransitioning}
+                                  size="icon"
+                                >
+                                  <Mails />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Admin Queries</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </NavLink>
+                    </li>
+                  </>
                 )}
                 {userInfo ? (
                   <li>
