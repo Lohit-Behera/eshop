@@ -12,10 +12,10 @@ function SuccessContactUs() {
             </div>
           </div>
           <h1 className="mt-5 text-3xl md:text-5xl font-bold">
-            Massage sent successfully
+            Message sent successfully
           </h1>
           <p className="mt-5 lg:text-lg">
-            We send you a massage. Check your email.
+            We send you a message. Check your email.
           </p>
         </div>
       </div>

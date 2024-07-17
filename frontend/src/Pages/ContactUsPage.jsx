@@ -29,7 +29,7 @@ function ContactUsPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
-  const [massage, setMassage] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (contactusStatus === "succeeded") {
@@ -37,17 +37,17 @@ function ContactUsPage() {
       setName("");
       setEmail("");
       setSubject("");
-      setMassage("");
+      setMessage("");
     } else if (contactusStatus === "failed") {
       toast.error("Something went wrong");
     }
   }, [contactusStatus]);
 
   const contactHandler = () => {
-    if (name === "" && email === "" && subject === "" && massage === "") {
+    if (name === "" && email === "" && subject === "" && message === "") {
       toast.warning("Please fill all the fields");
     } else {
-      dispatch(fetchContactUs({ name, email, subject, massage }));
+      dispatch(fetchContactUs({ name, email, subject, message }));
     }
   };
 
@@ -56,7 +56,7 @@ function ContactUsPage() {
     setName("");
     setEmail("");
     setSubject("");
-    setMassage("");
+    setMessage("");
     navigate("/");
   };
 
@@ -114,7 +114,7 @@ function ContactUsPage() {
                   id="problem"
                   required
                   placeholder="Explain your problem"
-                  onChange={(e) => setMassage(e.target.value)}
+                  onChange={(e) => setMessage(e.target.value)}
                   className="resize-none"
                   rows={14}
                 />

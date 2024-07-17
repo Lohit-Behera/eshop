@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchContactUs = createAsyncThunk('contactus', async (massage, { rejectWithValue }) => {
+export const fetchContactUs = createAsyncThunk('contactus', async (message, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
@@ -10,7 +10,7 @@ export const fetchContactUs = createAsyncThunk('contactus', async (massage, { re
         };
         const { data } = await axios.put(
             '/api/user/contactus/',
-            massage,
+            message,
             config
         );
         return data;
@@ -24,7 +24,7 @@ export const fetchContactUs = createAsyncThunk('contactus', async (massage, { re
     }
 })
 
-export const fetchContactUsGetAll = createAsyncThunk('contactus/get/all', async (_, { rejectWithValue, getState }) => {
+export const fetchContactUsGetAll = createAsyncThunk('contactus/get/all', async (keyword = '', { rejectWithValue, getState }) => {
     try {
         const { user: { userInfo } = {} } = getState();
         const config = {
@@ -34,7 +34,7 @@ export const fetchContactUsGetAll = createAsyncThunk('contactus/get/all', async 
             },
         };
         const { data } = await axios.get(
-            '/api/user/get/all/contactus/',
+            `/api/user/get/all/contactus/${keyword}`,
             config
         );
         return data;

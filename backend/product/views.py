@@ -176,11 +176,11 @@ def update_product(request, pk):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['put'])
 @permission_classes([IsAuthenticated])
 def create_product_review(request, pk):
     user = request.user
-    product = Product.objects.get(_id=pk)
+    product = Product.objects.get(id=pk)
     data = request.data
 
     alreadyExists = Review.objects.filter(product=product, user=user).exists()

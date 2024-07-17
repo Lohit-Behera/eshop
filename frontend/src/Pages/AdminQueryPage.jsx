@@ -56,12 +56,14 @@ function AdminQueryPage() {
             </p>
           </div>
           <div className="w-full flex justify-between space-x-4">
-            <Button
-              className="w-full"
-              onClick={() => dispatch(fetchContactUsUpdate(id))}
-            >
-              Resolved
-            </Button>
+            {query.is_resolved ? null : (
+              <Button
+                className="w-full"
+                onClick={() => dispatch(fetchContactUsUpdate(id))}
+              >
+                Resolved
+              </Button>
+            )}
             <Button
               className="w-full"
               onClick={() => navigate("/admin/contact")}

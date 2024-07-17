@@ -319,9 +319,26 @@ def create_contact_us(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_all_queries(request):
-    queries = ContactUs.objects.all()
+    
+    queries = ContactUs.objects.all().order_by('id')
+
+    page = request.query_params.get('page')
+    paginator = Paginator(queries, 10)
+
+    try:
+        queries = paginator.page(page)
+    except PageNotAnInteger:
+        queries = paginator.page(1)
+    except EmptyPage:
+        queries = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+
     serializer = ContactUsSerializer(queries, many=True)
-    return Response(serializer.data)
+    return Response({'queries': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])

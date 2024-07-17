@@ -2,7 +2,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductDetail } from "@/features/ProductSlice";
+import {
+  fetchCreateReview,
+  fetchProductDetail,
+  resetCreateReview,
+} from "@/features/ProductSlice";
 import { fetchCreateCart, resetCreateCart } from "@/features/CartSlice";
 import Rating from "@/components/Rating";
 import { Button } from "@/components/ui/button";
@@ -30,6 +34,8 @@ function ProductDetailsPage() {
   }, [dispatch]);
 
   const [quantity, setQuantity] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const userInfo = useSelector((state) => state.user.userInfo);
   const product = useSelector((state) => state.product.productDetail);
@@ -38,6 +44,9 @@ function ProductDetailsPage() {
     (state) => state.product.productDetailStatus
   );
   const createCartStatus = useSelector((state) => state.cart.createCartStatus);
+  const createReviewStatus = useSelector(
+    (state) => state.product.createReviewStatus
+  );
 
   useEffect(() => {
     if (createCartStatus === "succeeded") {
@@ -49,6 +58,18 @@ function ProductDetailsPage() {
     }
   }, [createCartStatus]);
 
+  useEffect(() => {
+    if (createReviewStatus === "succeeded") {
+      toast.success("Review added successfully");
+      setRating(0);
+      setComment("");
+      dispatch(fetchProductDetail(id));
+      dispatch(resetCreateReview());
+    } else if (createReviewStatus === "failed") {
+      toast.error("Something went wrong");
+    }
+  }, [createReviewStatus]);
+
   const addToCartHandler = () => {
     if (!userInfo) {
       navigator("/login");
@@ -57,6 +78,20 @@ function ProductDetailsPage() {
         fetchCreateCart({
           product_id: product.id,
           quantity: quantity,
+        })
+      );
+    }
+  };
+
+  const handleCreateReview = () => {
+    if (!userInfo) {
+      navigator("/login");
+    } else {
+      dispatch(
+        fetchCreateReview({
+          id: product.id,
+          rating: rating,
+          comment: comment,
         })
       );
     }
@@ -100,7 +135,9 @@ function ProductDetailsPage() {
                 </div>
                 <div className="min-h-80">
                   <h2 className="text-lg font-semibold">Description:</h2>
-                  <p className="text-muted-foreground">{product.description}</p>
+                  <p className="text-sm md:text-base text-muted-foreground">
+                    {product.description}
+                  </p>
                 </div>
                 <div className="flex flex-col w-full space-y-2 text-base md:text-lg">
                   <div className="flex justify-between w-full">
@@ -179,11 +216,21 @@ function ProductDetailsPage() {
                       <DropdownMenuContent>
                         <DropdownMenuLabel>Select Rating</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Poor</DropdownMenuItem>
-                        <DropdownMenuItem>Fair</DropdownMenuItem>
-                        <DropdownMenuItem>Good</DropdownMenuItem>
-                        <DropdownMenuItem>Very Good</DropdownMenuItem>
-                        <DropdownMenuItem>Excellent</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setRating(1)}>
+                          Poor
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setRating(2)}>
+                          Fair
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setRating(3)}>
+                          Good
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setRating(4)}>
+                          Very Good
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setRating(5)}>
+                          Excellent
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
@@ -194,10 +241,14 @@ function ProductDetailsPage() {
                     <Textarea
                       id="description"
                       type="description"
+                      onChange={(e) => setComment(e.target.value)}
                       placeholder="Product Description"
                       className="md:text-base resize-none"
                       rows={6}
                     />
+                    <Button variant="default" onClick={handleCreateReview}>
+                      Submit
+                    </Button>
                   </div>
                 </div>
               ) : (

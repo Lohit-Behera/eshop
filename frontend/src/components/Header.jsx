@@ -16,6 +16,7 @@ import {
   Search,
   ShoppingCart,
   UserCog,
+  X,
 } from "lucide-react";
 import Logo from "../assets/Logo.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,14 +29,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -46,7 +39,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { fetchDeleteImages } from "@/features/DeleteImages";
@@ -62,9 +55,14 @@ function Header() {
   const [search, setSearch] = useState("");
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !search === "") {
       navigate(`/?search=${search}`);
     }
+  };
+  const handleClickSearch = (e) => {
+    if (!search === "") {
+    }
+    setSearch(e.target.value);
   };
 
   const logoutHandler = () => {
@@ -350,7 +348,6 @@ function Header() {
               </SheetContent>
             </Sheet>
           </div>
-
           <div>
             <ul className="flex">
               <li className="mr-3">
@@ -361,9 +358,16 @@ function Header() {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="space-y-2">
-                    <Label htmlFor="search" className="md:text-base">
-                      Search
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="search" className="md:text-base">
+                        Search
+                      </Label>
+                      <PopoverPrimitive.Close asChild>
+                        <Button variant="ghostTwo" size="iconTwo" className="">
+                          <X />
+                        </Button>
+                      </PopoverPrimitive.Close>
+                    </div>
                     <div className="flex h-9 w-full rounded-md border border-input bg-transparent shadow-sm transition-colors placeholder:text-muted-foreground focus-within:ring-1 ring-ring">
                       <Input
                         className="text-sm md:text-base h-auto border-0 focus-visible:outline-none focus-visible:ring-0 bg-background w-full"
@@ -373,12 +377,13 @@ function Header() {
                         onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={(e) => handleKeyPress(e)}
                       />
-                      <span
-                        className="cursor-pointer hover:bg-primary p-1 rounded-md duration-200"
+                      <Button
+                        variant="ghostTwo"
+                        size="iconTwo"
                         onClick={() => navigate(`/?search=${search}`)}
                       >
                         <Search />
-                      </span>
+                      </Button>
                     </div>
                   </PopoverContent>
                 </Popover>

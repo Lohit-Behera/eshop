@@ -64,6 +64,30 @@ export const fetchTopProducts = createAsyncThunk('get/top/products', async (_, {
     }
 })
 
+export const fetchCreateReview = createAsyncThunk('create/review', async (review, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.put(
+            `/api/product/create/review/${review.id}/`,
+            review,
+            config
+        );
+        return data;
+    } catch (error) {
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+})
+
 
 const productSlice = createSlice({
     name: 'products',
@@ -79,8 +103,17 @@ const productSlice = createSlice({
         topProducts: null,
         topProductsStatus: 'idle',
         topProductsError: null,
+
+        createReview: null,
+        createReviewStatus: 'idle',
+        createReviewError: null,
     },
     reducers: {
+        resetCreateReview: (state) => {
+            state.createReview = null;
+            state.createReviewStatus = 'idle';
+            state.createReviewError = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -119,8 +152,20 @@ const productSlice = createSlice({
                 state.topProductsStatus = 'failed';
                 state.topProductsError = action.payload;
             })
+
+            .addCase(fetchCreateReview.pending, (state) => {
+                state.createReviewStatus = 'loading';
+            })
+            .addCase(fetchCreateReview.fulfilled, (state, action) => {
+                state.createReviewStatus = 'succeeded';
+                state.createReview = action.payload;
+            })
+            .addCase(fetchCreateReview.rejected, (state, action) => {
+                state.createReviewStatus = 'failed';
+                state.createReviewError = action.payload;
+            })
     }
 })
 
-
+export const { resetCreateReview } = productSlice.actions
 export default productSlice.reducer

@@ -15,88 +15,108 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
-import { FileSearch, Pencil, Trash } from "lucide-react";
-import { toast } from "react-toastify";
+import { FileSearch } from "lucide-react";
 import AdminOrderLoader from "@/components/PageLoader/AdminOrderLoader";
+import ServerError from "./ServerError";
 
 function AdminContactPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  let keyword = location.search;
 
   const userInfo = useSelector((state) => state.user.userInfo);
-  const getAllContactUs =
-    useSelector((state) => state.contactUs.getAllContactUs) || [];
+  const getAllContactUs = useSelector(
+    (state) => state.contactUs.getAllContactUs
+  );
+  const getAllContactUsStatus = useSelector(
+    (state) => state.contactUs.getAllContactUsStatus
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const page = getAllContactUs ? getAllContactUs.page : 1;
+  const pages = getAllContactUs ? getAllContactUs.pages : 1;
+  const queries = getAllContactUs ? getAllContactUs.queries : [];
 
   useEffect(() => {
     if (userInfo && userInfo.is_staff) {
-      dispatch(fetchContactUsGetAll());
+      dispatch(fetchContactUsGetAll(keyword));
     } else {
       navigate("/login");
     }
-  }, [userInfo, dispatch]);
+  }, [userInfo, dispatch, keyword]);
   return (
     <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 bg-background/70">
-      <h1 className="text-2xl font-bold text-center">AdminContactPage</h1>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>User</TableHead>
-            <TableHead className="hidden md:table-cell">Subject</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="hidden md:table-cell">Date</TableHead>
-            <TableHead>Details</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {getAllContactUs.map((query) => (
-            <TableRow key={query.id}>
-              <TableCell>
-                <div className="hidden font-medium lg:inline">
-                  {query.email}
-                </div>
-                <div className="text-sm text-muted-foreground ">
-                  {query.name}
-                </div>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">
-                {query.subject}
-              </TableCell>
-              <TableCell>
-                <Badge
-                  className="text-xs"
-                  variant={query.is_resolved ? "default" : "secondary"}
-                >
-                  {query.is_resolved ? "Resolved" : "Pending"}
-                </Badge>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">
-                {query.created_at.substr(0, 10)}
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => navigate(`/admin/query/${query.id}`)}
-                >
-                  <FileSearch />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {getAllContactUsStatus === "loading" ? (
+        <AdminOrderLoader />
+      ) : getAllContactUsStatus === "failed" ? (
+        <ServerError />
+      ) : (
+        <>
+          <h1 className="text-2xl font-bold text-center my-4">Admin Contact</h1>
+          <Table>
+            <TableCaption>
+              {pages > 1 && (
+                <CustomPagination
+                  keyword="?page="
+                  page={currentPage}
+                  pages={pages}
+                  link="/admin/contact"
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                />
+              )}
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>User</TableHead>
+                <TableHead className="hidden md:table-cell">Subject</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="hidden md:table-cell">Date</TableHead>
+                <TableHead>Details</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {queries.map((query) => (
+                <TableRow key={query.id}>
+                  <TableCell>
+                    <div className="hidden font-medium lg:inline">
+                      {query.email}
+                    </div>
+                    <div className="text-sm text-muted-foreground ">
+                      {query.name}
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {query.subject}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      className="text-xs"
+                      variant={query.is_resolved ? "default" : "secondary"}
+                    >
+                      {query.is_resolved ? "Resolved" : "Pending"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {query.created_at.substr(0, 10)}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => navigate(`/admin/query/${query.id}`)}
+                    >
+                      <FileSearch />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
     </div>
   );
 }
