@@ -62,22 +62,22 @@ function HomePage() {
     dispatch(fetchGetProducts(keyword));
   }, [dispatch, keyword]);
 
-  useEffect(() => {
-    if (!userInfo) {
-      toast.warn(
-        "Vercel is a serverless hosting service. It can't read or write, which is why you can't create an account because of the profile image. That's why you can contact me so I can give you an account to explore.You can contact me at the Contact Us page. ",
-        {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!userInfo) {
+  //     toast.warn(
+  //       "Vercel is a serverless hosting service. It can't read or write, which is why you can't create an account because of the profile image. That's why you can contact me so I can give you an account to explore.You can contact me at the Contact Us page. ",
+  //       {
+  //         position: "top-center",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       }
+  //     );
+  //   }
+  // }, []);
 
   const handleAddToCart = (productId) => {
     if (!userInfo) {
