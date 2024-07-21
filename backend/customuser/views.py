@@ -116,7 +116,7 @@ def verify_email(request, token):
         user.is_verified = True
         user.save()
         email_verification_token.delete()
-        return redirect('/login')
+        return redirect('https://eshop-frontend-pi.vercel.app/login')
     except EmailVerificationToken.DoesNotExist:
         return redirect('/verify-expired')
     
