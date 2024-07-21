@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 function ProductDetailsPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigator = useNavigate();
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
@@ -36,6 +37,7 @@ function ProductDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [readMore, setReadMore] = useState(true);
 
   const userInfo = useSelector((state) => state.user.userInfo);
   const product = useSelector((state) => state.product.productDetail);
@@ -133,11 +135,21 @@ function ProductDetailsPage() {
                     text
                   />
                 </div>
-                <div className="min-h-80">
+                <div className="min-h-60">
                   <h2 className="text-lg font-semibold">Description:</h2>
-                  <p className="text-sm md:text-base text-muted-foreground">
+                  <p
+                    className={`text-sm md:text-base text-muted-foreground ${
+                      readMore ? "line-clamp-[10] lg:line-clamp-[14]" : ""
+                    }`}
+                  >
                     {product.description}
                   </p>
+                  <span
+                    className="text-sm md:text-base text-current hover:cursor-pointer hover:underline"
+                    onClick={() => setReadMore(!readMore)}
+                  >
+                    {readMore ? "Read More" : "Read Less"}
+                  </span>
                 </div>
                 <div className="flex flex-col w-full space-y-2 text-base md:text-lg">
                   <div className="flex justify-between w-full">

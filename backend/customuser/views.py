@@ -15,7 +15,10 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from django.conf import settings
 import os
+import boto3
 
 from .serializers import UserSerializerWithToken, UserSerializer, AddressSerializer, ContactUsSerializer
 
@@ -244,36 +247,36 @@ def delete_address(request, pk):
 @permission_classes([IsAdminUser])
 def delete_all_images(request):
     try:
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME
+        )
+
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+
         users = CustomUser.objects.all()
-        profile_images = [user.profile_image for user in users if user.profile_image]
+        profile_images = [user.profile_image.name for user in users if user.profile_image]
         products = Product.objects.all()
-        product_images = [product.image for product in products if product.image]
+        product_images = [product.image.name for product in products if product.image]
 
-        file_list = []
-        for i in profile_images:
-            file_list.append(i)
-        filenames = [file.name for file in file_list]
+        used_images = set(profile_images + product_images)
 
-        profiles = []
-        for i in profile_images:
-            filename = os.path.basename(i.name)
-            profiles.append(filename)
+        excluded_files = {'product_images/product_sample.jpg', 'profile_images/profile_images/profile.png'}
 
-        productsImages = []
-        for i in product_images:
-            filename = os.path.basename(i.name)
-            productsImages.append(filename)
+        response = s3.list_objects_v2(Bucket=bucket_name)
+        if 'Contents' in response:
+            for obj in response['Contents']:
+                key = obj['Key']
+                if key not in used_images and key not in excluded_files:
+                    s3.delete_object(Bucket=bucket_name, Key=key)
 
-        excluded_files = ['product_sample.jpg', 'profile.png']
+        return Response({'message': 'All unused images deleted successfully'}, status=200)
+    except Exception as e:
+        print(e)
+        return Response({'message': f'An error occurred while deleting images: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
 
-        for root, dirs, files in os.walk(MEDIA_ROOT):
-            for file in files:
-                if file not in profiles and file not in productsImages and file not in excluded_files:
-                    os.remove(os.path.join(root, file))
-                        
-        return Response({'message': 'All images deleted successfully'}, status=200)
-    except:
-        return Response({'message': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PUT'])

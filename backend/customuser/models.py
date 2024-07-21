@@ -5,6 +5,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import uuid
 from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 
 # Create your models here.
 
@@ -37,7 +40,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True, default='profile_images/profile.png')
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True, default='profile_images/profile_images/profile.jpg')
     join_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -52,15 +55,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
     
     def save(self, *args, **kwargs):
+        if self.profile_image:
+            img = Image.open(self.profile_image)
+            
+            max_size = (170, 170)
+            img.thumbnail(max_size)
+            
+            output = BytesIO()
+            img.save(output, format='JPEG', quality=70)
+            output.seek(0)
+            
+            self.profile_image = ContentFile(output.read(), self.profile_image.name)
+    
         super().save(*args, **kwargs)
 
-        if self.profile_image:
-            img = Image.open(self.profile_image.path)
-
-            max_size = (170, 170)
-
-            img.thumbnail(max_size)
-            img.save(self.profile_image.path)
 
 class EmailVerificationToken(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
