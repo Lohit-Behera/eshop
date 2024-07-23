@@ -1,14 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Skeleton } from "../ui/skeleton";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 function HomeLoader() {
   const location = useLocation();
@@ -20,138 +13,26 @@ function HomeLoader() {
           <Skeleton className="w-[95%] md:w-[80%] lg:w-[70%] h-56 md:h-128 rounded-lg mx-auto" />
         ))}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>
+        {[...Array(6)].map((_, index) => (
+          <Card className="h-full" key={index}>
+            <CardHeader>
               <Skeleton className="w-full h-60 rounded-lg" />
-            </CardTitle>
-            <CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
               <Skeleton className="w-[60%] h-3 rounded-lg" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <div className="mt-9 space-y-4">
               <Skeleton className="w-[90%] h-6 rounded-lg" />
               <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <div className="flex justify-between">
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
+              <div className="mt-9 space-y-4">
+                <Skeleton className="w-[90%] h-6 rounded-lg" />
+                <Skeleton className="w-[90%] h-6 rounded-lg" />
+                <div className="flex justify-between">
+                  <Skeleton className="w-[40%] h-6 rounded-lg" />
+                  <Skeleton className="w-[40%] h-6 rounded-lg" />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="w-full h-60 rounded-lg" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="w-[60%] h-3 rounded-lg" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <div className="mt-9 space-y-4">
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <div className="flex justify-between">
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="w-full h-60 rounded-lg" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="w-[60%] h-3 rounded-lg" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <div className="mt-9 space-y-4">
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <div className="flex justify-between">
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="w-full h-60 rounded-lg" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="w-[60%] h-3 rounded-lg" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <div className="mt-9 space-y-4">
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <div className="flex justify-between">
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="w-full h-60 rounded-lg" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="w-[60%] h-3 rounded-lg" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <div className="mt-9 space-y-4">
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <div className="flex justify-between">
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="w-full h-60 rounded-lg" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="w-[60%] h-3 rounded-lg" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <Skeleton className="w-[90%] h-6 rounded-lg" />
-            <div className="mt-9 space-y-4">
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <Skeleton className="w-[90%] h-6 rounded-lg" />
-              <div className="flex justify-between">
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-                <Skeleton className="w-[40%] h-6 rounded-lg" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

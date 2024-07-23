@@ -12,6 +12,7 @@ import Logo from "../assets/Logo.svg";
 import { toast } from "react-toastify";
 import Loader from "@/components/Loader/Loader";
 import CustomImage from "@/components/CustomImage";
+import AddressLoader from "@/components/PageLoader/AddressLoader";
 
 function CheckoutPage() {
   const dispatch = useDispatch();
@@ -21,6 +22,9 @@ function CheckoutPage() {
   const userDetails = useSelector((state) => state.user.userDetails) || {};
   const getCart = useSelector((state) => state.cart.getCart) || [];
   const getAddress = useSelector((state) => state.address.getAddress) || [];
+  const getAddressStatus = useSelector(
+    (state) => state.address.getAddressStatus
+  );
   const getCartStatus = useSelector((state) => state.cart.getCartStatus);
   const order = useSelector((state) => state.order.order) || {};
   const orderStatus = useSelector((state) => state.order.orderStatus);
@@ -126,66 +130,73 @@ function CheckoutPage() {
       ) : (
         <>
           <h1 className="text-2xl font-bold text-center my-4">Order Summary</h1>
+
           <div className="flex-grow lg:flex ">
             <div className="w-[95%] lg:w-4/6 space-y-2 mb-4 m-2 border-2 rounded-lg p-4 backdrop-blur bg-background/50">
-              {getAddress.length > 0 ? (
-                <>
-                  <h2 className="text-xl font-semibold">Select Address</h2>
-                  <div className="w-[95%] mx-auto">
-                    <RadioGroup>
-                      {getAddress.map((address) => (
-                        <div
-                          className="flex flex-row items-center space-x-4 border-2 p-3 rounded-lg"
-                          key={address.id}
-                        >
-                          <RadioGroupItem
-                            value={address.id}
-                            id={address.id}
-                            onClick={() => setAddressId(address.id)}
-                          />
-                          <div className="w-[95%] flex-grow md:flex justify-between text-sm md:text-base space-y-2">
-                            <div>
-                              <p>House No: {address.house_no} </p>
-                              <p>LandMark: {address.landmark} </p>
-                            </div>
-                            <div>
-                              <p>City: {address.city} </p>
-                              <p>State: {address.state} </p>
-                            </div>
-                            <div>
-                              <p>Pincode: {address.pincode} </p>
-                              <p>Country: {address.country} </p>
-                            </div>
-                            <div>
-                              <Button
-                                variant="destructive"
-                                size="icon"
-                                onClick={() =>
-                                  dispatch(fetchDeleteAddress(address.id))
-                                }
-                              >
-                                <Trash />
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                    <Button
-                      onClick={() => navigate("/address")}
-                      className="w-full mt-4"
-                    >
-                      Create new address
-                    </Button>
-                  </div>
-                </>
+              {getAddressStatus === "loading" ? (
+                <AddressLoader />
               ) : (
                 <>
-                  <h2 className="text-xl font-semibold">Add Address</h2>
-                  <p>You don't have any address you can create one</p>
-                  <Button onClick={() => navigate("/address")}>
-                    Add Address
-                  </Button>
+                  {getAddress.length > 0 ? (
+                    <>
+                      <h2 className="text-xl font-semibold">Select Address</h2>
+                      <div className="w-[95%] mx-auto">
+                        <RadioGroup>
+                          {getAddress.map((address) => (
+                            <div
+                              className="flex flex-row items-center space-x-4 border-2 p-3 rounded-lg"
+                              key={address.id}
+                            >
+                              <RadioGroupItem
+                                value={address.id}
+                                id={address.id}
+                                onClick={() => setAddressId(address.id)}
+                              />
+                              <div className="w-[95%] flex-grow md:flex justify-between text-sm md:text-base space-y-2">
+                                <div>
+                                  <p>House No: {address.house_no} </p>
+                                  <p>LandMark: {address.landmark} </p>
+                                </div>
+                                <div>
+                                  <p>City: {address.city} </p>
+                                  <p>State: {address.state} </p>
+                                </div>
+                                <div>
+                                  <p>Pincode: {address.pincode} </p>
+                                  <p>Country: {address.country} </p>
+                                </div>
+                                <div>
+                                  <Button
+                                    variant="destructive"
+                                    size="icon"
+                                    onClick={() =>
+                                      dispatch(fetchDeleteAddress(address.id))
+                                    }
+                                  >
+                                    <Trash />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                        <Button
+                          onClick={() => navigate("/address")}
+                          className="w-full mt-4"
+                        >
+                          Create new address
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="text-xl font-semibold">Add Address</h2>
+                      <p>You don't have any address you can create one</p>
+                      <Button onClick={() => navigate("/address")}>
+                        Add Address
+                      </Button>
+                    </>
+                  )}
                 </>
               )}
               <div>

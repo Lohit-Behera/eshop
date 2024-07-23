@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import ServerError from "./ServerError";
+import Loader from "@/components/Loader/Loader";
 
 function AddressPage() {
   const navigate = useNavigate();

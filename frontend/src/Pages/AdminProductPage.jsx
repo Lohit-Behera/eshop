@@ -102,14 +102,14 @@ function AdminProductPage() {
     dispatch(fetchDeleteProduct(id));
   };
   return (
-    <div className="w-[95%] min-h-[80vh] mx-auto border-2rounded-lg bg-background/70">
+    <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg bg-background/70">
       {adminProductsStatus === "loading" ||
       deleteProductStatus === "loading" ||
       createProductStatus === "loading" ? (
         <AdminProductLoader />
       ) : (
         <>
-          <h1 className="text-2xl font-bold text-center mt-6">Admin Product</h1>
+          <h1 className="text-2xl font-bold text-center mt-4">Admin Product</h1>
           <Table className="mb-4">
             <TableCaption>
               <CustomPagination
