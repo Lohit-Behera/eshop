@@ -1,4 +1,4 @@
-# Ecomore Project
+# E-commerce Project
 
 This is a simple e-commerce website project called "Eshop".
 
