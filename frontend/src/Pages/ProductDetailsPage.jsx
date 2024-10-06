@@ -23,7 +23,8 @@ import { Textarea } from "@/components/ui/textarea";
 import CustomImage from "@/components/CustomImage";
 import ServerError from "./ServerError";
 import ProductDetailsLoader from "@/components/PageLoader/ProductDetailsLoader";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import { SquarePlus } from "lucide-react";
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -52,23 +53,22 @@ function ProductDetailsPage() {
 
   useEffect(() => {
     if (createCartStatus === "succeeded") {
-      toast.success("Product added to cart");
       dispatch(resetCreateCart());
     } else if (createCartStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(resetCreateCart());
     }
   }, [createCartStatus]);
 
   useEffect(() => {
     if (createReviewStatus === "succeeded") {
-      toast.success("Review added successfully");
       setRating(0);
       setComment("");
       dispatch(fetchProductDetail(id));
       dispatch(resetCreateReview());
     } else if (createReviewStatus === "failed") {
-      toast.error("Something went wrong");
+      setRating(0);
+      setComment("");
+      dispatch(resetCreateReview());
     }
   }, [createReviewStatus]);
 
@@ -76,26 +76,44 @@ function ProductDetailsPage() {
     if (!userInfo) {
       navigator("/login");
     } else {
-      dispatch(
+      const CreateCartPromise = dispatch(
         fetchCreateCart({
           product_id: product.id,
           quantity: quantity,
         })
-      );
+      ).unwrap();
+      toast.promise(CreateCartPromise, {
+        loading: "Adding to cart...",
+        success: "Item added to cart successfully",
+        error: "Failed to add item to cart",
+      });
     }
   };
 
   const handleCreateReview = () => {
     if (!userInfo) {
       navigator("/login");
+    } else if (rating === 0 || !comment) {
+      return toast.error("Please fill all the fields");
     } else {
-      dispatch(
+      console.log(rating, comment);
+
+      const CreateReviewPromise = dispatch(
         fetchCreateReview({
           id: product.id,
           rating: rating,
           comment: comment,
         })
-      );
+      ).unwrap();
+      toast.promise(CreateReviewPromise, {
+        loading: "Creating review...",
+        success: "Review created successfully",
+        error: (error) => {
+          return error === "Request failed with status code 409"
+            ? "You already reviewed this product"
+            : "Failed to create review";
+        },
+      });
     }
   };
 
@@ -163,7 +181,7 @@ function ProductDetailsPage() {
                       )}
                     </div>
                     <div className="mr-2.5">
-                      {product.countInStock === 0 ? null : (
+                      {userInfo && product.countInStock !== 0 && (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
@@ -197,12 +215,13 @@ function ProductDetailsPage() {
                     <h1 className="text-lg font-semibold mt-1">
                       Price -&nbsp;₹{product.price}
                     </h1>
-                    {product.countInStock === 0 ? null : (
+                    {userInfo && product.countInStock !== 0 && (
                       <Button
                         variant="default"
                         className="text-base md:text-lg"
                         onClick={addToCartHandler}
                       >
+                        <SquarePlus className="mr-2 w-4 h-4" />
                         Add to Cart
                       </Button>
                     )}
@@ -223,7 +242,9 @@ function ProductDetailsPage() {
                     </Label>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="default">Select Rating</Button>
+                        <Button size="sm" variant="default">
+                          Select Rating
+                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuLabel>Select Rating</DropdownMenuLabel>
@@ -258,8 +279,12 @@ function ProductDetailsPage() {
                       className="md:text-base resize-none"
                       rows={6}
                     />
-                    <Button variant="default" onClick={handleCreateReview}>
-                      Submit
+                    <Button
+                      size="sm"
+                      variant="default"
+                      onClick={handleCreateReview}
+                    >
+                      <SquarePlus className="mr-2 w-4 h-4" /> Submit
                     </Button>
                   </div>
                 </div>

@@ -198,6 +198,7 @@ RAZORPAY_API_SECRET = os.getenv('RAZORPAY_API_SECRET')
 
 
 CORS_ALLOWED_ORIGINS=[
+    'https://eshop.behera.info',
     'https://eshop-frontend-pi.vercel.app',
     'http://localhost:5173'
 ]

@@ -8,15 +8,15 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Loader from "@/components/Loader/Loader";
 import ServerError from "./ServerError";
+import { BadgePlus } from "lucide-react";
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -27,10 +27,8 @@ function RegisterPage() {
   useEffect(() => {
     if (registerStatus === "succeeded") {
       navigate("/verification");
-      toast.success("Registration successful");
       dispatch(resetRegister());
     } else if (registerStatus === "failed") {
-      toast.error("Something went wrong!");
       dispatch(resetRegister());
     }
   }, [registerStatus, navigate]);
@@ -48,14 +46,19 @@ function RegisterPage() {
     } else if (!firstName || !lastName || !email || !password) {
       toast.warning("Please fill in all fields");
     } else {
-      dispatch(
+      const registerPromise = dispatch(
         fetchRegister({
           first_name: firstName,
           last_name: lastName,
           email: email,
           password: password,
         })
-      );
+      ).unwrap();
+      toast.promise(registerPromise, {
+        loading: "Creating account...",
+        success: "Account created successfully",
+        error: "Failed to create account",
+      });
     }
   };
 
@@ -131,7 +134,7 @@ function RegisterPage() {
                     change={(e) => setConfirmPassword(e.target.value)}
                   />
                   <Button className="w-full md:text-base">
-                    Create an account
+                    <BadgePlus className="mr-2 w-4 h-4" /> Create an account
                   </Button>
                 </div>
                 <div className="mt-4 text-center text-sm">

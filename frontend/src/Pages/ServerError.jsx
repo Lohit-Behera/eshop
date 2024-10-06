@@ -1,5 +1,5 @@
 import React from "react";
-import { ServerCrash } from "lucide-react";
+import { RefreshCcw, ServerCrash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function ServerError() {
@@ -20,6 +20,7 @@ function ServerError() {
             free to contact us if the problem persists.
           </p>
           <Button className="mt-5" onClick={() => window.location.reload()}>
+            <RefreshCcw className="mr-2 w-4 h-4" />
             Try again
           </Button>
         </div>

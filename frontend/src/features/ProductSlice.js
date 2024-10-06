@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchGetProducts = createAsyncThunk('get/all/products', async (keyword = '', { rejectWithValue }) => {
     try {
@@ -9,7 +10,7 @@ export const fetchGetProducts = createAsyncThunk('get/all/products', async (keyw
             },
         };
         const { data } = await axios.get(
-            `/api/product/${keyword}`,
+            `${baseUrl}/api/product/${keyword}`,
             config
         );
         return data;
@@ -30,7 +31,7 @@ export const fetchProductDetail = createAsyncThunk('get/product/detail', async (
             },
         };
         const { data } = await axios.get(
-            `/api/product/${id}/`,
+            `${baseUrl}/api/product/${id}/`,
             config
         );
         return data;
@@ -51,7 +52,7 @@ export const fetchTopProducts = createAsyncThunk('get/top/products', async (_, {
             },
         };
         const { data } = await axios.get(
-            `/api/product/top/`,
+            `${baseUrl}/api/product/top/`,
             config
         );
         return data;
@@ -74,7 +75,7 @@ export const fetchCreateReview = createAsyncThunk('create/review', async (review
             },
         };
         const { data } = await axios.put(
-            `/api/product/create/review/${review.id}/`,
+            `${baseUrl}/api/product/create/review/${review.id}/`,
             review,
             config
         );

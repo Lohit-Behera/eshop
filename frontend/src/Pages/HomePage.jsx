@@ -10,7 +10,7 @@ import {
   fetchGetCart,
 } from "@/features/CartSlice";
 import HomeLoader from "@/components/PageLoader/HomeLoader";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   Carousel,
   CarouselContent,
@@ -34,7 +34,6 @@ function HomePage() {
   const createCartStatus = useSelector((state) => state.cart.createCartStatus);
   const productsStatus = useSelector((state) => state.product.productsStatus);
   const products = getProducts.products || [];
-  const page = getProducts.page || 1;
   const pages = getProducts.pages || 1;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -48,11 +47,9 @@ function HomePage() {
 
   useEffect(() => {
     if (createCartStatus === "succeeded") {
-      toast.success("Item added to cart!");
       dispatch(fetchGetCart());
       dispatch(resetCreateCart());
     } else if (createCartStatus === "failed") {
-      toast.error("Something went wrong!");
       dispatch(fetchGetCart());
       dispatch(resetCreateCart());
     }
@@ -66,12 +63,17 @@ function HomePage() {
     if (!userInfo) {
       navigate("/login");
     } else {
-      dispatch(
+      const CreateCartPromise = dispatch(
         fetchCreateCart({
           product_id: productId,
           quantity: 1,
         })
-      );
+      ).unwrap();
+      toast.promise(CreateCartPromise, {
+        loading: "Adding to cart...",
+        success: "Item added to cart successfully",
+        error: "Failed to add item to cart",
+      });
     }
   };
 

@@ -33,8 +33,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { Pencil, Trash } from "lucide-react";
-import { toast } from "react-toastify";
+import { Pencil, SquarePlus, Trash } from "lucide-react";
+import { toast } from "sonner";
 import CustomImage from "@/components/CustomImage";
 import AdminProductLoader from "@/components/PageLoader/AdminProductLoader";
 
@@ -79,27 +79,37 @@ function AdminProductPage() {
 
   useEffect(() => {
     if (deleteProductStatus === "succeeded") {
-      toast.success("Product deleted successfully");
       dispatch(resetDeleteProduct());
     } else if (deleteProductStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(resetDeleteProduct());
     }
   }, [dispatch, deleteProductStatus]);
 
   useEffect(() => {
     if (createProductStatus === "succeeded") {
-      toast.success("Product created successfully");
       navigate(`/admin/update/product/${createProduct.id}`);
       dispatch(resetCreateProduct());
     } else if (createProductStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(resetDeleteProduct());
     }
   }, [dispatch, createProductStatus]);
 
   const deleteHandler = (id) => {
-    dispatch(fetchDeleteProduct(id));
+    const deleteProductPromise = dispatch(fetchDeleteProduct(id)).unwrap();
+    toast.promise(deleteProductPromise, {
+      loading: "Deleting product...",
+      success: "Product deleted successfully",
+      error: "Failed to delete product",
+    });
+  };
+
+  const handleCreateProduct = () => {
+    const createProductPromise = dispatch(fetchCreateProduct()).unwrap();
+    toast.promise(createProductPromise, {
+      loading: "Creating product...",
+      success: "Product created successfully",
+      error: "Failed to create product",
+    });
   };
   return (
     <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg bg-background/70">
@@ -236,7 +246,9 @@ function AdminProductPage() {
             </TableBody>
           </Table>
           <div className="flex justify-end m-4">
-            <Button onClick={() => dispatch(fetchCreateProduct())}>
+            <Button onClick={handleCreateProduct}>
+              {" "}
+              <SquarePlus className="mr-2 w-4 h-4" />
               Create Product
             </Button>
           </div>

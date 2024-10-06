@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchGetAdminDashboard = createAsyncThunk('get/stats', async (_, { rejectWithValue, getState }) => {
     try {
@@ -11,7 +12,7 @@ export const fetchGetAdminDashboard = createAsyncThunk('get/stats', async (_, { 
             },
         };
         const { data } = await axios.get(
-            '/api/order/admin/dashboard/',
+            `${baseUrl}/api/order/admin/dashboard/`,
             config
         );
         return data;

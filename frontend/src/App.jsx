@@ -7,8 +7,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { ToastContainer, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "@/components/ui/sonner";
 
 import Layout from "./Layout";
 import HomePage from "./Pages/HomePage";
@@ -63,39 +62,10 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const mode = useSelector((state) => state.mode.mode);
-
-  useEffect(() => {
-    const systemTheme = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const theme =
-      mode === "dark"
-        ? "dark"
-        : systemTheme && mode === "system"
-        ? "dark"
-        : "light";
-    setIsDarkMode(theme === "dark");
-  }, [mode]);
-
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <RouterProvider router={router}></RouterProvider>
-      <ToastContainer
-        stacked
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme={isDarkMode ? "dark" : "light"}
-        transition={Slide}
-      />
+      <Toaster richColors />
     </ThemeProvider>
   );
 }

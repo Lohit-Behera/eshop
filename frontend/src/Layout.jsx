@@ -12,7 +12,7 @@ import Footer from "./components/Footer";
 import FallBack from "./components/FallBack";
 import Loader from "./components/Loader/Loader";
 import ServerError from "./Pages/ServerError";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { AuroraBackground } from "./components/ui/aurora-background";
 
 function Layout() {
@@ -63,25 +63,25 @@ function Layout() {
         <AuroraBackground />
       </div>
       <Header />
-      <ErrorBoundary FallbackComponent={FallBack}>
-        {productsStatus === "loading" ||
-        userDetailsStatus === "loading" ||
-        getCartStatus === "loading" ||
-        getAllOrderStatus === "loading" ? (
-          <Loader hight="min-h-[80vh]" />
-        ) : productsStatus === "failed" ||
-          userDetailsStatus === "failed" ||
-          getCartStatus === "failed" ||
-          getAllOrderStatus === "failed" ? (
-          <ServerError />
-        ) : (
-          <>
-            <ScrollRestoration />
-            <Outlet />
-          </>
-        )}
-      </ErrorBoundary>
-      <Footer />
+      <main>
+        <ErrorBoundary FallbackComponent={FallBack}>
+          {productsStatus === "loading" ||
+          userDetailsStatus === "loading" ||
+          getAllOrderStatus === "loading" ? (
+            <Loader hight="min-h-[80vh]" />
+          ) : productsStatus === "failed" ||
+            userDetailsStatus === "failed" ||
+            getAllOrderStatus === "failed" ? (
+            <ServerError />
+          ) : (
+            <>
+              <ScrollRestoration />
+              <Outlet />
+            </>
+          )}
+        </ErrorBoundary>
+      </main>
+      {/* <Footer /> */}
     </div>
   );
 }

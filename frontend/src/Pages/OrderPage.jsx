@@ -12,7 +12,6 @@ function OrderPage() {
   const userInfo = useSelector((state) => state.user.userInfo);
 
   const getOrder = useSelector((state) => state.order.getOrder);
-  const getCartStatus = useSelector((state) => state.cart.getCartStatus);
   const order = getOrder ? getOrder.order : {};
   const address = getOrder ? getOrder.address : {};
   const orderItems = getOrder ? getOrder.items : [];
@@ -89,6 +88,7 @@ function OrderPage() {
                       className="w-24 h-20 lg:mx-0"
                       src={item.image}
                       alt={item.name}
+                      addUrl
                     />
                   </Link>
                   <Link to={`/product/${item.id}`}>

@@ -10,13 +10,13 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import { LogIn } from "lucide-react";
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -34,9 +34,6 @@ function LoginPage() {
   useEffect(() => {
     if (userInfoStatus === "succeeded") {
       navigate("/");
-      toast.success("Login successful");
-    } else if (userInfoStatus === "failed") {
-      toast.error("Login failed");
     }
   }, [userInfoStatus, navigate]);
 
@@ -44,12 +41,21 @@ function LoginPage() {
   const [password, setPassword] = useState("");
 
   const loginHandler = () => {
-    dispatch(
+    const loginPromise = dispatch(
       fetchLogin({
         email: email,
         password: password,
       })
-    );
+    ).unwrap();
+    toast.promise(loginPromise, {
+      loading: "Logging in...",
+      success: "Logged in successfully",
+      error: (error) => {
+        return error === "Request failed with status code 401"
+          ? "Invalid email or password"
+          : "Something went wrong";
+      },
+    });
   };
 
   return (
@@ -83,6 +89,7 @@ function LoginPage() {
                 change={(e) => setPassword(e.target.value)}
               />
               <Button onClick={loginHandler} className="w-full md:text-base'">
+                <LogIn className="mr-2 w-4 h-4" />
                 Login
               </Button>
             </div>

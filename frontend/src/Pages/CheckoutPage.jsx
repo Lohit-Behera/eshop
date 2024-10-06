@@ -5,14 +5,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchGetAddress, fetchDeleteAddress } from "@/features/AddressSlice";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Trash } from "lucide-react";
+import { IndianRupee, SquarePlus, Trash } from "lucide-react";
 import axios from "axios";
 import { fetchCreateOrder, resetOrder } from "@/features/OrderSlice";
 import Logo from "../assets/Logo.svg";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Loader from "@/components/Loader/Loader";
 import CustomImage from "@/components/CustomImage";
 import AddressLoader from "@/components/PageLoader/AddressLoader";
+import { baseUrl } from "@/features/proxy";
 
 function CheckoutPage() {
   const dispatch = useDispatch();
@@ -25,7 +26,6 @@ function CheckoutPage() {
   const getAddressStatus = useSelector(
     (state) => state.address.getAddressStatus
   );
-  const getCartStatus = useSelector((state) => state.cart.getCartStatus);
   const order = useSelector((state) => state.order.order) || {};
   const orderStatus = useSelector((state) => state.order.orderStatus);
 
@@ -42,11 +42,9 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (orderStatus === "succeeded") {
-      toast.success("Order placed successfully");
       dispatch(resetOrder());
       navigate(`/order/${order.id}`);
     } else if (orderStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(resetOrder());
     }
   }, [orderStatus]);
@@ -66,7 +64,7 @@ function CheckoutPage() {
 
   const orderItems = getCart
     .filter((item) => item.quantity > 0)
-    .map((item, index) => ({
+    .map((item) => ({
       cart_id: item.id,
       product: item.product,
       qty: item.quantity,
@@ -82,7 +80,7 @@ function CheckoutPage() {
       toast.warning("Razor pay is not support for orders over 5,00,000");
     } else {
       axios
-        .post("/api/order/payment/", { amount: amount })
+        .post(`${baseUrl}/api/order/payment/`, { amount: amount })
         .then((response) => {
           const options = {
             key: import.meta.env.VITE_RAZORPAY_KEY,
@@ -94,7 +92,7 @@ function CheckoutPage() {
             order_id: response.data.id,
             handler: function (response) {
               toast.success("Payment Successful");
-              dispatch(
+              const createOrderPromise = dispatch(
                 fetchCreateOrder({
                   address: addressId,
                   shipping_price: shippingPrice,
@@ -102,8 +100,12 @@ function CheckoutPage() {
                   order_payment_id: response.razorpay_order_id,
                   orderItems: orderItems,
                 })
-              );
-              console.log(response);
+              ).unwrap();
+              toast.promise(createOrderPromise, {
+                loading: "Creating order...",
+                success: "Order created successfully",
+                error: "Failed to create order",
+              });
             },
             prefill: {
               name: userDetails.first_name + " " + userDetails.last_name,
@@ -116,9 +118,9 @@ function CheckoutPage() {
           const rzp1 = new window.Razorpay(options);
           rzp1.open();
         })
-        .catch((error) => {
+        .catch((e) => {
+          console.log(e);
           toast.error("Payment Failed");
-          console.error("Error initiating payment:", error);
         });
     }
   };
@@ -152,7 +154,7 @@ function CheckoutPage() {
                                 id={address.id}
                                 onClick={() => setAddressId(address.id)}
                               />
-                              <div className="w-[95%] flex-grow md:flex justify-between text-sm md:text-base space-y-2">
+                              <div className="w-[95%] grid grid-cols-1 md:grid-cols-4 gap-1 lg:gap-4">
                                 <div>
                                   <p>House No: {address.house_no} </p>
                                   <p>LandMark: {address.landmark} </p>
@@ -184,6 +186,7 @@ function CheckoutPage() {
                           onClick={() => navigate("/address")}
                           className="w-full mt-4"
                         >
+                          <SquarePlus className="mr-2 w-4 h-4" />
                           Create new address
                         </Button>
                       </div>
@@ -193,7 +196,7 @@ function CheckoutPage() {
                       <h2 className="text-xl font-semibold">Add Address</h2>
                       <p>You don't have any address you can create one</p>
                       <Button onClick={() => navigate("/address")}>
-                        Add Address
+                        <SquarePlus className="mr-2 w-4 h-4" /> Add Address
                       </Button>
                     </>
                   )}
@@ -213,6 +216,7 @@ function CheckoutPage() {
                             className="w-24 h-20 lg:mx-0"
                             src={item.image}
                             alt={item.name}
+                            addUrl
                           />
                         </Link>
                         <Link to={`/product/${item.product}`}>
@@ -241,6 +245,7 @@ function CheckoutPage() {
                   Total: ₹ {totalPrice + shippingPrice}
                 </p>
                 <Button onClick={handlePayment} className="w-full mt-4">
+                  <IndianRupee className="mr-2 w-4 h-4" />
                   Pay Now
                 </Button>
               </div>

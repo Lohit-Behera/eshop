@@ -70,7 +70,8 @@ def create_order(request):
             serializer = OrderSerializer(order, many=False)
             return Response(serializer.data)
 
-    except:
+    except Exception as e:
+        print(e)
         return Response({'detail': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
     
     

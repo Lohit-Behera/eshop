@@ -10,7 +10,7 @@ import {
   reset,
 } from "@/features/AdminUsers";
 
-import { Check, X } from "lucide-react";
+import { Check, Trash, UserMinus, UserPlus, X } from "lucide-react";
 import CustomPagination from "@/components/CustomPagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import AdminUserLoader from "@/components/PageLoader/AdminUserLoader";
 
 function AdminUserPage() {
@@ -73,15 +73,12 @@ function AdminUserPage() {
 
   useEffect(() => {
     if (adminStatus === "succeeded") {
-      toast.success("Admin added successfully");
       dispatch(fetchGetAllUsers(keyword));
       dispatch(reset());
     } else if (removeAdminStatus === "succeeded") {
-      toast.success("Admin removed successfully");
       dispatch(fetchGetAllUsers(keyword));
       dispatch(reset());
     } else if (deleteUserStatus === "succeeded") {
-      toast.success("User deleted successfully");
       dispatch(fetchGetAllUsers(keyword));
       dispatch(reset());
     } else if (
@@ -89,40 +86,51 @@ function AdminUserPage() {
       deleteUserStatus === "failed" ||
       removeAdminStatus === "failed"
     ) {
-      toast.error("Something went wrong");
       dispatch(fetchGetAllUsers(keyword));
       dispatch(reset());
     }
   }, [dispatch, adminStatus, removeAdminStatus, deleteUserStatus]);
 
   const adminHandler = (id) => {
-    dispatch(
+    const adminPromise = dispatch(
       fetchGiveAdmin({
         id: id,
         is_staff: true,
       })
-    );
+    ).unwrap();
+    toast.promise(adminPromise, {
+      loading: "Adding admin...",
+      success: "Admin added successfully",
+      error: "Something went wrong",
+    });
   };
 
   const removeAdminHandler = (id) => {
-    dispatch(
+    const removeAdminPromise = dispatch(
       fetchRemoveAdmin({
         id: id,
         is_staff: false,
       })
-    );
+    ).unwrap();
+    toast.promise(removeAdminPromise, {
+      loading: "Removing admin...",
+      success: "Admin removed successfully",
+      error: "Something went wrong",
+    });
   };
 
   const deleteHandler = (id) => {
-    dispatch(fetchDeleteUser(id));
+    const deleteUserPromise = dispatch(fetchDeleteUser(id)).unwrap();
+    toast.promise(deleteUserPromise, {
+      loading: "Deleting user...",
+      success: "User deleted successfully",
+      error: "Something went wrong",
+    });
   };
 
   return (
     <div className="w-[96%] min-h-[80vh] mx-auto backdrop-blur bg-background/70 border-2 rounded-lg">
-      {adminStatus === "loading" ||
-      removeAdminStatus === "loading" ||
-      deleteUserStatus === "loading" ||
-      allUsersStatus === "loading" ? (
+      {allUsersStatus === "loading" ? (
         <AdminUserLoader />
       ) : (
         <>
@@ -142,14 +150,18 @@ function AdminUserPage() {
             )}
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[20%]">Email</TableHead>
-                <TableHead className="w-[20%]">Name</TableHead>
-                <TableHead className="hidden md:table-cell">Verified</TableHead>
-                <TableHead className="hidden md:table-cell">Admin</TableHead>
-                <TableHead className="hidden lg:table-cell">
+                <TableHead className="w-auto md:w-[20%]">Email</TableHead>
+                <TableHead className="w-auto md:w-[20%]">Name</TableHead>
+                <TableHead className="hidden md:table-cell text-center">
+                  Verified
+                </TableHead>
+                <TableHead className="hidden md:table-cell text-center">
+                  Admin
+                </TableHead>
+                <TableHead className="hidden lg:table-cell text-center">
                   Change to Admin
                 </TableHead>
-                <TableHead className="hidden lg:table-cell">
+                <TableHead className="hidden lg:table-cell text-center">
                   Remove Admin
                 </TableHead>
                 <TableHead className="hidden lg:table-cell">Delete</TableHead>
@@ -158,28 +170,33 @@ function AdminUserPage() {
             <TableBody>
               {users.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
+                  <TableCell className="truncate">{user.email}</TableCell>
+                  <TableCell className="truncate">
                     {user.first_name + " " + user.last_name}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {user.is_verified ? (
-                      <Check className="text-primary" strokeWidth={4} />
+                      <Check className="text-primary mx-auto" strokeWidth={4} />
                     ) : (
-                      <X className="text-primary" strokeWidth={4} />
+                      <X className="text-primary mx-auto" strokeWidth={4} />
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {user.is_staff ? (
-                      <Check className="text-primary" strokeWidth={4} />
+                      <Check className="text-primary mx-auto" strokeWidth={4} />
                     ) : (
-                      <X className="text-primary" strokeWidth={4} />
+                      <X className="text-primary mx-auto" strokeWidth={4} />
                     )}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button disabled={user.is_staff}>Admin</Button>
+                      <AlertDialogTrigger
+                        className="flex justify-center mx-auto"
+                        asChild
+                      >
+                        <Button size="icon" disabled={user.is_staff}>
+                          <UserPlus />
+                        </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
@@ -203,8 +220,13 @@ function AdminUserPage() {
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button disabled={!user.is_staff}>Remove Admin</Button>
+                      <AlertDialogTrigger
+                        className="flex justify-center mx-auto"
+                        asChild
+                      >
+                        <Button size="icon" disabled={!user.is_staff}>
+                          <UserMinus />
+                        </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
@@ -229,7 +251,9 @@ function AdminUserPage() {
                   <TableCell className="hidden lg:table-cell">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button variant="destructive">Delete</Button>
+                        <Button size="icon" variant="destructive">
+                          <Trash />
+                        </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>

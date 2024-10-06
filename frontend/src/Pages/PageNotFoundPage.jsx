@@ -26,6 +26,7 @@ function PageNotFoundPage() {
             navigate("/");
           }}
         >
+          <House className="mr-2 w-4 h-4" />
           Home page
         </Button>
       </div>

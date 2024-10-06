@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CustomPagination from "@/components/CustomPagination";
-import { fetchGetOrders, fetchDeleteOrder } from "@/features/AdminOrderSlice";
+import {
+  fetchGetOrders,
+  fetchDeleteOrder,
+  resetDeleteOrder,
+} from "@/features/AdminOrderSlice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,7 +32,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Pencil, Trash } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import AdminOrderLoader from "@/components/PageLoader/AdminOrderLoader";
 
 function AdminOrderPage() {
@@ -62,11 +66,9 @@ function AdminOrderPage() {
 
   useEffect(() => {
     if (deleteOrderStatus === "succeeded") {
-      toast.success("Order deleted successfully");
       dispatch(resetDeleteOrder());
       dispatch(fetchGetOrders());
     } else if (deleteOrderStatus === "failed") {
-      toast.error("Failed to delete order");
       dispatch(resetDeleteOrder());
     }
   }, [deleteOrderStatus]);
@@ -76,7 +78,13 @@ function AdminOrderPage() {
   }, [dispatch, currentPage, keyword]);
 
   const deleteHandler = (id) => {
-    dispatch(fetchDeleteOrder(id));
+    const deleteOrderPromise = dispatch(fetchDeleteOrder(id)).unwrap();
+
+    toast.promise(deleteOrderPromise, {
+      loading: "Deleting order...",
+      success: "Order deleted successfully",
+      error: "Failed to delete order",
+    });
   };
 
   return (

@@ -9,7 +9,7 @@ import {
   resetDeleteCart,
 } from "@/features/CartSlice";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { PackageCheck, RefreshCcw, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import CustomImage from "@/components/CustomImage";
 
 function CartPage() {
@@ -48,24 +48,26 @@ function CartPage() {
       dispatch(fetchGetCart());
       dispatch(resetCreateCart());
     } else if (createCartStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(fetchGetCart());
     }
   }, [dispatch, createCartStatus]);
 
   useEffect(() => {
     if (deleteCartStatus === "succeeded") {
-      toast.success("Item deleted successfully");
       dispatch(fetchGetCart());
       dispatch(resetDeleteCart());
     } else if (deleteCartStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(fetchGetCart());
     }
   }, [dispatch, deleteCartStatus]);
 
   const deleteItem = (id) => {
-    dispatch(fetchDeleteCart(id));
+    const deleteCartPromise = dispatch(fetchDeleteCart(id)).unwrap();
+    toast.promise(deleteCartPromise, {
+      loading: "Deleting...",
+      success: "Item deleted successfully",
+      error: "Failed to delete item",
+    });
   };
 
   return (
@@ -97,6 +99,7 @@ function CartPage() {
                       className="w-24 h-20 lg:mx-0"
                       src={item.image}
                       alt={item.name}
+                      addUrl
                     />
                   </Link>
                   <Link to={`/product/${item.product}`}>
@@ -117,7 +120,10 @@ function CartPage() {
                       <p>Quantity-{item.quantity}</p>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost">Change Quantity</Button>
+                          <Button variant="ghost">
+                            <RefreshCcw className="mr-2 w-4 h-4" /> Change
+                            Quantity
+                          </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuLabel>Select Quantity</DropdownMenuLabel>
@@ -163,6 +169,7 @@ function CartPage() {
                   variant="default"
                   onClick={() => navigate("/checkout")}
                 >
+                  <PackageCheck className="mr-2 w-4 h-4" />
                   Checkout
                 </Button>
               </div>

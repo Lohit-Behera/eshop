@@ -2,6 +2,9 @@
   @tailwind components;
   @tailwind utilities;
 
+  body {
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  }
   
 
   @layer base {
@@ -61,3 +64,8 @@
       @apply bg-background text-foreground;
     }
   }
+
+
+::selection {
+  background: #3677e1;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserUpdate } from "@/features/UserSlice";
+import { fetchUserUpdate, resetUserUpdate } from "@/features/UserSlice";
 import CustomPassword from "@/components/CustomPassword";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -18,9 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import CustomPagination from "@/components/CustomPagination";
 import { fetchGetAllOrders } from "@/features/OrderSlice";
+import { RefreshCcw } from "lucide-react";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ function ProfilePage() {
   const userDetails = useSelector((state) => state.user.userDetails) || {};
   const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus);
   const getAllOrders = useSelector((state) => state.order.getAllOrders) || [];
-  const page = getAllOrders.page || 1;
   const pages = getAllOrders.pages || 1;
   const orders = getAllOrders.orders || [];
 
@@ -46,9 +46,9 @@ function ProfilePage() {
 
   useEffect(() => {
     if (userUpdateStatus === "succeeded") {
-      toast.success("User updated successfully");
+      dispatch(resetUserUpdate());
     } else if (userUpdateStatus === "failed") {
-      toast.error("User update failed");
+      dispatch(resetUserUpdate());
     }
   }, [userUpdateStatus]);
 
@@ -72,7 +72,7 @@ function ProfilePage() {
     if (file.type.startsWith("image/")) {
       setProfileImage(file);
     } else {
-      toast.success("Please select an image file");
+      toast.warning("Please select an image file");
     }
   };
 
@@ -80,7 +80,7 @@ function ProfilePage() {
     if (password !== confirmPassword) {
       toast.warning("Passwords do not match");
     } else {
-      dispatch(
+      const updateUserPromise = dispatch(
         fetchUserUpdate({
           id: userDetails.id,
           first_name: firstName,
@@ -89,7 +89,12 @@ function ProfilePage() {
           password: password,
           profile_image: profileImage,
         })
-      );
+      ).unwrap();
+      toast.promise(updateUserPromise, {
+        loading: "Updating user...",
+        success: "User updated successfully",
+        error: "Failed to update user",
+      });
     }
   };
   return (
@@ -175,6 +180,7 @@ function ProfilePage() {
                 change={(e) => setConfirmPassword(e.target.value)}
               />
               <Button onClick={updateHandler} className="w-full">
+                <RefreshCcw className="mr-2 w-4 h-4" />
                 Update
               </Button>
             </div>

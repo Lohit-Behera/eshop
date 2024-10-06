@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/table";
 import CustomImage from "@/components/CustomImage";
 import ServerError from "./ServerError";
-import Loader from "@/components/Loader/Loader";
 import AdminDashboardLoader from "@/components/PageLoader/AdminDashboardLoader";
 
 function AdminDashboardPage() {
@@ -128,7 +127,7 @@ function AdminDashboardPage() {
                   </Card>
                   <Card x-chunk="dashboard-05-chunk-2">
                     <CardHeader className="pb-2">
-                      <CardDescription>Orders This Month</CardDescription>
+                      <CardDescription>Total Users</CardDescription>
                       <CardTitle className="text-4xl">
                         {dashboard.total_users}
                       </CardTitle>

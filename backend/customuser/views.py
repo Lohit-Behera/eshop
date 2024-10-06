@@ -140,6 +140,7 @@ def update_user(request, pk):
 
     profile_image = request.FILES.get('profile_image')
     if profile_image:
+        user.profile_image.delete(save=False)
         user.profile_image = profile_image
 
     password = data.get('password')
@@ -153,6 +154,7 @@ def update_user(request, pk):
 @permission_classes([IsAdminUser])
 def edit_user(request, pk):
     user = CustomUser.objects.get(id=pk)
+    print(user.profile_image)
     data = request.data
 
     user.is_staff = data['is_staff']

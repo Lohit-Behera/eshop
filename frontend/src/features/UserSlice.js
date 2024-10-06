@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchLogin = createAsyncThunk('user/login', async (user, { rejectWithValue }) => {
     try {
@@ -10,12 +11,12 @@ export const fetchLogin = createAsyncThunk('user/login', async (user, { rejectWi
         };
 
         const { data } = await axios.post(
-            '/api/user/login/',
+            `${baseUrl}/api/user/login/`,
             user,
             config
         );
 
-        document.cookie = `userInfo=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${30 * 24 * 60 * 60};`;
+        document.cookie = `userInfoEShop=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=${30 * 24 * 60 * 60};`;
         
         return data;
     } catch (error) {
@@ -35,7 +36,7 @@ function getCookie(name) {
     return null;
 }
 
-const userInfoCookie = getCookie('userInfo');
+const userInfoCookie = getCookie('userInfoEShop');
 
 export const fetchRegister = createAsyncThunk('user/register', async (user, { rejectWithValue }) => {
     try {
@@ -46,7 +47,7 @@ export const fetchRegister = createAsyncThunk('user/register', async (user, { re
         };
 
         const { data } = await axios.post(
-            '/api/user/register/',
+            `${baseUrl}/api/user/register/`,
             user,
             config
         );
@@ -73,7 +74,7 @@ export const fetchUserDetails = createAsyncThunk('user/details', async (id, { re
             },
         };
         const { data } = await axios.get(
-            `/api/user/details/${id}/`,
+            `${baseUrl}/api/user/details/${id}/`,
             config
         );
 
@@ -99,7 +100,7 @@ export const fetchUserUpdate = createAsyncThunk('user/update', async (user, { re
             },
         };
         const { data } = await axios.put(
-            `/api/user/update/${user.id}/`,
+            `${baseUrl}/api/user/update/${user.id}/`,
             user,
             config
         );
@@ -137,7 +138,7 @@ const userSlice = createSlice({
     },
     reducers: {
         logout: (state) => {
-            localStorage.removeItem("userInfo");
+            document.cookie = "userInfoEShop=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             state.userInfo = null;
             state.userInfoStatus = "idle";
             state.userInfoError = null;

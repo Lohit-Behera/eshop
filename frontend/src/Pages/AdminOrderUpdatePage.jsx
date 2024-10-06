@@ -8,9 +8,10 @@ import {
   resetGetOrderById,
 } from "@/features/AdminOrderSlice";
 import { Button } from "@/components/ui/button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Loader from "@/components/Loader/Loader";
 import CustomImage from "@/components/CustomImage";
+import { ArrowLeft, PackageCheck } from "lucide-react";
 
 function AdminOrderUpdatePage() {
   const { id } = useParams();
@@ -39,14 +40,21 @@ function AdminOrderUpdatePage() {
 
   useEffect(() => {
     if (updateOrderStatus === "succeeded") {
-      toast.success("Order updated successfully");
       dispatch(resetGetOrderById());
       dispatch(fetchAdminGetOrderById(id));
     } else if (updateOrderStatus === "failed") {
-      toast.error("Something went wrong");
       dispatch(resetGetOrderById());
     }
   }, [dispatch, updateOrderStatus]);
+
+  const handleOrderUpdate = () => {
+    const updateOrderPromise = dispatch(fetchUpdateOrder(id)).unwrap();
+    toast.promise(updateOrderPromise, {
+      loading: "Updating order...",
+      success: "Order updated successfully",
+      error: "Failed to update order",
+    });
+  };
 
   return (
     <div className="w-[95%] mx-auto border-2 min-h-[80vh] rounded-lg bg-background/50">
@@ -87,10 +95,8 @@ function AdminOrderUpdatePage() {
             </div>
             {!order.is_delivered && (
               <div className="flex justify-end mr-16">
-                <Button
-                  className="md:text-base"
-                  onClick={() => dispatch(fetchUpdateOrder(id))}
-                >
+                <Button className="md:text-base" onClick={handleOrderUpdate}>
+                  <PackageCheck className="mr-2 w-4 h-4" />
                   Delivered
                 </Button>
               </div>
@@ -124,6 +130,7 @@ function AdminOrderUpdatePage() {
                           className="w-24 h-20 lg:mx-0"
                           src={item.image}
                           alt={item.name}
+                          addUrl
                         />
                       </Link>
                       <Link to={`/product/${item.id}`}>
@@ -144,6 +151,7 @@ function AdminOrderUpdatePage() {
               className="w-full my-4 mb-8 md:text-base"
               onClick={() => navigate(-1)}
             >
+              <ArrowLeft className="mr-2 w-4 h-4" />
               Go Back
             </Button>
           </div>

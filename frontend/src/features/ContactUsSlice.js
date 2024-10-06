@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchContactUs = createAsyncThunk('contactus', async (message, { rejectWithValue }) => {
     try {
@@ -9,7 +10,7 @@ export const fetchContactUs = createAsyncThunk('contactus', async (message, { re
             },
         };
         const { data } = await axios.put(
-            '/api/user/contactus/',
+            `${baseUrl}/api/user/contactus/`,
             message,
             config
         );
@@ -34,7 +35,7 @@ export const fetchContactUsGetAll = createAsyncThunk('contactus/get/all', async 
             },
         };
         const { data } = await axios.get(
-            `/api/user/get/all/contactus/${keyword}`,
+            `${baseUrl}/api/user/get/all/contactus/${keyword}`,
             config
         );
         return data;
@@ -58,7 +59,7 @@ export const fetchContactUsGetById = createAsyncThunk('contactus/get/id', async 
             },
         };
         const { data } = await axios.get(
-            `/api/user/contactus/${id}/`,
+            `${baseUrl}/api/user/contactus/${id}/`,
             config
         );
         return data;
@@ -82,7 +83,7 @@ export const fetchContactUsUpdate = createAsyncThunk('contactus/update', async (
             },
         };
         const { data } = await axios.put(
-            `/api/user/contactus/update/${id}/`,
+            `${baseUrl}/api/user/contactus/update/${id}/`,
             id,
             config
         );

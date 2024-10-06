@@ -1,16 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { resetRegister } from "@/features/UserSlice";
 
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LogIn } from "lucide-react";
 
 function VerificationPage() {
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ function VerificationPage() {
               navigate("/login");
             }}
           >
-            LogIn
+            <LogIn className="mr-2 w-4 h-4" /> LogIn
           </Button>
         </CardFooter>
       </Card>

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchGetAllUsers = createAsyncThunk('get/users', async (keyword, { rejectWithValue, getState }) => {
     try {
@@ -12,7 +13,7 @@ export const fetchGetAllUsers = createAsyncThunk('get/users', async (keyword, { 
         };
 
         const { data } = await axios.get(
-            `/api/user/allusers/${keyword}`,
+            `${baseUrl}/api/user/allusers/${keyword}`,
             config
         );
 
@@ -39,7 +40,7 @@ export const fetchGiveAdmin = createAsyncThunk('give/admin', async (user, { reje
         };
 
         const { data } = await axios.put(
-            `/api/user/useredit/${user.id}/`,
+            `${baseUrl}/api/user/useredit/${user.id}/`,
             user,
             config
         );
@@ -68,7 +69,7 @@ export const fetchRemoveAdmin = createAsyncThunk('remove/admin', async (user, { 
         };
 
         const { data } = await axios.put(
-            `/api/user/useredit/${user.id}/`,
+            `${baseUrl}/api/user/useredit/${user.id}/`,
             user,
             config
         );
@@ -96,7 +97,7 @@ export const fetchDeleteUser = createAsyncThunk('delete/user', async (id, { reje
         };
 
         const { data } = await axios.delete(
-            `/api/user/userdelete/${id}/`,
+            `${baseUrl}/api/user/userdelete/${id}/`,
             config
         );
 

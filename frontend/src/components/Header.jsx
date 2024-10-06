@@ -42,7 +42,6 @@ import {
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { fetchDeleteImages } from "@/features/DeleteImages";
 
 function Header() {
   const dispatch = useDispatch();
@@ -70,13 +69,9 @@ function Header() {
     navigate("/");
   };
 
-  const deleteImagesHandler = () => {
-    dispatch(fetchDeleteImages());
-  };
-
   return (
-    <nav className="z-20 w-full sticky top-0 mb-8 backdrop-blur bg-background/50 shadow  ">
-      <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
+    <header className="z-20 w-full sticky top-0 mb-8 backdrop-blur bg-background/50 shadow  ">
+      <nav className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
         <div className="flex justify-between w-[95%] mx-auto py-3 md:py-3">
           <div className="hidden md:block">
             <div>
@@ -166,7 +161,7 @@ function Header() {
                     )}
                   </NavLink>
                 </li>
-                {userDetails && userDetails.is_staff && (
+                {userInfo && userDetails && userDetails.is_staff && (
                   <>
                     <li>
                       <NavLink to="/admin/dashboard">
@@ -424,31 +419,11 @@ function Header() {
               <li className="mt-0.5">
                 <DarkModeToggle />
               </li>
-              {userInfo && userDetails && userDetails.is_staff && (
-                <li className="mt-0.5 ml-2">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={deleteImagesHandler}
-                        >
-                          <ImageMinus />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Delete Unused Images</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </li>
-              )}
             </ul>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
 

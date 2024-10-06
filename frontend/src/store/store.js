@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import productSlice from "@/features/ProductSlice";
 import UserSlice from "@/features/UserSlice";
 import CartSlice from "@/features/CartSlice";
-import DeleteImages from "@/features/DeleteImages";
 import AddressSlice from "@/features/AddressSlice";
 import OrderSlice from "@/features/OrderSlice";
 import AdminUsers from "@/features/AdminUsers";
@@ -26,7 +25,6 @@ const store = configureStore({
         adminProduct: AdminProductSlice,
         adminOrder: AdminOrderSlice,
         contactUs: ContactUsSlice,
-        deleteImages: DeleteImages
     },
 });
 

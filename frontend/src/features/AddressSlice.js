@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchAddAddress = createAsyncThunk('address/add', async (address, { rejectWithValue, getState }) => {
     try {
@@ -11,7 +12,7 @@ export const fetchAddAddress = createAsyncThunk('address/add', async (address, {
             },
         };
         const { data } = await axios.put(
-            '/api/user/add/address/',
+           `${baseUrl}/api/user/add/address/`,
             address,
             config
         );
@@ -31,7 +32,7 @@ export const fetchGetAddress = createAsyncThunk('address/get', async (_, { rejec
             },
         };
         const { data } = await axios.get(
-            '/api/user/get/address/',
+            `${baseUrl}/api/user/get/address/`,
             config
         );
         return data;
@@ -50,7 +51,7 @@ export const fetchDeleteAddress = createAsyncThunk('address/delete', async (id, 
             },
         };
         const { data } = await axios.delete(
-            `/api/user/delete/address/${id}`,
+            `${baseUrl}/api/user/delete/address/${id}`,
             config
         );
         return data;

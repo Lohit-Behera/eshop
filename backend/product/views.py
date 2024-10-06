@@ -94,6 +94,7 @@ def get_cart(request):
         else:
             pass
     serializer = CartSerializer(cart, many=True)
+    print(serializer.data)
     return Response(serializer.data)
 
 
@@ -170,6 +171,7 @@ def update_product(request, pk):
     product.countInStock = data['countInStock']
     product.description = data['description']
     if image:
+        product.image.delete(save=False)
         product.image = image
     product.save()
     serializer = ProductSerializer(product, many=False)
@@ -187,7 +189,7 @@ def create_product_review(request, pk):
 
     if alreadyExists:
         content = {'detail': 'Product already reviewed'}
-        return Response(content,status=status.HTTP_400_BAD_REQUEST)
+        return Response(content,status=status.HTTP_409_CONFLICT)
 
     elif data['rating'] == 0:
         content = {'detail': 'Please select a rating'}

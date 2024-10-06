@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Rating from "./Rating";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import CustomImage from "./CustomImage";
+import { PackagePlus } from "lucide-react";
 
 function Product({ product, onAddToCart }) {
+  const userInfo = useSelector((state) => state.user.userInfo);
   const addToCart = () => {
     onAddToCart(product.id);
   };
@@ -59,8 +62,9 @@ function Product({ product, onAddToCart }) {
             <h1 className="text-lg font-semibold mt-1">
               Price -&nbsp;₹{product.price}
             </h1>
-            {product.countInStock === 0 ? null : (
-              <Button variant="default" onClick={addToCart}>
+            {userInfo && product.countInStock !== 0 && (
+              <Button variant="default" size="sm" onClick={addToCart}>
+                <PackagePlus className="mr-2 w-4 h-4" />
                 Add to Cart
               </Button>
             )}

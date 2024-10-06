@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchGetOrders = createAsyncThunk('get/orders', async (keyword = '', { rejectWithValue, getState }) => {
     try {
@@ -11,7 +12,7 @@ export const fetchGetOrders = createAsyncThunk('get/orders', async (keyword = ''
             },
         };
         const { data } = await axios.get(
-            `/api/order/get/all/${keyword}`,
+            `${baseUrl}/api/order/get/all/${keyword}`,
             config
         );
         return data;
@@ -34,7 +35,7 @@ export const fetchAdminGetOrderById = createAsyncThunk('get/order/id/admin', asy
             },
         };
         const { data } = await axios.get(
-            `/api/order/get/${id}/`,
+            `${baseUrl}/api/order/get/${id}/`,
             config
         );
         return data;
@@ -57,7 +58,7 @@ export const fetchUpdateOrder = createAsyncThunk('update/order', async (id, { re
             },
         };
         const { data } = await axios.put(
-            `/api/order/update/${id}/`,
+            `${baseUrl}/api/order/update/${id}/`,
             id,
             config
         );
@@ -81,7 +82,7 @@ export const fetchDeleteOrder = createAsyncThunk('delete/order', async (id, { re
             },
         };
         const { data } = await axios.delete(
-            `/api/order/delete/${id}/`,
+            `${baseUrl}/api/order/delete/${id}/`,
             config
         );
         return data;

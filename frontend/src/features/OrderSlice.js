@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchCreateOrder = createAsyncThunk('create/order', async (order, { rejectWithValue, getState }) => {
     try {
@@ -11,7 +12,7 @@ export const fetchCreateOrder = createAsyncThunk('create/order', async (order, {
             },
         };
         const { data } = await axios.put(
-            '/api/order/create/',
+            `${baseUrl}/api/order/create/`,
             order,
             config
         );
@@ -35,7 +36,7 @@ export const fetchGetOrderById = createAsyncThunk('get/order', async (id, { reje
             },
         };
         const { data } = await axios.get(
-            `/api/order/get/${id}/`,
+            `${baseUrl}/api/order/get/${id}/`,
             config
         );
         return data;
@@ -58,7 +59,7 @@ export const fetchGetAllOrders = createAsyncThunk('get/all/orders', async (keywo
             },
         };
         const { data } = await axios.get(
-            `/api/order/get/${keyword}`,
+            `${baseUrl}/api/order/get/${keyword}`,
             config
         );
         return data;

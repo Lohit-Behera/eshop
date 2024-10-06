@@ -10,7 +10,6 @@ urlpatterns = [
     path('get/address/', views.get_address, name='get_address'),
     path('contactus/', views.create_contact_us, name='contact_us'),
     path('get/all/contactus/', views.get_all_queries, name='get_all_queries'),
-    path('admin/delete/images/', views.delete_all_images, name='delete_images'),
     
     path('verify/<str:token>/', views.verify_email, name='verify_email'),
     path('details/<str:pk>/', views.get_user_details, name='get_user_details'),

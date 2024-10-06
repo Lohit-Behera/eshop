@@ -2,8 +2,11 @@ import React from "react";
 import { useState } from "react";
 import ImageLoader from "./Loader/ImageLoader";
 import ErrorImage from "../assets/image_not_available.svg";
+import { awsUrl } from "@/features/proxy";
 
-function CustomImage({ className, src, alt }) {
+function CustomImage({ className, src, alt, addUrl = false }) {
+  const imageSrc = src.substring(7);
+
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -31,7 +34,7 @@ function CustomImage({ className, src, alt }) {
       </div>
       <img
         className="w-full h-full object-cover rounded-lg"
-        src={error ? ErrorImage : src}
+        src={error ? ErrorImage : addUrl ? awsUrl + imageSrc : src}
         alt={alt}
         style={imagesStyle}
         onLoad={imageLoaded}

@@ -12,7 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Loader from "@/components/Loader/Loader";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import { ArrowLeft, RefreshCcw } from "lucide-react";
 
 function ProductEditPage() {
   const dispatch = useDispatch();
@@ -37,10 +38,8 @@ function ProductEditPage() {
 
   useEffect(() => {
     if (updateProductStatus === "succeeded") {
-      toast.success("Product updated successfully");
       dispatch(resetUpdateProduct());
     } else if (updateProductStatus === "failed") {
-      toast.error("Update failed");
       dispatch(resetUpdateProduct());
     }
   }, [updateProductStatus, dispatch, navigate]);
@@ -73,7 +72,7 @@ function ProductEditPage() {
       toast.warning("Price cannot be negative");
       return;
     } else {
-      dispatch(
+      const updateProductPromise = dispatch(
         fetchUpdateProduct({
           name: name,
           image: image,
@@ -84,7 +83,12 @@ function ProductEditPage() {
           description: description,
           id: id,
         })
-      );
+      ).unwrap();
+      toast.promise(updateProductPromise, {
+        loading: "Updating product...",
+        success: "Product updated successfully",
+        error: "Failed to update product",
+      });
     }
   };
 
@@ -197,12 +201,14 @@ function ProductEditPage() {
               rows={12}
             />
             <Button className="w-full md:text-base" onClick={updateHandler}>
+              <RefreshCcw className="mr-2 w-4 h-4" />
               Update
             </Button>
             <Button
               className="w-full md:text-base"
               onClick={() => navigate(-1)}
             >
+              <ArrowLeft className="mr-2 w-4 h-4" />
               Go Back
             </Button>
           </div>

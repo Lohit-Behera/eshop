@@ -7,7 +7,8 @@ import {
   fetchContactUsUpdate,
 } from "@/features/ContactUsSlice";
 import { Button } from "@/components/ui/button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import { ArrowLeft, ListChecks } from "lucide-react";
 
 function AdminQueryPage() {
   const { id } = useParams();
@@ -34,11 +35,17 @@ function AdminQueryPage() {
   useEffect(() => {
     if (updateContactUsStatus === "succeeded") {
       dispatch(fetchContactUsGetById(id));
-      toast.success("Query resolved");
-    } else if (updateContactUsStatus === "failed") {
-      toast.error("Something went wrong");
     }
   }, [updateContactUsStatus]);
+
+  const handelUpdateContactUs = () => {
+    const updateContactUsPromise = dispatch(fetchContactUsUpdate(id)).unwrap();
+    toast.promise(updateContactUsPromise, {
+      loading: "Updating query...",
+      success: "Query updated successfully",
+      error: "Failed to update query",
+    });
+  };
 
   return (
     <div className="w-[95%] min-h-[80vh] mx-auto border-2 rounded-lg p-4 bg-background/70">
@@ -57,17 +64,13 @@ function AdminQueryPage() {
           </div>
           <div className="w-full flex justify-between space-x-4">
             {query.is_resolved ? null : (
-              <Button
-                className="w-full"
-                onClick={() => dispatch(fetchContactUsUpdate(id))}
-              >
+              <Button className="w-full" onClick={handelUpdateContactUs}>
+                <ListChecks className="mr-2 w-4 h-4" />
                 Resolved
               </Button>
             )}
-            <Button
-              className="w-full"
-              onClick={() => navigate("/admin/contact")}
-            >
+            <Button className="w-full" onClick={() => navigate(-1)}>
+              <ArrowLeft className="mr-2 w-4 h-4" />
               Go Back
             </Button>
           </div>

@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Loader from "@/components/Loader/Loader";
 import ServerError from "@/Pages/ServerError";
 import SuccessContactUs from "@/components/SuccessContactUs";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 function ContactUsPage() {
   const dispatch = useDispatch();
@@ -33,13 +33,10 @@ function ContactUsPage() {
 
   useEffect(() => {
     if (contactusStatus === "succeeded") {
-      toast.success("Thank you for contacting us");
       setName("");
       setEmail("");
       setSubject("");
       setMessage("");
-    } else if (contactusStatus === "failed") {
-      toast.error("Something went wrong");
     }
   }, [contactusStatus]);
 
@@ -47,7 +44,14 @@ function ContactUsPage() {
     if (name === "" && email === "" && subject === "" && message === "") {
       toast.warning("Please fill all the fields");
     } else {
-      dispatch(fetchContactUs({ name, email, subject, message }));
+      const contactPromise = dispatch(
+        fetchContactUs({ name, email, subject, message })
+      ).unwrap();
+      toast.promise(contactPromise, {
+        loading: "Sending message...",
+        success: "Message sent successfully",
+        error: "Failed to send message",
+      });
     }
   };
 
@@ -59,7 +63,6 @@ function ContactUsPage() {
     setMessage("");
     navigate("/");
   };
-
   return (
     <div className="min-h-[80vh] w-[95%] md:w-[70%] mx-auto bg-background/50">
       {contactusStatus === "idle" ? (

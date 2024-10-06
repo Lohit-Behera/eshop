@@ -6,9 +6,10 @@ import { fetchAddAddress } from "@/features/AddressSlice";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import ServerError from "./ServerError";
 import Loader from "@/components/Loader/Loader";
+import { SquarePlus } from "lucide-react";
 
 function AddressPage() {
   const navigate = useNavigate();
@@ -26,10 +27,7 @@ function AddressPage() {
 
   useEffect(() => {
     if (addAddressStatus === "succeeded") {
-      toast.success("Address added successfully");
       navigate("/checkout");
-    } else if (addAddressStatus === "failed") {
-      toast.error("Failed to add address");
     }
   }, [addAddressStatus, navigate]);
 
@@ -41,7 +39,7 @@ function AddressPage() {
   const [pincode, setPincode] = useState("");
 
   const addAddressHandler = () => {
-    dispatch(
+    const addressPromise = dispatch(
       fetchAddAddress({
         house_no: houseNo,
         landmark: landmark,
@@ -50,7 +48,12 @@ function AddressPage() {
         country: country,
         pincode: pincode,
       })
-    );
+    ).unwrap();
+    toast.promise(addressPromise, {
+      loading: "Adding address...",
+      success: "Address added successfully",
+      error: "Failed to add address",
+    });
   };
   return (
     <div className="min-h-[80vh]">
@@ -143,6 +146,7 @@ function AddressPage() {
               onClick={addAddressHandler}
               variant="default"
             >
+              <SquarePlus className="mr-2 h-4 w-4" />
               Add Address
             </Button>
           </div>

@@ -22,7 +22,7 @@ function CustomPassword({ id, label, placeholder, change }) {
         />
         <span
           onClick={() => setShowPassword(!showPassword)}
-          className="px-1 py-1 cursor-pointer"
+          className="px-1 py-1 cursor-pointer bg-background"
         >
           {showPassword ? <EyeOff /> : <Eye />}
         </span>

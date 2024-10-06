@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { baseUrl } from "./proxy";
 
 export const fetchCreateCart = createAsyncThunk('create/cart', async (item, { rejectWithValue, getState }) => {
     try {
@@ -11,7 +12,7 @@ export const fetchCreateCart = createAsyncThunk('create/cart', async (item, { re
             },
         };
         const { data } = await axios.put(
-            '/api/product/create/cart/',
+            `${baseUrl}/api/product/create/cart/`,
             item,
             config
         );
@@ -36,7 +37,7 @@ export const fetchGetCart = createAsyncThunk('get/cart', async (_, { rejectWithV
             },
         };
         const { data } = await axios.get(
-            '/api/product/get/cart/',
+            `${baseUrl}/api/product/get/cart/`,
             config
         );
         return data;
@@ -59,7 +60,7 @@ export const fetchDeleteCart = createAsyncThunk('delete/cart', async (id, { reje
             },
         };
         const { data } = await axios.delete(
-            `/api/product/delete/cart/${id}/`,
+            `${baseUrl}/api/product/delete/cart/${id}/`,
             config
         );
         return data;
